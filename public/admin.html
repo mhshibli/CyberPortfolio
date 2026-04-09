@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MH_ROOT | Command Center</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap');
+        body { font-family: 'Inter', sans-serif; background: #020617; color: #f8fafc; transition: background 0.3s, color 0.3s; }
+        .mono { font-family: 'JetBrains Mono', monospace; }
+        .glass { background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1); transition: all 0.3s; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: slideUp 0.3s ease; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.2); }
+        ::-webkit-scrollbar-thumb { background: rgba(14, 165, 233, 0.5); border-radius: 4px; }
+        .modal-overlay { background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(8px); }
+
+        /* ====== LIGHT MODE OVERRIDES ====== */
+        body.light-mode { background: #f1f5f9; color: #0f172a; }
+        body.light-mode .glass { background: rgba(255, 255, 255, 0.95); border-color: rgba(0,0,0,0.1); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+        body.light-mode input, body.light-mode textarea { background: #f8fafc; color: #0f172a; border-color: rgba(0,0,0,0.2); }
+        body.light-mode input:focus, body.light-mode textarea:focus { border-color: #0ea5e9; box-shadow: 0 0 0 2px rgba(14,165,233,0.2); }
+        body.light-mode .text-white { color: #0f172a !important; }
+        body.light-mode .text-slate-400 { color: #475569 !important; }
+        body.light-mode .text-slate-500 { color: #64748b !important; }
+        body.light-mode .bg-black\/20, body.light-mode .bg-black\/30, body.light-mode .bg-black\/40 { background: rgba(0,0,0,0.03); border-color: rgba(0,0,0,0.05); }
+        body.light-mode .nav-btn:hover { background: rgba(0,0,0,0.05); }
+        body.light-mode .nav-btn.bg-sky-500\/10 { background: rgba(14,165,233,0.1); }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+
+    <div id="login-screen" class="fixed inset-0 z-[9999] bg-[#020617] flex items-center justify-center p-6">
+        <div class="glass max-w-md w-full p-8 rounded-3xl shadow-2xl border-sky-500/20">
+            <div class="text-center mb-8">
+                <i data-lucide="shield-check" class="w-16 h-16 text-sky-500 mx-auto mb-4 animate-pulse"></i>
+                <h2 class="text-2xl font-black mono tracking-tighter text-white">AUTH_REQUIRED</h2>
+            </div>
+            <div id="auth-box">
+                <div id="login-fields">
+                    <label class="block text-[10px] text-sky-500 font-bold uppercase tracking-widest mb-2 ml-1 mono">Username</label>
+                    <input type="text" id="user" autocomplete="username" placeholder="Enter Username" class="w-full bg-black/40 border border-white/10 rounded-xl p-4 mb-4 outline-none focus:border-sky-500 text-sm mono">
+                    
+                    <label class="block text-[10px] text-sky-500 font-bold uppercase tracking-widest mb-2 ml-1 mono">Password</label>
+                    <div class="relative mb-6">
+                        <input type="password" id="pass" autocomplete="current-password" placeholder="Enter Password" class="w-full bg-black/40 border border-white/10 rounded-xl p-4 pr-12 outline-none focus:border-sky-500 text-sm mono">
+                        <button type="button" onclick="togglePass('pass', 'eye-login')" class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 hover:text-sky-500 transition">
+                            <i id="eye-login" data-lucide="eye" class="w-5 h-5"></i>
+                        </button>
+                    </div>
+                    
+                    <button id="login-btn" onclick="handleLogin()" class="w-full bg-sky-600 p-4 rounded-xl font-bold hover:bg-sky-500 transition shadow-lg shadow-sky-500/20 text-white">INITIALIZE ACCESS</button>
+                    <button onclick="toggleForgot(true)" class="w-full text-slate-500 text-[10px] mt-6 hover:text-sky-400 mono tracking-wider">FORGOT CREDENTIALS?</button>
+                </div>
+
+                <div id="forgot-fields" class="hidden">
+                    <label class="block text-[10px] text-emerald-500 font-bold uppercase tracking-widest mb-2 ml-1 mono">Target Username</label>
+                    <input type="text" id="f-user" autocomplete="off" placeholder="Your Username" class="w-full bg-black/40 border border-white/10 rounded-xl p-4 mb-4 text-sm mono outline-none focus:border-emerald-500">
+                    
+                    <label class="block text-[10px] text-emerald-500 font-bold uppercase tracking-widest mb-2 ml-1 mono">Security Key</label>
+                    <input type="text" id="f-key" autocomplete="off" placeholder="e.g. 1234" class="w-full bg-black/40 border border-white/10 rounded-xl p-4 mb-4 text-sm mono outline-none focus:border-emerald-500">
+                    
+                    <label class="block text-[10px] text-emerald-500 font-bold uppercase tracking-widest mb-2 ml-1 mono">New Password</label>
+                    <div class="relative mb-6">
+                        <input type="password" id="f-newpass" autocomplete="new-password" placeholder="Create New Password" class="w-full bg-black/40 border border-white/10 rounded-xl p-4 pr-12 text-sm mono outline-none focus:border-emerald-500">
+                        <button type="button" onclick="togglePass('f-newpass', 'eye-forgot')" class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 hover:text-emerald-500 transition">
+                            <i id="eye-forgot" data-lucide="eye" class="w-5 h-5"></i>
+                        </button>
+                    </div>
+                    
+                    <button onclick="handleForgot()" class="w-full bg-emerald-600 p-4 rounded-xl font-bold hover:bg-emerald-500 transition text-white shadow-lg shadow-emerald-500/20">RECOVER SYSTEM</button>
+                    <button onclick="toggleForgot(false)" class="w-full text-slate-500 text-[10px] mt-4 mono tracking-wider hover:text-white">RETURN TO LOGIN</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="admin-dashboard" class="hidden max-w-7xl mx-auto">
+        
+        <header class="glass p-6 rounded-3xl flex flex-col md:flex-row justify-between items-center mb-6 border-white/5">
+            <div class="flex items-center gap-4">
+                <div class="bg-sky-500/20 p-3 rounded-2xl border border-sky-500/30"><i data-lucide="layout-dashboard" class="text-sky-500"></i></div>
+                <div>
+                    <h1 class="text-xl font-black mono tracking-tight text-white uppercase">MH_ROOT <span class="text-sky-500">CMS</span></h1>
+                    <p class="text-[10px] text-emerald-500 mono uppercase tracking-widest">Active Session // Secure Node</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-3 mt-4 md:mt-0">
+                <button id="themeToggle" class="p-2.5 rounded-xl bg-black/20 hover:bg-black/40 transition border border-white/10 shadow-sm flex items-center justify-center">
+                    <i data-lucide="sun" class="w-4 h-4 text-amber-400"></i>
+                </button>
+                <a href="/index.html" target="_blank" class="flex items-center gap-2 bg-sky-500/10 text-sky-500 border border-sky-500/30 px-4 py-2.5 rounded-xl hover:bg-sky-500/20 transition text-xs font-bold mono">
+                    <i data-lucide="external-link" class="w-4 h-4"></i> VIEW SITE
+                </a>
+                <button onclick="location.reload()" class="text-red-500 text-xs font-bold border border-red-500/20 px-6 py-2.5 rounded-xl hover:bg-red-500/10 transition bg-red-500/5">LOGOUT</button>
+            </div>
+        </header>
+
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
+            <div class="glass p-4 rounded-2xl border-emerald-500/20 flex flex-col items-center justify-center relative overflow-hidden group min-h-[100px]">
+                <div class="absolute -top-4 -right-4 w-12 h-12 bg-emerald-500/10 rounded-full blur-xl group-hover:bg-emerald-500/20 transition duration-500"></div>
+                <div class="flex items-center gap-2 mb-1 z-10">
+                    <i data-lucide="cpu" class="w-4 h-4 text-emerald-500"></i>
+                    <p class="text-[10px] text-slate-400 uppercase tracking-widest font-bold mono">CPU Usage</p>
+                </div>
+                <h3 class="text-xl font-black text-white mono tracking-tighter z-10"><span id="stat-cpu">--</span><span class="text-emerald-500 text-sm ml-1">%</span></h3>
+            </div>
+            
+            <div class="glass p-4 rounded-2xl border-purple-500/20 flex flex-col items-center justify-center relative overflow-hidden group min-h-[100px]">
+                <div class="absolute -top-4 -right-4 w-12 h-12 bg-purple-500/10 rounded-full blur-xl group-hover:bg-purple-500/20 transition duration-500"></div>
+                <div class="flex items-center gap-2 mb-1 z-10">
+                    <i data-lucide="memory-stick" class="w-4 h-4 text-purple-500"></i>
+                    <p class="text-[10px] text-slate-400 uppercase tracking-widest font-bold mono">RAM Usage</p>
+                </div>
+                <h3 class="text-xl font-black text-white mono tracking-tighter z-10"><span id="stat-ram">--</span><span class="text-purple-500 text-sm ml-1">%</span></h3>
+            </div>
+
+            <div class="glass p-4 rounded-2xl border-rose-500/20 flex flex-col items-center justify-center relative overflow-hidden group min-h-[100px]">
+                <div class="absolute -top-4 -right-4 w-12 h-12 bg-rose-500/10 rounded-full blur-xl group-hover:bg-rose-500/20 transition duration-500"></div>
+                <div class="flex items-center gap-2 mb-1 z-10">
+                    <i data-lucide="activity" class="w-4 h-4 text-rose-500"></i>
+                    <p class="text-[10px] text-slate-400 uppercase tracking-widest font-bold mono">Server Load</p>
+                </div>
+                <h3 class="text-xl font-black text-white mono tracking-tighter z-10" id="stat-load">--</h3>
+            </div>
+
+            <div class="glass p-4 rounded-2xl border-sky-500/20 flex flex-col items-center justify-center relative overflow-hidden group min-h-[100px]">
+                <div class="absolute -top-4 -right-4 w-12 h-12 bg-sky-500/10 rounded-full blur-xl group-hover:bg-sky-500/20 transition duration-500"></div>
+                <div class="flex items-center gap-2 mb-1 z-10">
+                    <i data-lucide="users" class="w-4 h-4 text-sky-500"></i>
+                    <p class="text-[10px] text-slate-400 uppercase tracking-widest font-bold mono">Total Visits</p>
+                </div>
+                <h3 class="text-xl font-black text-white mono tracking-tighter z-10" id="stat-total">--</h3>
+            </div>
+
+            <div class="glass p-4 rounded-2xl border-amber-500/20 flex flex-col items-center justify-center relative overflow-hidden group col-span-2 md:col-span-1 lg:col-span-1 min-h-[100px]">
+                <div class="absolute -top-4 -right-4 w-12 h-12 bg-amber-500/10 rounded-full blur-xl group-hover:bg-amber-500/20 transition duration-500"></div>
+                <div class="flex items-center gap-2 mb-1 z-10">
+                    <i data-lucide="user-check" class="w-4 h-4 text-amber-500"></i>
+                    <p class="text-[10px] text-slate-400 uppercase tracking-widest font-bold mono">Visits Today</p>
+                </div>
+                <h3 class="text-xl font-black text-white mono tracking-tighter z-10" id="stat-today">--</h3>
+            </div>
+        </div>
+
+        <div class="grid lg:grid-cols-4 gap-8">
+            <nav class="lg:col-span-1 space-y-4">
+                <div class="glass p-3 rounded-3xl space-y-1 flex flex-col sm:flex-row lg:flex-col overflow-x-auto custom-scrollbar">
+                    <button onclick="switchTab('profile')" id="btn-profile" class="nav-btn w-full text-left p-4 rounded-2xl flex items-center gap-4 text-sm font-bold mono transition whitespace-nowrap"><i data-lucide="user" class="w-5 h-5 shrink-0"></i> Profile</button>
+                    <button onclick="switchTab('education')" id="btn-education" class="nav-btn w-full text-left p-4 rounded-2xl flex items-center gap-4 text-sm font-bold mono transition whitespace-nowrap"><i data-lucide="book-open" class="w-5 h-5 shrink-0"></i> Education</button>
+                    <button onclick="switchTab('arsenal')" id="btn-arsenal" class="nav-btn w-full text-left p-4 rounded-2xl flex items-center gap-4 text-sm font-bold mono transition whitespace-nowrap"><i data-lucide="crosshair" class="w-5 h-5 shrink-0"></i> Arsenal</button>
+                    <button onclick="switchTab('projects')" id="btn-projects" class="nav-btn w-full text-left p-4 rounded-2xl flex items-center gap-4 text-sm font-bold mono transition whitespace-nowrap"><i data-lucide="terminal" class="w-5 h-5 shrink-0"></i> Projects</button>
+                    <button onclick="switchTab('achievements')" id="btn-achievements" class="nav-btn w-full text-left p-4 rounded-2xl flex items-center gap-4 text-sm font-bold mono transition whitespace-nowrap"><i data-lucide="award" class="w-5 h-5 shrink-0"></i> Achievement</button>
+                    <button onclick="switchTab('gallery')" id="btn-gallery" class="nav-btn w-full text-left p-4 rounded-2xl flex items-center gap-4 text-sm font-bold mono transition whitespace-nowrap"><i data-lucide="image" class="w-5 h-5 shrink-0"></i> Archive</button>
+                    <button onclick="switchTab('messages')" id="btn-messages" class="nav-btn w-full text-left p-4 rounded-2xl flex items-center gap-4 text-sm font-bold mono transition whitespace-nowrap"><i data-lucide="message-square" class="w-5 h-5 shrink-0"></i> Messages</button>
+                    <div class="h-px bg-white/10 my-2 hidden lg:block"></div>
+                    <button onclick="switchTab('settings')" id="btn-settings" class="nav-btn w-full text-left p-4 rounded-2xl flex items-center gap-4 text-sm font-bold mono transition whitespace-nowrap text-amber-500 hover:bg-amber-500/10"><i data-lucide="shield" class="w-5 h-5 shrink-0 text-amber-500"></i> Settings</button>
+                </div>
+            </nav>
+
+            <main class="lg:col-span-3">
+                
+                <div id="tab-profile" class="tab-content glass p-8 rounded-3xl active">
+                    <h2 class="text-xl font-bold mb-6 flex items-center gap-3 border-b border-white/10 pb-4"><i data-lucide="user" class="text-sky-500"></i> Profile Management</h2>
+                    <form id="form-profile" onsubmit="saveProfile(event)" class="space-y-4">
+                        <div>
+                            <label class="block text-[10px] text-sky-500 font-bold uppercase tracking-widest mb-2 ml-1 mono">Full Name</label>
+                            <input type="text" id="prof-full_name" placeholder="e.g. Mahmudul Hasan" required class="w-full bg-black/40 border border-white/10 rounded-xl p-4 text-sm outline-none focus:border-sky-500">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] text-sky-500 font-bold uppercase tracking-widest mb-2 ml-1 mono">Professional Title</label>
+                            <input type="text" id="prof-job_title" placeholder="e.g. Cybersecurity Researcher" required class="w-full bg-black/40 border border-white/10 rounded-xl p-4 text-sm outline-none focus:border-sky-500">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] text-sky-500 font-bold uppercase tracking-widest mb-2 ml-1 mono">Biography / About Me</label>
+                            <textarea id="prof-bio" placeholder="Write about yourself..." rows="5" required class="w-full bg-black/40 border border-white/10 rounded-xl p-4 text-sm outline-none focus:border-sky-500"></textarea>
+                        </div>
+                        <button type="submit" class="bg-sky-600 px-8 py-3 rounded-xl font-bold text-sm hover:bg-sky-500 transition shadow-[0_0_15px_rgba(14,165,233,0.3)] text-white">Save Profile Data</button>
+                    </form>
+                </div>
+
+                <div id="tab-education" class="tab-content glass p-8 rounded-3xl">
+                    <h2 class="text-xl font-bold mb-6 flex justify-between items-center border-b border-white/10 pb-4">
+                        <span class="flex items-center gap-3"><i data-lucide="book-open" class="text-emerald-500"></i> Education Records</span>
+                        <button onclick="resetForm('education')" class="text-xs bg-emerald-500/10 text-emerald-500 px-4 py-2 rounded-lg border border-emerald-500/20 hover:bg-emerald-500/20 transition">Add New Record</button>
+                    </h2>
+                    <form id="form-education" onsubmit="saveData(event, 'education')" class="space-y-4 mb-8 bg-black/20 p-6 rounded-2xl border border-white/5">
+                        <input type="hidden" id="edu-id">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-[10px] text-emerald-500 font-bold uppercase tracking-widest mb-2 ml-1 mono">Degree Name</label>
+                                <input type="text" id="edu-degree" placeholder="e.g. BSc Computer Science" required class="w-full bg-black/40 border border-white/10 rounded-xl p-4 text-sm outline-none focus:border-emerald-500">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] text-emerald-500 font-bold uppercase tracking-widest mb-2 ml-1 mono">Institution</label>
+                                <input type="text" id="edu-institution" placeholder="e.g. Feni University" required class="w-full bg-black/40 border border-white/10 rounded-xl p-4 text-sm outline-none focus:border-emerald-500">
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-[10px] text-emerald-500 font-bold uppercase tracking-widest mb-2 ml-1 mono">Passing Year</label>
+                                <input type="text" id="edu-pass_year" placeholder="e.g. 2026" required class="w-full bg-black/40 border border-white/10 rounded-xl p-4 text-sm outline-none focus:border-emerald-500">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] text-sky-500 font-bold uppercase tracking-widest mb-2 ml-1 mono">Core Focus (Optional)</label>
+                                <input type="text" id="edu-core_focus" placeholder="e.g. Cybersecurity & Analytics" class="w-full bg-black/40 border border-white/10 rounded-xl p-4 text-sm outline-none focus:border-sky-500">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-[10px] text-sky-500 font-bold uppercase tracking-widest mb-2 ml-1 mono">Active Thesis (Optional)</label>
+                            <input type="text" id="edu-active_thesis" placeholder="e.g. Explainable Generative Adversarial Networks..." class="w-full bg-black/40 border border-white/10 rounded-xl p-4 text-sm outline-none focus:border-sky-500">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] text-emerald-500 font-bold uppercase tracking-widest mb-2 ml-1 mono">Full Details / Description</label>
+                            <textarea id="edu-details" placeholder="Write full details about the degree..." rows="3" required class="w-full bg-black/40 border border-white/10 rounded-xl p-4 text-sm outline-none focus:border-emerald-500"></textarea>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <button type="submit" class="bg-emerald-600 px-8 py-3 rounded-xl font-bold text-sm hover:bg-emerald-500 transition shadow-[0_0_15px_rgba(16,185,129,0.3)] text-white">Save Record</button>
+                            <button type="button" onclick="resetForm('education')" class="text-slate-400 text-xs hover:text-white transition">Clear Form</button>
+                        </div>
+                    </form>
+                    <div id="list-education" class="space-y-3 max-h-[400px] overflow-y-auto pr-2"></div>
+                </div>
+
+                <div id="tab-arsenal" class="tab-content glass p-8 rounded-3xl">
+                    <h2 class="text-xl font-bold mb-6 flex justify-between items-center border-b border-white/10 pb-4">
+                        <span class="flex items-center gap-3"><i data-lucide="crosshair" class="text-rose-500"></i> Cyber Arsenal</span>
+                        <button onclick="resetForm('arsenal')" class="text-xs bg-rose-500/10 text-rose-500 px-4 py-2 rounded-lg border border-rose-500/20 hover:bg-rose-500/20 transition">Add New Tool</button>
+                    </h2>
+                    <form id="form-arsenal" onsubmit="saveData(event, 'arsenal')" class="space-y-4 mb-8 bg-black/20 p-6 rounded-2xl border border-white/5">
+                        <input type="hidden" id="ars-id">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-[10px] text-rose-500 font-bold uppercase tracking-widest mb-2 ml-1 mono">Category Name</label>
+                                <input type="text" id="ars-category" placeholder="e.g. Exploitation Frameworks" required class="w-full bg-black/40 border border-white/10 rounded-xl p-4 text-sm outline-none focus:border-rose-500">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] text-rose-500 font-bold uppercase tracking-widest mb-2 ml-1 mono">Tool Group Title</label>
+                                <input type="text" id="ars-title" placeholder="e.g. Offensive Tools" required class="w-full bg-black/40 border border-white/10 rounded-xl p-4 text-sm outline-none focus:border-rose-500">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-[10px] text-rose-500 font-bold uppercase tracking-widest mb-2 ml-1 mono">Tool List (Details)</label>
+                            <textarea id="ars-details" placeholder="e.g. Metasploit, Burp Suite, Nmap..." rows="2" required class="w-full bg-black/40 border border-white/10 rounded-xl p-4 text-sm outline-none focus:border-rose-500"></textarea>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <button type="submit" class="bg-rose-600 px-8 py-3 rounded-xl font-bold text-sm hover:bg-rose-500 transition shadow-[0_0_15px_rgba(244,63,94,0.3)] text-white">Save to Arsenal</button>
+                            <button type="button" onclick="resetForm('arsenal')" class="text-slate-400 text-xs hover:text-white transition">Cancel Edit</button>
+                        </div>
+                    </form>
+                    <div id="list-arsenal" class="space-y-3 max-h-[400px] overflow-y-auto pr-2"></div>
+                </div>
+
+                <div id="tab-projects" class="tab-content glass p-8 rounded-3xl">
+                    <h2 class="text-xl font-bold mb-6 flex justify-between items-center border-b border-white/10 pb-4">
+                        <span class="flex items-center gap-3"><i data-lucide="terminal" class="text-purple-500"></i> Projects & Deployments</span>
+                        <button onclick="resetForm('projects')" class="text-xs bg-purple-500/10 text-purple-500 px-4 py-2 rounded-lg border border-purple-500/20 hover:bg-purple-500/20 transition">Add New Project</button>
+                    </h2>
+                    <form id="form-projects" onsubmit="saveData(event, 'projects')" class="space-y-4 mb-8 bg-black/20 p-6 rounded-2xl border border-white/5">
+                        <input type="hidden" id="proj-id">
+                        <div>
+                            <label class="block text-[10px] text-purple-500 font-bold uppercase tracking-widest mb-2 ml-1 mono">Project Title</label>
+                            <input type="text" id="proj-title" placeholder="e.g. Secure Chat App" required class="w-full bg-black/40 border border-white/10 rounded-xl p-4 text-sm outline-none focus:border-purple-500">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] text-purple-500 font-bold uppercase tracking-widest mb-2 ml-1 mono">Project Description</label>
+                            <textarea id="proj-description" placeholder="What does this project do?" rows="3" required class="w-full bg-black/40 border border-white/10 rounded-xl p-4 text-sm outline-none focus:border-purple-500"></textarea>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-[10px] text-purple-500 font-bold uppercase tracking-widest mb-2 ml-1 mono">Tags (Languages/Tools)</label>
+                                <input type="text" id="proj-tags" placeholder="e.g. Python, React, AI" required class="w-full bg-black/40 border border-white/10 rounded-xl p-4 text-sm outline-none focus:border-purple-500">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] text-purple-500 font-bold uppercase tracking-widest mb-2 ml-1 mono">Project Link (Optional)</label>
+                                <input type="text" id="proj-link" placeholder="GitHub or Live URL" class="w-full bg-black/40 border border-white/10 rounded-xl p-4 text-sm outline-none focus:border-purple-500">
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <button type="submit" class="bg-purple-600 px-8 py-3 rounded-xl font-bold text-sm hover:bg-purple-500 transition shadow-[0_0_15px_rgba(168,85,247,0.3)] text-white">Save Project</button>
+                            <button type="button" onclick="resetForm('projects')" class="text-slate-400 text-xs hover:text-white transition">Cancel Edit</button>
+                        </div>
+                    </form>
+                    <div id="list-projects" class="space-y-3 max-h-[400px] overflow-y-auto pr-2"></div>
+                </div>
+
+                <div id="tab-achievements" class="tab-content glass p-8 rounded-3xl">
+                    <h2 class="text-xl font-bold mb-6 flex justify-between items-center border-b border-white/10 pb-4">
+                        <span class="flex items-center gap-3"><i data-lucide="award" class="text-amber-500"></i> Achievements & Certs</span>
+                        <button onclick="resetForm('achievements')" class="text-xs bg-amber-500/10 text-amber-500 px-4 py-2 rounded-lg border border-amber-500/20 hover:bg-amber-500/20 transition">Add New Cert</button>
+                    </h2>
+                    <form id="form-achievements" onsubmit="saveData(event, 'achievements')" class="space-y-4 mb-8 bg-black/20 p-6 rounded-2xl border border-white/5">
+                        <input type="hidden" id="ach-id">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="md:col-span-2">
+                                <label class="block text-[10px] text-amber-500 font-bold uppercase tracking-widest mb-2 ml-1 mono">Achievement Title</label>
+                                <input type="text" id="ach-title" placeholder="e.g. Certified Ethical Hacker" required class="w-full bg-black/40 border border-white/10 rounded-xl p-4 text-sm outline-none focus:border-amber-500">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] text-amber-500 font-bold uppercase tracking-widest mb-2 ml-1 mono">Year</label>
+                                <input type="text" id="ach-year" placeholder="e.g. 2025" required class="w-full bg-black/40 border border-white/10 rounded-xl p-4 text-sm outline-none focus:border-amber-500">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-[10px] text-amber-500 font-bold uppercase tracking-widest mb-2 ml-1 mono">Organization / Issuer</label>
+                            <input type="text" id="ach-organization" placeholder="e.g. EC-Council" required class="w-full bg-black/40 border border-white/10 rounded-xl p-4 text-sm outline-none focus:border-amber-500">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] text-amber-500 font-bold uppercase tracking-widest mb-2 ml-1 mono">Details / Description</label>
+                            <textarea id="ach-details" placeholder="Short description of the achievement..." rows="2" required class="w-full bg-black/40 border border-white/10 rounded-xl p-4 text-sm outline-none focus:border-amber-500"></textarea>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <button type="submit" class="bg-amber-600 px-8 py-3 rounded-xl font-bold text-sm hover:bg-amber-500 transition shadow-[0_0_15px_rgba(245,158,11,0.3)] text-white">Save Achievement</button>
+                            <button type="button" onclick="resetForm('achievements')" class="text-slate-400 text-xs hover:text-white transition">Cancel Edit</button>
+                        </div>
+                    </form>
+                    <div id="list-achievements" class="space-y-3 max-h-[400px] overflow-y-auto pr-2"></div>
+                </div>
+
+                <div id="tab-gallery" class="tab-content glass p-8 rounded-3xl">
+                    <h2 class="text-xl font-bold mb-6 flex justify-between items-center border-b border-white/10 pb-4">
+                        <span class="flex items-center gap-3"><i data-lucide="image" class="text-sky-500"></i> Visual Archives</span>
+                        <button onclick="resetGalForm()" class="text-xs bg-sky-500/10 text-sky-500 px-4 py-2 rounded-lg border border-sky-500/20 hover:bg-sky-500/20 transition">Add New Image</button>
+                    </h2>
+                    <div class="bg-black/20 p-6 rounded-3xl border border-white/5 mb-8">
+                        <input type="hidden" id="gal-id">
+                        <input type="hidden" id="gal-existing-url">
+                        
+                        <div class="text-center mb-6">
+                            <input type="file" id="gal-file" class="hidden" onchange="previewImg(event)">
+                            <label for="gal-file" class="cursor-pointer block border-2 border-dashed border-white/10 p-6 rounded-2xl hover:border-sky-500/50 transition bg-black/40 relative group overflow-hidden">
+                                <div id="img-placeholder">
+                                    <i data-lucide="upload-cloud" class="w-8 h-8 text-sky-500 mx-auto mb-2 group-hover:scale-110 transition"></i>
+                                    <p class="text-xs text-slate-400 font-bold tracking-wider">CLICK TO SELECT NEW IMAGE</p>
+                                </div>
+                                <img id="img-preview" class="h-40 w-full object-cover mx-auto hidden rounded-lg border border-white/20">
+                                <div class="absolute inset-0 bg-black/50 hidden group-hover:flex items-center justify-center opacity-0 group-hover:opacity-100 transition" id="img-overlay">
+                                    <p class="text-white font-bold text-sm bg-black/60 px-4 py-2 rounded-lg border border-white/20 backdrop-blur-sm"><i data-lucide="refresh-cw" class="w-4 h-4 inline mr-2"></i> Change Image</p>
+                                </div>
+                            </label>
+                        </div>
+                        <div class="space-y-4">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-[10px] text-sky-500 font-bold uppercase tracking-widest mb-2 ml-1 mono">Image Title</label>
+                                    <input type="text" id="gal-title" placeholder="e.g. CTF Winner" class="w-full bg-black/40 border border-white/10 rounded-xl p-4 text-sm outline-none focus:border-sky-500">
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] text-sky-500 font-bold uppercase tracking-widest mb-2 ml-1 mono">Subtitle / Date</label>
+                                    <input type="text" id="gal-subtitle" placeholder="e.g. Aug 2025" class="w-full bg-black/40 border border-white/10 rounded-xl p-4 text-sm outline-none focus:border-sky-500">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-[10px] text-sky-500 font-bold uppercase tracking-widest mb-2 ml-1 mono">Full Details (Shown in Lightbox)</label>
+                                <textarea id="gal-details" placeholder="Write full description here..." rows="2" class="w-full bg-black/40 border border-white/10 rounded-xl p-4 text-sm outline-none focus:border-sky-500"></textarea>
+                            </div>
+                            <div class="flex flex-col md:flex-row items-center gap-4 pt-2">
+                                <button onclick="uploadAndSaveGallery()" id="gal-btn" class="w-full md:w-auto flex-1 bg-sky-600 p-4 rounded-xl font-bold text-sm hover:bg-sky-500 transition shadow-[0_0_15px_rgba(14,165,233,0.3)] text-white">Upload & Save New Archive</button>
+                                <button onclick="resetGalForm()" class="px-6 py-4 text-slate-400 text-xs hover:text-white transition">Cancel Form</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="list-gallery" class="grid grid-cols-2 md:grid-cols-4 gap-4 max-h-[500px] overflow-y-auto pr-2 content-start auto-rows-max"></div>
+                </div>
+
+                <div id="tab-messages" class="tab-content glass p-8 rounded-3xl">
+                    <h2 class="text-xl font-bold mb-6 flex justify-between items-center border-b border-white/10 pb-4">
+                        <span class="flex items-center gap-3"><i data-lucide="message-square" class="text-emerald-500"></i> Transmissions</span>
+                        <button onclick="loadList('messages')" class="text-xs bg-emerald-500/10 text-emerald-500 px-4 py-2 rounded-lg border border-emerald-500/20 hover:bg-emerald-500/20 transition flex items-center gap-2"><i data-lucide="refresh-cw" class="w-3 h-3"></i> Refresh Inbox</button>
+                    </h2>
+                    <p class="text-xs text-slate-500 mb-6 mono">* Click on any message box to read full details in Lightbox.</p>
+                    <div id="list-messages" class="grid sm:grid-cols-2 gap-4 max-h-[600px] overflow-y-auto pr-2 content-start auto-rows-max"></div>
+                </div>
+
+                <div id="tab-settings" class="tab-content glass p-8 rounded-3xl">
+                    <h2 class="text-xl font-bold mb-6 flex justify-between items-center border-b border-white/10 pb-4">
+                        <span class="flex items-center gap-3"><i data-lucide="shield" class="text-amber-500"></i> Security & Credentials</span>
+                    </h2>
+                    
+                    <div class="bg-black/20 p-6 md:p-8 rounded-3xl border border-white/5 max-w-xl mx-auto mt-4 shadow-inner">
+                        <div class="space-y-5">
+                            <div>
+                                <label class="block text-[10px] text-amber-500 font-bold uppercase tracking-widest mb-2 ml-1 mono">New Username</label>
+                                <input type="text" id="s-new-user" autocomplete="off" placeholder="Type new username" class="w-full bg-black/40 border border-white/10 rounded-xl p-4 text-sm mono outline-none focus:border-amber-500">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-[10px] text-amber-500 font-bold uppercase tracking-widest mb-2 ml-1 mono">New Security Key (For Recovery)</label>
+                                <input type="text" id="s-new-key" autocomplete="off" placeholder="e.g. MH-ROOT-2026" class="w-full bg-black/40 border border-white/10 rounded-xl p-4 text-sm mono outline-none focus:border-amber-500">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-[10px] text-amber-500 font-bold uppercase tracking-widest mb-2 ml-1 mono">New Password</label>
+                                <div class="relative">
+                                    <input type="password" id="s-new-pass" autocomplete="new-password" placeholder="Type new password" class="w-full bg-black/40 border border-white/10 rounded-xl p-4 pr-12 text-sm mono outline-none focus:border-amber-500">
+                                    <button type="button" onclick="togglePass('s-new-pass', 'eye-settings')" class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 hover:text-amber-500 transition">
+                                        <i id="eye-settings" data-lucide="eye" class="w-5 h-5"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <button onclick="updateCreds()" class="w-full bg-amber-600 px-8 py-4 rounded-xl font-bold text-sm hover:bg-amber-500 transition shadow-[0_0_15px_rgba(245,158,11,0.3)] text-white mt-4">Update Security Credentials</button>
+                        </div>
+                    </div>
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <div id="msgModal" class="fixed inset-0 modal-overlay z-[9999] hidden flex items-center justify-center p-4 opacity-0 transition-opacity duration-300">
+        <div class="glass max-w-2xl w-full p-8 rounded-3xl border border-sky-500/30 shadow-[0_0_40px_rgba(14,165,233,0.15)] relative transform scale-95 transition-transform duration-300" id="msgModal-content">
+            <button onclick="closeMsgModal()" class="absolute top-6 right-6 text-slate-400 hover:text-red-500 bg-black/40 p-2 rounded-full border border-white/5 transition"><i data-lucide="x" class="w-5 h-5"></i></button>
+            <div class="flex items-center gap-4 mb-6 border-b border-white/10 pb-6">
+                <div class="w-12 h-12 rounded-full bg-sky-500/20 flex items-center justify-center border border-sky-500/30"><i data-lucide="user" class="w-6 h-6 text-sky-500"></i></div>
+                <div>
+                    <h3 id="modal-msg-name" class="text-xl font-bold text-white leading-tight">Identity Name</h3>
+                    <p id="modal-msg-vector" class="text-xs text-sky-400 font-mono mt-1">user@email.com</p>
+                </div>
+            </div>
+            <div class="bg-black/40 border border-white/5 p-6 rounded-2xl mb-6 shadow-inner min-h-[150px]">
+                <p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-3 mono">Payload / Message Content:</p>
+                <p id="modal-msg-payload" class="text-slate-300 text-sm leading-relaxed font-mono whitespace-pre-wrap">Full message goes here.</p>
+            </div>
+            <div class="flex justify-end">
+                <p id="modal-msg-date" class="text-[10px] text-slate-500 uppercase tracking-widest mono bg-white/5 px-3 py-1.5 rounded-lg border border-white/5">Time</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+        const API_BASE = 'https://cyberportfolio-ax05.onrender.com/api';
+        let currentAdmin = "";
+        let globalData = {}; 
+        let statsInterval;
+
+        // Light/Dark Theme Toggle
+        const themeBtn = document.getElementById('themeToggle');
+        themeBtn.addEventListener('click', () => {
+            document.body.classList.toggle('light-mode');
+            themeBtn.innerHTML = document.body.classList.contains('light-mode') ? '<i data-lucide="moon" class="w-5 h-5 text-slate-600"></i>' : '<i data-lucide="sun" class="w-5 h-5 text-amber-400"></i>';
+            lucide.createIcons();
+        });
+
+        // Toggle Password Visibility
+        function togglePass(inputId, iconId) {
+            const input = document.getElementById(inputId);
+            const icon = document.getElementById(iconId);
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.setAttribute('data-lucide', 'eye-off');
+            } else {
+                input.type = 'password';
+                icon.setAttribute('data-lucide', 'eye');
+            }
+            lucide.createIcons();
+        }
+
+        // ================= SYSTEM STATS =================
+        async function fetchSystemStats() {
+            try {
+                const res = await fetch(`${API_BASE}/system-stats`);
+                if(res.ok) {
+                    const data = await res.json();
+                    document.getElementById('stat-cpu').innerText = data.cpu;
+                    document.getElementById('stat-ram').innerText = data.ram;
+                    document.getElementById('stat-load').innerText = data.load;
+                    document.getElementById('stat-total').innerText = data.totalVisitors;
+                    document.getElementById('stat-today').innerText = data.todayVisitors;
+                }
+            } catch(e) {}
+        }
+
+        // ================= AUTHENTICATION =================
+        async function handleLogin() {
+            const u = document.getElementById('user').value.trim();
+            const p = document.getElementById('pass').value.trim();
+            
+            if(!u || !p) return alert("Please enter Username and Password!");
+
+            const btn = document.getElementById('login-btn');
+            const origText = btn.innerText;
+            btn.innerText = "VERIFYING...";
+
+            try {
+                const res = await fetch(`${API_BASE}/login`, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({username: u, password: p}) });
+                if(res.ok) {
+                    currentAdmin = u;
+                    document.getElementById('login-screen').style.display = 'none';
+                    document.getElementById('admin-dashboard').classList.remove('hidden');
+                    
+                    fetchSystemStats();
+                    statsInterval = setInterval(fetchSystemStats, 5000); 
+                    switchTab('profile'); 
+                } else { 
+                    alert("ACCESS DENIED: Wrong Credentials"); 
+                    btn.innerText = origText;
+                }
+            } catch(e) { 
+                alert("Server Error. Make sure backend is running."); 
+                btn.innerText = origText;
+            }
+        }
+
+        function toggleForgot(show) {
+            document.getElementById('login-fields').classList.toggle('hidden', show);
+            document.getElementById('forgot-fields').classList.toggle('hidden', !show);
+        }
+
+        async function handleForgot() {
+            const payload = { username: document.getElementById('f-user').value.trim(), security_key: document.getElementById('f-key').value.trim(), new_password: document.getElementById('f-newpass').value.trim() };
+            if(!payload.username || !payload.security_key || !payload.new_password) return alert("Fill all fields!");
+            
+            const res = await fetch(`${API_BASE}/forgot-creds`, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(payload) });
+            if(res.ok) { alert("Success! Password Reset."); toggleForgot(false); } else { alert("Failed. Invalid Key."); }
+        }
+
+        async function updateCreds() {
+            const newUser = document.getElementById('s-new-user').value.trim();
+            const newPass = document.getElementById('s-new-pass').value.trim();
+            const newKey = document.getElementById('s-new-key').value.trim(); // New Feature
+            
+            if(!newUser || !newPass) return alert("Username and Password fields cannot be empty!");
+            
+            const res = await fetch(`${API_BASE}/update-auth`, { 
+                method: 'POST', 
+                headers: {'Content-Type':'application/json'}, 
+                body: JSON.stringify({old_user: currentAdmin, new_user: newUser, new_pass: newPass, new_key: newKey}) 
+            });
+            
+            if(res.ok) { 
+                alert("Security Credentials Updated Successfully! Please Re-login."); 
+                location.reload(); 
+            } else {
+                alert("Failed to update credentials.");
+            }
+        }
+
+        // ================= TAB MANAGEMENT =================
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(b => {
+                b.classList.remove('bg-sky-500/10', 'text-sky-500', 'shadow-lg', 'bg-amber-500/10', 'text-amber-500');
+                b.classList.add('text-slate-400');
+            });
+            
+            document.getElementById('tab-'+tabId).classList.add('active');
+            const activeBtn = document.getElementById('btn-'+tabId);
+            activeBtn.classList.remove('text-slate-400');
+            
+            if(tabId === 'settings') {
+                activeBtn.classList.add('bg-amber-500/10', 'text-amber-500', 'shadow-lg');
+            } else {
+                activeBtn.classList.add('bg-sky-500/10', 'text-sky-500', 'shadow-lg');
+            }
+            
+            if(tabId === 'profile') loadProfile();
+            else if(tabId !== 'settings') loadList(tabId);
+        }
+
+        function resetForm(table) {
+            const form = document.getElementById(`form-${table}`);
+            if(form) {
+                form.reset();
+                const pfx = table === 'education' ? 'edu' : table === 'arsenal' ? 'ars' : table === 'projects' ? 'proj' : 'ach';
+                const idField = document.getElementById(`${pfx}-id`);
+                if(idField) idField.value = '';
+                form.querySelector('button[type="submit"]').innerText = `Save Record`;
+            }
+        }
+
+        // ================= PROFILE CRUD =================
+        async function loadProfile() {
+            try {
+                const res = await fetch(`${API_BASE}/profile`);
+                const rawData = await res.json();
+                const data = Array.isArray(rawData) ? rawData[0] : rawData; 
+                if(data && data.full_name) {
+                    document.getElementById('prof-full_name').value = data.full_name;
+                    document.getElementById('prof-job_title').value = data.job_title;
+                    document.getElementById('prof-bio').value = data.bio;
+                }
+            } catch(e) { console.error("Error loading profile:", e); }
+        }
+
+        async function saveProfile(e) {
+            e.preventDefault();
+            const btn = e.target.querySelector('button'); btn.innerText = "Saving Data...";
+            const payload = { full_name: document.getElementById('prof-full_name').value.trim(), job_title: document.getElementById('prof-job_title').value.trim(), bio: document.getElementById('prof-bio').value.trim() };
+            try {
+                const res = await fetch(`${API_BASE}/profile`, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(payload) });
+                if(!res.ok) throw new Error("Failed to save profile");
+                btn.innerText = "Successfully Saved!"; setTimeout(()=> btn.innerText = "Save Profile Data", 2000);
+            } catch(err) { btn.innerText = "Error! Check DB"; setTimeout(()=> btn.innerText = "Save Profile Data", 2000); }
+        }
+
+        // ================= DYNAMIC CRUD FOR ALL LISTS =================
+        async function loadList(table) {
+            try {
+                const res = await fetch(`${API_BASE}/${table}`);
+                const data = await res.json();
+                globalData[table] = data; 
+                const container = document.getElementById(`list-${table}`);
+                if(!container) return;
+                container.innerHTML = '';
+                
+                if(!data || data.length === 0) { 
+                    container.innerHTML = `<div class="col-span-full"><p class="text-xs text-slate-500 mono bg-black/20 p-4 rounded-xl border border-white/5 text-center">No records found in database.</p></div>`; 
+                    return; 
+                }
+
+                data.forEach(item => {
+                    if(table === 'gallery') {
+                        container.innerHTML += `
+                            <div class="bg-black/40 border border-white/5 p-2 rounded-xl relative group overflow-hidden">
+                                <img src="${item.image_url}" class="h-32 w-full object-cover rounded-lg mb-1 border border-white/10 transition group-hover:opacity-40 duration-300">
+                                <div class="absolute inset-0 flex items-center justify-center gap-3 opacity-0 group-hover:opacity-100 transition duration-300 z-10 pointer-events-none">
+                                    <button onclick="editGallery(${item.id})" class="pointer-events-auto bg-sky-500 text-white p-2.5 rounded-full hover:scale-110 hover:bg-sky-400 transition shadow-[0_0_15px_rgba(14,165,233,0.5)]" title="Edit"><i data-lucide="edit-3" class="w-4 h-4"></i></button>
+                                    <button onclick="deleteRecord('${table}', ${item.id})" class="pointer-events-auto bg-red-500 text-white p-2.5 rounded-full hover:scale-110 hover:bg-red-400 transition shadow-[0_0_15px_rgba(239,68,68,0.5)]" title="Delete"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                                </div>
+                                <p class="text-[10px] font-bold text-sky-400 truncate px-1 text-center mt-2">${item.title}</p>
+                            </div>`;
+                    } else if(table === 'messages') {
+                        const dateStr = new Date(item.created_at).toLocaleDateString();
+                        container.innerHTML += `
+                            <div onclick="openMsgModal(${item.id})" class="bg-black/30 border border-white/5 p-5 rounded-2xl relative group cursor-pointer hover:border-sky-500/30 hover:bg-sky-500/5 transition duration-300 flex flex-col h-full">
+                                <button onclick="event.stopPropagation(); deleteRecord('messages', ${item.id})" class="absolute top-4 right-4 p-2 text-red-500 bg-red-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition hover:bg-red-500 hover:text-white"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                                <div class="flex items-center gap-3 mb-2">
+                                    <i data-lucide="user" class="w-4 h-4 text-sky-500"></i>
+                                    <p class="text-white font-bold text-sm">${item.identity_name}</p>
+                                </div>
+                                <p class="text-[10px] text-sky-500 mb-3 mono truncate pl-7">${item.contact_vector}</p>
+                                <p class="text-xs text-slate-400 bg-black/40 p-3 rounded-lg border border-white/5 truncate flex-1">${item.data_payload}</p>
+                                <p class="text-[8px] text-slate-500 uppercase tracking-widest mt-3 text-right mono">${dateStr}</p>
+                            </div>`;
+                    } else {
+                        const title = item.degree || item.title;
+                        const sub = item.institution || item.category || item.tags || item.organization;
+                        container.innerHTML += `
+                            <div class="bg-black/30 border border-white/5 p-5 rounded-xl flex justify-between items-center group hover:border-sky-500/30 hover:bg-sky-500/5 transition">
+                                <div class="w-[70%]">
+                                    <p class="text-white font-bold text-sm truncate">${title}</p>
+                                    <p class="text-slate-500 text-[10px] uppercase mono truncate mt-1">${sub}</p>
+                                </div>
+                                <div class="flex gap-2 shrink-0">
+                                    <button onclick="editRecord('${table}', ${item.id})" class="p-2 text-sky-500 bg-sky-500/10 hover:bg-sky-500 hover:text-white rounded-lg transition"><i data-lucide="edit-3" class="w-4 h-4"></i></button>
+                                    <button onclick="deleteRecord('${table}', ${item.id})" class="p-2 text-red-500 bg-red-500/10 hover:bg-red-500 hover:text-white rounded-lg transition"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                                </div>
+                            </div>`;
+                    }
+                });
+                lucide.createIcons();
+            } catch(e) { console.error("Error loading list:", e); }
+        }
+
+        async function saveData(e, table) {
+            e.preventDefault();
+            const form = e.target;
+            const btn = form.querySelector('button[type="submit"]'); 
+            const orgText = btn.innerText; btn.innerText = 'Saving...';
+            
+            const pfx = table === 'education' ? 'edu' : table === 'arsenal' ? 'ars' : table === 'projects' ? 'proj' : 'ach';
+            const id = document.getElementById(`${pfx}-id`).value;
+            
+            let payload = {};
+            if(table === 'education') payload = { degree: document.getElementById('edu-degree').value, institution: document.getElementById('edu-institution').value, pass_year: document.getElementById('edu-pass_year').value, details: document.getElementById('edu-details').value, active_thesis: document.getElementById('edu-active_thesis').value || null, core_focus: document.getElementById('edu-core_focus').value || null };
+            if(table === 'arsenal') payload = { title: document.getElementById('ars-title').value, category: document.getElementById('ars-category').value, details: document.getElementById('ars-details').value };
+            if(table === 'projects') payload = { title: document.getElementById('proj-title').value, description: document.getElementById('proj-description').value, tags: document.getElementById('proj-tags').value, link: document.getElementById('proj-link').value || null };
+            if(table === 'achievements') payload = { title: document.getElementById('ach-title').value, organization: document.getElementById('ach-organization').value, year: document.getElementById('ach-year').value, details: document.getElementById('ach-details').value };
+
+            const method = id ? 'PUT' : 'POST';
+            const url = id ? `${API_BASE}/${table}/${id}` : `${API_BASE}/${table}`;
+            
+            try {
+                const res = await fetch(url, { method, headers: {'Content-Type':'application/json'}, body: JSON.stringify(payload) });
+                if(!res.ok) throw new Error();
+                resetForm(table); loadList(table);
+                btn.innerText = 'Saved Successfully!'; setTimeout(() => btn.innerText = orgText, 1500);
+            } catch(err) { alert("Server Error while saving."); btn.innerText = 'Error'; setTimeout(() => btn.innerText = orgText, 1500); }
+        }
+
+        function editRecord(table, id) {
+            const item = globalData[table].find(x => x.id === id);
+            const pfx = table === 'education' ? 'edu' : table === 'arsenal' ? 'ars' : table === 'projects' ? 'proj' : 'ach';
+            document.getElementById(`${pfx}-id`).value = item.id;
+            
+            if(table === 'education') {
+                document.getElementById('edu-degree').value = item.degree;
+                document.getElementById('edu-institution').value = item.institution;
+                document.getElementById('edu-pass_year').value = item.pass_year;
+                document.getElementById('edu-details').value = item.details;
+                document.getElementById('edu-active_thesis').value = item.active_thesis || '';
+                document.getElementById('edu-core_focus').value = item.core_focus || '';
+            }
+            if(table === 'arsenal') {
+                document.getElementById('ars-title').value = item.title;
+                document.getElementById('ars-category').value = item.category;
+                document.getElementById('ars-details').value = item.details;
+            }
+            if(table === 'projects') {
+                document.getElementById('proj-title').value = item.title;
+                document.getElementById('proj-description').value = item.description;
+                document.getElementById('proj-tags').value = item.tags;
+                document.getElementById('proj-link').value = item.link || '';
+            }
+            if(table === 'achievements') {
+                document.getElementById('ach-title').value = item.title;
+                document.getElementById('ach-organization').value = item.organization;
+                document.getElementById('ach-year').value = item.year;
+                document.getElementById('ach-details').value = item.details;
+            }
+            
+            document.querySelector(`#form-${table} button[type="submit"]`).innerText = 'Update Record Data';
+            document.getElementById(`tab-${table}`).scrollIntoView({behavior: 'smooth'});
+        }
+
+        async function deleteRecord(table, id) {
+            if(!confirm("Warning: Do you want to permanently delete this record?")) return;
+            await fetch(`${API_BASE}/${table}/${id}`, { method: 'DELETE' });
+            loadList(table);
+        }
+
+        // ================= GALLERY CRUD LOGIC =================
+        function resetGalForm() {
+            document.getElementById('gal-title').value = '';
+            document.getElementById('gal-subtitle').value = '';
+            document.getElementById('gal-details').value = '';
+            document.getElementById('gal-id').value = '';
+            document.getElementById('gal-existing-url').value = '';
+            document.getElementById('gal-file').value = '';
+            document.getElementById('img-preview').classList.add('hidden');
+            document.getElementById('img-preview').src = '';
+            document.getElementById('img-placeholder').classList.remove('hidden');
+            document.getElementById('img-overlay').classList.add('hidden');
+            document.getElementById('gal-btn').innerText = 'Upload & Save New Archive';
+        }
+
+        function previewImg(e) {
+            const file = e.target.files[0];
+            if(file) {
+                const img = document.getElementById('img-preview');
+                img.src = URL.createObjectURL(file);
+                img.classList.remove('hidden');
+                document.getElementById('img-placeholder').classList.add('hidden');
+                document.getElementById('img-overlay').classList.remove('hidden');
+            }
+        }
+
+        function editGallery(id) {
+            const item = globalData['gallery'].find(x => x.id === id);
+            if(!item) return;
+            
+            document.getElementById('gal-id').value = item.id;
+            document.getElementById('gal-existing-url').value = item.image_url;
+            document.getElementById('gal-title').value = item.title;
+            document.getElementById('gal-subtitle').value = item.subtitle || '';
+            document.getElementById('gal-details').value = item.details || '';
+            
+            const imgPreview = document.getElementById('img-preview');
+            imgPreview.src = item.image_url;
+            imgPreview.classList.remove('hidden');
+            document.getElementById('img-placeholder').classList.add('hidden');
+            document.getElementById('img-overlay').classList.remove('hidden');
+            
+            document.getElementById('gal-btn').innerText = 'Update Archive Data';
+            document.getElementById('tab-gallery').scrollIntoView({behavior: 'smooth'});
+        }
+
+        async function uploadAndSaveGallery() {
+            const btn = document.getElementById('gal-btn');
+            const id = document.getElementById('gal-id').value;
+            const title = document.getElementById('gal-title').value;
+            const subtitle = document.getElementById('gal-subtitle').value;
+            const details = document.getElementById('gal-details').value;
+            const existingUrl = document.getElementById('gal-existing-url').value;
+            const fileInput = document.getElementById('gal-file');
+            
+            if(!title) return alert("Image Title is required!");
+            if(!id && !fileInput.files[0]) return alert("Please select an image file to upload!"); 
+            
+            btn.innerText = "PROCESSING DATA..."; btn.classList.add('opacity-50');
+            
+            let finalImageUrl = existingUrl;
+
+            if(fileInput.files[0]) {
+                btn.innerText = "UPLOADING TO STORAGE...";
+                const formData = new FormData();
+                formData.append('image', fileInput.files[0]);
+                
+                try {
+                    const uploadRes = await fetch(`${API_BASE}/upload`, { method: 'POST', body: formData });
+                    const uploadData = await uploadRes.json();
+                    if(!uploadRes.ok) throw new Error();
+                    finalImageUrl = uploadData.url;
+                } catch(e) { 
+                    alert("Image Upload Failed! Check Supabase Storage permissions."); 
+                    btn.innerText = id ? "Update Archive Data" : "Upload & Save New Archive"; 
+                    btn.classList.remove('opacity-50');
+                    return;
+                }
+            }
+            
+            btn.innerText = "SYNCING WITH DATABASE...";
+            try {
+                const payload = { title, subtitle, details, image_url: finalImageUrl };
+                const method = id ? 'PUT' : 'POST';
+                const url = id ? `${API_BASE}/gallery/${id}` : `${API_BASE}/gallery`;
+
+                const res = await fetch(url, { method, headers: {'Content-Type':'application/json'}, body: JSON.stringify(payload) });
+                if(!res.ok) throw new Error();
+                
+                resetGalForm();
+                loadList('gallery');
+                
+                btn.innerText = "SUCCESSFULLY SAVED!";
+                setTimeout(() => { btn.innerText = "Upload & Save New Archive"; btn.classList.remove('opacity-50'); }, 1500);
+            } catch(e) { 
+                alert("Database Update Failed!"); 
+                btn.innerText = "Error"; btn.classList.remove('opacity-50');
+            }
+        }
+
+        // ================= MESSAGE LIGHTBOX LOGIC =================
+        const msgModal = document.getElementById('msgModal');
+        const msgModalContent = document.getElementById('msgModal-content');
+        
+        function openMsgModal(id) {
+            const msg = globalData['messages'].find(m => m.id === id);
+            if(!msg) return;
+
+            const dateStr = new Date(msg.created_at).toLocaleString();
+
+            document.getElementById('modal-msg-name').innerText = msg.identity_name;
+            document.getElementById('modal-msg-vector').innerText = msg.contact_vector;
+            document.getElementById('modal-msg-payload').innerText = msg.data_payload;
+            document.getElementById('modal-msg-date').innerText = dateStr;
+            
+            msgModal.classList.remove('hidden');
+            setTimeout(() => { 
+                msgModal.classList.remove('opacity-0'); 
+                msgModalContent.classList.remove('scale-95'); 
+            }, 10);
+        }
+
+        function closeMsgModal() {
+            msgModal.classList.add('opacity-0');
+            msgModalContent.classList.add('scale-95');
+            setTimeout(() => { msgModal.classList.add('hidden'); }, 300);
+        }
+    </script>
+</body>
+</html>
