@@ -16,10 +16,16 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 const upload = multer({ storage: multer.memoryStorage() });
 
 // ================= REAL VISITOR TRACKING MIDDLEWARE =================
-app.use((req, res, next) => {
+app.use(async (req, res, next) => {
+    // শুধু মেইন সাইট ভিজিট করলেই কাউন্ট হবে
     if (req.path === '/' || req.path === '/index.html') {
         const today = new Date().toISOString().split('T')[0];
-        supabase.from('page_views').insert([{ view_date: today }]).then();
+        
+        // ডাটাবেসে পুশ করা এবং কোনো এরর থাকলে তা লগে দেখানো
+        const { error } = await supabase.from('page_views').insert([{ view_date: today }]);
+        if (error) {
+            console.error("[TRACKING ERROR]:", error.message);
+        }
     }
     next();
 });
