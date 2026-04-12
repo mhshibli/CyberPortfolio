@@ -702,7 +702,14 @@
                 if(profData && profData.full_name) {
                     document.getElementById('profile-name').innerText = profData.full_name;
                     document.getElementById('profile-title').innerText = profData.job_title;
-                    document.getElementById('profile-bio').innerText = profData.bio;
+                    
+                    // --- Custom Bio Color Formatter ---
+                    let formattedBio = profData.bio
+                        .replace(/\*\*(.*?)\*\*/g, '<span class="text-white font-bold">$1</span>') // **Text** will be White
+                        .replace(/\*(.*?)\*/g, '<span class="text-sky-400 font-bold drop-shadow-[0_0_8px_rgba(56,189,248,0.5)]">$1</span>'); // *Text* will be Glowing Blue
+                    document.getElementById('profile-bio').innerHTML = formattedBio;
+                    // ----------------------------------
+
                     document.getElementById('footer-text').innerText = `© 2026 ${profData.full_name.toUpperCase()}. DESIGN: HYPER-SECURITY OS V2`;
                 }
 
