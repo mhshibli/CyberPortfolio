@@ -183,6 +183,11 @@
                 </div>
                 
                 <p id="stat-modal-desc" class="text-[10px] text-slate-500 mono uppercase tracking-widest text-center mt-2 leading-relaxed">Monitoring real-time server resources.</p>
+
+                <div id="stat-graph-container" class="mt-6 pt-6 border-t border-white/5 hidden">
+                    <canvas id="statDetailChart" height="180"></canvas>
+                </div>
+                
             </div>
         </div>
     </div>
@@ -645,84 +650,120 @@
             } catch(e) { alert("Database Update Failed!"); btn.innerText = "Error"; btn.classList.remove('opacity-50'); }
         }
 
-        // ================= DYNAMIC STATS LIGHTBOX LOGIC =================
-        const statModal = document.getElementById('statModal');
-        const statModalContent = document.getElementById('statModal-content');
+// ================= DYNAMIC STATS LIGHTBOX WITH GRAPHS =================
+        let statChartInstance = null;
 
-        function openStatModal(type) {
+        async function openStatModal(type) {
             let title, subtitle, value, textClass, bgClass, borderClass, barClass, icon, desc, percent;
+            let showGraph = false;
+            let graphUrl = '';
+            let graphColor = '#0ea5e9';
 
-            const cpuVal = parseFloat(document.getElementById('stat-cpu').innerText) || 0;
-            const ramVal = parseFloat(document.getElementById('stat-ram').innerText) || 0;
-            const loadVal = parseFloat(document.getElementById('stat-load').innerText) || 0;
             const totalVal = parseInt(document.getElementById('stat-total').innerText) || 0;
             const todayVal = parseInt(document.getElementById('stat-today').innerText) || 0;
 
-            switch(type) {
-                case 'cpu':
-                    title = 'CPU Usage'; subtitle = 'Processor Load'; value = cpuVal + '%';
-                    textClass = 'text-emerald-500'; bgClass = 'bg-emerald-500/10'; borderClass = 'border-emerald-500/30'; barClass = 'bg-emerald-500 shadow-[0_0_15px_#10b981]';
-                    icon = 'cpu'; desc = 'Real-time computation load across all active cores.'; percent = cpuVal; break;
-                case 'ram':
-                    title = 'RAM Usage'; subtitle = 'Memory Allocation'; value = ramVal + '%';
-                    textClass = 'text-purple-500'; bgClass = 'bg-purple-500/10'; borderClass = 'border-purple-500/30'; barClass = 'bg-purple-500 shadow-[0_0_15px_#a855f7]';
-                    icon = 'memory-stick'; desc = 'Real-time active memory consumption on server.'; percent = ramVal; break;
-                case 'load':
-                    title = 'Server Load'; subtitle = 'System Average'; value = loadVal;
-                    textClass = 'text-rose-500'; bgClass = 'bg-rose-500/10'; borderClass = 'border-rose-500/30'; barClass = 'bg-rose-500 shadow-[0_0_15px_#f43f5e]';
-                    icon = 'activity'; desc = '1-minute server load average. Normal range is under 2.0.'; percent = Math.min((loadVal / 4) * 100, 100); break;
-                case 'total':
-                    title = 'Total Visits'; subtitle = 'All Time Traffic'; value = totalVal;
-                    textClass = 'text-sky-500'; bgClass = 'bg-sky-500/10'; borderClass = 'border-sky-500/30'; barClass = 'bg-sky-500 shadow-[0_0_15px_#0ea5e9]';
-                    icon = 'users'; desc = 'Total number of page views since initial deployment.'; percent = 100; break;
-                case 'today':
-                    title = 'Visits Today'; subtitle = '24H Traffic'; value = todayVal;
-                    textClass = 'text-amber-500'; bgClass = 'bg-amber-500/10'; borderClass = 'border-amber-500/30'; barClass = 'bg-amber-500 shadow-[0_0_15px_#f59e0b]';
-                    icon = 'user-check'; desc = 'Number of page views recorded in the current day.'; percent = totalVal > 0 ? (todayVal / totalVal) * 100 : 100; break;
+            // ডেটা লজিক সেটআপ
+            if(type === 'total') {
+                title = 'Total Visits'; subtitle = '7 Days Traffic'; value = totalVal;
+                textClass = 'text-sky-500'; bgClass = 'bg-sky-500/10'; borderClass = 'border-sky-500/30'; barClass = 'bg-sky-500';
+                icon = 'users'; desc = 'Last 7 days visitor progression.'; percent = 100;
+                showGraph = true; graphUrl = '/api/analytics'; graphColor = '#0ea5e9';
+            } else if(type === 'today') {
+                title = 'Visits Today'; subtitle = 'Hourly Traffic'; value = todayVal;
+                textClass = 'text-amber-500'; bgClass = 'bg-amber-500/10'; borderClass = 'border-amber-500/30'; barClass = 'bg-amber-500';
+                icon = 'user-check'; desc = 'Traffic distribution over the last 24 hours.';
+                percent = totalVal > 0 ? (todayVal / totalVal) * 100 : 100;
+                showGraph = true; graphUrl = '/api/analytics/today'; graphColor = '#f59e0b';
+            } else {
+                // CPU, RAM, Load এর জন্য আগের মতই থাকবে (কোন গ্রাফ নেই)
+                if(type === 'cpu') {
+                    title = 'CPU Usage'; subtitle = 'System Load'; value = document.getElementById('stat-cpu').innerText + '%';
+                    textClass = 'text-emerald-500'; bgClass = 'bg-emerald-500/10'; borderClass = 'border-emerald-500/30'; barClass = 'bg-emerald-500';
+                    icon = 'cpu'; desc = 'Real-time computation load.'; percent = parseFloat(value);
+                } else if(type === 'ram') {
+                    title = 'RAM Usage'; subtitle = 'Memory Load'; value = document.getElementById('stat-ram').innerText + '%';
+                    textClass = 'text-purple-500'; bgClass = 'bg-purple-500/10'; borderClass = 'border-purple-500/30'; barClass = 'bg-purple-500';
+                    icon = 'memory-stick'; desc = 'System memory consumption.'; percent = parseFloat(value);
+                } else {
+                    title = 'Server Load'; subtitle = 'Status'; value = document.getElementById('stat-load').innerText;
+                    textClass = 'text-rose-500'; bgClass = 'bg-rose-500/10'; borderClass = 'border-rose-500/30'; barClass = 'bg-rose-500';
+                    icon = 'activity'; desc = 'Server stability index.'; percent = (parseFloat(value)/2)*100;
+                }
             }
 
-            // Update Texts
+            // UI আপডেট
             document.getElementById('stat-modal-title').innerText = title;
             document.getElementById('stat-modal-subtitle').innerText = subtitle;
-            
             const valEl = document.getElementById('stat-modal-value');
-            valEl.innerText = value;
-            valEl.className = `text-4xl font-black tracking-tighter mono ${textClass}`;
+            valEl.innerText = value; valEl.className = `text-4xl font-black mono ${textClass}`;
             document.getElementById('stat-modal-desc').innerText = desc;
-
-            // Update Icons
-            const iconEl = document.getElementById('stat-modal-icon');
-            iconEl.setAttribute('data-lucide', icon);
-            iconEl.className = `w-8 h-8 ${textClass}`;
-
-            const iconBg = document.getElementById('stat-modal-icon-bg');
-            iconBg.className = `w-16 h-16 rounded-2xl flex items-center justify-center border shadow-inner ${bgClass} ${borderClass}`;
-
-            // Update Progress Bar
+            document.getElementById('stat-modal-icon').setAttribute('data-lucide', icon);
+            document.getElementById('stat-modal-icon-bg').className = `w-16 h-16 rounded-2xl flex items-center justify-center border ${bgClass} ${borderClass}`;
             const bar = document.getElementById('stat-modal-bar');
             bar.className = `h-full w-0 transition-all duration-[1500ms] ease-out relative rounded-full ${barClass}`;
-
-            // Update Main Container
-            statModalContent.className = `glass max-w-sm md:max-w-md w-full p-8 rounded-3xl border shadow-[0_0_50px_rgba(0,0,0,0.5)] relative transform scale-95 transition-transform duration-300 ${borderClass}`;
-
+            
             lucide.createIcons();
-            statModal.classList.remove('hidden');
+            document.getElementById('statModal').classList.remove('hidden');
 
-            // Trigger Animation
+            // গ্রাফ লজিক
+            const graphContainer = document.getElementById('stat-graph-container');
+            if(showGraph) {
+                graphContainer.classList.remove('hidden');
+                loadStatGraph(graphUrl, graphColor);
+            } else {
+                graphContainer.classList.add('hidden');
+            }
+
             setTimeout(() => {
-                statModal.classList.remove('opacity-0');
-                statModalContent.classList.remove('scale-95');
+                document.getElementById('statModal').classList.remove('opacity-0');
+                document.getElementById('statModal-content').classList.remove('scale-95');
                 bar.style.width = percent + '%';
             }, 10);
         }
 
-        function closeStatModal() {
-            statModal.classList.add('opacity-0');
-            statModalContent.classList.add('scale-95');
-            document.getElementById('stat-modal-bar').style.width = '0%';
-            setTimeout(() => statModal.classList.add('hidden'), 300);
+        async function loadStatGraph(url, color) {
+            try {
+                const res = await fetch(`${API_BASE}${url}`);
+                const data = await res.json();
+                const ctx = document.getElementById('statDetailChart').getContext('2d');
+                
+                if(statChartInstance) statChartInstance.destroy();
+                
+                statChartInstance = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: data.labels,
+                        datasets: [{
+                            data: data.values,
+                            borderColor: color,
+                            backgroundColor: color + '20',
+                            fill: true,
+                            tension: 0.4,
+                            borderWidth: 2,
+                            pointRadius: 3,
+                            pointBackgroundColor: color
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#64748b', font: { size: 9 } } },
+                            x: { grid: { display: false }, ticks: { color: '#64748b', font: { size: 8 } } }
+                        }
+                    }
+                });
+            } catch(e) { console.error("Graph Error", e); }
         }
-        
+
+        function closeStatModal() {
+            document.getElementById('statModal').classList.add('opacity-0');
+            document.getElementById('statModal-content').classList.add('scale-95');
+            setTimeout(() => {
+                document.getElementById('statModal').classList.add('hidden');
+                if(statChartInstance) statChartInstance.destroy();
+            }, 300);
+        }
 // ================= MESSAGE LIGHTBOX LOGIC =================
         const msgModal = document.getElementById('msgModal');
         const msgModalContent = document.getElementById('msgModal-content');
