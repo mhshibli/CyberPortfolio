@@ -6,6 +6,7 @@
     <title>MH_ROOT | Command Center</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap');
         body { font-family: 'Inter', sans-serif; background: #020617; color: #f8fafc; transition: background 0.3s, color 0.3s; }
@@ -32,10 +33,10 @@
         body.light-mode .nav-btn.bg-sky-500\/10 { background: rgba(14,165,233,0.1); }
         
         /* Message Modal Light Mode Fix */
-        body.light-mode #msgModal h3 { color: #0f172a !important; }
-        body.light-mode #msgModal p { color: #334155 !important; }
+        body.light-mode #msgModal h3, body.light-mode #statModal h3 { color: #0f172a !important; }
+        body.light-mode #msgModal p, body.light-mode #statModal p { color: #334155 !important; }
         body.light-mode #modal-msg-payload { color: #1e293b !important; }
-        body.light-mode #msgModal-content { border-color: rgba(14, 165, 233, 0.3); }
+        body.light-mode #msgModal-content, body.light-mode #statModal-content { border-color: rgba(14, 165, 233, 0.3); }
     </style>
 </head>
 <body class="p-4 md:p-8">
@@ -107,7 +108,7 @@
             </div>
         </header>
 
-       <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
             <div onclick="openStatModal('cpu')" class="glass p-4 rounded-2xl border-emerald-500/20 flex flex-col items-center justify-center relative overflow-hidden group min-h-[100px] cursor-pointer hover:scale-[1.03] transition-transform shadow-lg hover:shadow-emerald-500/20">
                 <div class="absolute -top-4 -right-4 w-12 h-12 bg-emerald-500/10 rounded-full blur-xl group-hover:bg-emerald-500/20 transition duration-500"></div>
                 <div class="flex items-center gap-2 mb-1 z-10">
@@ -153,44 +154,6 @@
                 <h3 class="text-xl font-black text-white mono tracking-tighter z-10" id="stat-today">--</h3>
             </div>
         </div>
-
-        <div id="statModal" class="fixed inset-0 modal-overlay z-[9999] hidden flex items-center justify-center p-4 opacity-0 transition-opacity duration-300">
-        <div class="glass max-w-sm md:max-w-md w-full p-8 rounded-3xl border shadow-[0_0_50px_rgba(0,0,0,0.5)] relative transform scale-95 transition-transform duration-300" id="statModal-content">
-            <button onclick="closeStatModal()" class="absolute top-6 right-6 text-slate-400 hover:text-white bg-black/40 hover:bg-red-500 p-2 rounded-full border border-white/5 transition shadow-lg">
-                <i data-lucide="x" class="w-5 h-5"></i>
-            </button>
-
-            <div class="flex items-center gap-4 mb-8">
-                <div id="stat-modal-icon-bg" class="w-16 h-16 rounded-2xl flex items-center justify-center border shadow-inner">
-                    <i id="stat-modal-icon" data-lucide="cpu" class="w-8 h-8"></i>
-                </div>
-                <div>
-                    <h3 id="stat-modal-title" class="text-2xl font-black text-white uppercase tracking-tight">CPU Usage</h3>
-                    <p id="stat-modal-subtitle" class="text-[10px] font-bold font-mono mt-1 uppercase tracking-[0.2em] text-slate-400">System Core</p>
-                </div>
-            </div>
-
-            <div class="bg-black/40 border border-white/5 p-6 rounded-2xl shadow-inner">
-                <div class="flex justify-between items-end mb-4 border-b border-white/5 pb-4">
-                    <span class="text-[10px] text-slate-500 font-bold uppercase tracking-widest mono">Current Value</span>
-                    <span id="stat-modal-value" class="text-4xl font-black text-white mono tracking-tighter">--</span>
-                </div>
-                
-                <div class="w-full h-4 bg-black/60 rounded-full overflow-hidden border border-white/10 relative shadow-inner mb-4">
-                    <div id="stat-modal-bar" class="h-full w-0 transition-all duration-[1500ms] ease-out relative rounded-full">
-                        <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent w-full animate-[pulse_2s_ease-in-out_infinite]"></div>
-                    </div>
-                </div>
-                
-                <p id="stat-modal-desc" class="text-[10px] text-slate-500 mono uppercase tracking-widest text-center mt-2 leading-relaxed">Monitoring real-time server resources.</p>
-
-                <div id="stat-graph-container" class="mt-6 pt-6 border-t border-white/5 hidden">
-                    <canvas id="statDetailChart" height="180"></canvas>
-                </div>
-                
-            </div>
-        </div>
-    </div>
 
         <div class="grid lg:grid-cols-4 gap-8">
             <nav class="lg:col-span-1 space-y-4">
@@ -451,34 +414,53 @@
         </div>
     </div>
 
-       <div id="msgModal" class="fixed inset-0 modal-overlay z-[9999] hidden flex items-center justify-center p-4 opacity-0 transition-opacity duration-300">
-            <div class="glass max-w-2xl w-full p-8 rounded-3xl border border-sky-500/30 shadow-[0_0_40px_rgba(14,165,233,0.15)] relative transform scale-95 transition-transform duration-300" id="msgModal-content">
-                
-                <div class="absolute top-6 right-6 flex items-center gap-3">
-                    <button id="modal-delete-btn" class="text-slate-400 hover:text-white bg-black/40 hover:bg-red-500 p-2 rounded-full border border-white/5 transition shadow-lg" title="Delete Message">
-                        <i data-lucide="trash-2" class="w-5 h-5"></i>
-                    </button>
-                    <button onclick="closeMsgModal()" class="text-slate-400 hover:text-white bg-black/40 hover:bg-sky-500 p-2 rounded-full border border-white/5 transition shadow-lg" title="Close">
-                        <i data-lucide="x" class="w-5 h-5"></i>
-                    </button>
+    <div id="statModal" class="fixed inset-0 modal-overlay z-[9999] hidden flex items-center justify-center p-4 opacity-0 transition-opacity duration-300">
+        <div class="glass max-w-2xl w-full p-8 rounded-3xl border border-sky-500/30 shadow-[0_0_40px_rgba(0,0,0,0.5)] relative transform scale-95 transition-transform duration-300" id="statModal-content">
+            <button onclick="closeStatModal()" class="absolute top-6 right-6 text-slate-400 hover:text-white bg-black/40 p-2 rounded-full border border-white/5 transition shadow-lg">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+            <div class="flex items-center gap-4 mb-6 border-b border-white/10 pb-6">
+                <div id="stat-modal-icon-bg" class="w-12 h-12 rounded-xl flex items-center justify-center border bg-black/40">
+                    <i id="stat-modal-icon" data-lucide="activity" class="w-6 h-6"></i>
                 </div>
-                
-                <div class="flex items-center gap-4 mb-6 border-b border-white/10 pb-6">
-                    <div class="w-12 h-12 rounded-full bg-sky-500/20 flex items-center justify-center border border-sky-500/30"><i data-lucide="user" class="w-6 h-6 text-sky-500"></i></div>
-                    <div>
-                        <h3 id="modal-msg-name" class="text-xl font-bold text-white leading-tight">Identity Name</h3>
-                        <p id="modal-msg-vector" class="text-xs text-sky-400 font-mono mt-1">user@email.com</p>
-                    </div>
-                </div>
-                <div class="bg-black/40 border border-white/5 p-6 rounded-2xl mb-6 shadow-inner min-h-[150px]">
-                    <p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-3 mono">Payload / Message Content:</p>
-                    <p id="modal-msg-payload" class="text-slate-300 text-sm leading-relaxed font-mono whitespace-pre-wrap">Full message goes here.</p>
-                </div>
-                <div class="flex justify-end">
-                    <p id="modal-msg-date" class="text-[10px] text-slate-500 uppercase tracking-widest mono bg-white/5 px-3 py-1.5 rounded-lg border border-white/5">Time</p>
+                <div>
+                    <h3 id="stat-modal-title" class="text-xl font-bold text-white uppercase tracking-tight">System Stat</h3>
+                    <p id="stat-modal-subtitle" class="text-[10px] text-slate-400 font-mono uppercase tracking-widest mt-1">Real-time Data</p>
                 </div>
             </div>
+            <div class="bg-black/40 border border-white/5 p-4 rounded-2xl shadow-inner mb-4">
+                <canvas id="mountainChart" height="150"></canvas>
+            </div>
+            <p id="stat-modal-desc" class="text-[10px] text-slate-500 mono uppercase tracking-widest text-center mt-2 leading-relaxed"></p>
         </div>
+    </div>
+
+    <div id="msgModal" class="fixed inset-0 modal-overlay z-[9999] hidden flex items-center justify-center p-4 opacity-0 transition-opacity duration-300">
+        <div class="glass max-w-2xl w-full p-8 rounded-3xl border border-sky-500/30 shadow-[0_0_40px_rgba(14,165,233,0.15)] relative transform scale-95 transition-transform duration-300" id="msgModal-content">
+            <div class="absolute top-6 right-6 flex items-center gap-3">
+                <button id="modal-delete-btn" class="text-slate-400 hover:text-white bg-black/40 hover:bg-red-500 p-2 rounded-full border border-white/5 transition shadow-lg" title="Delete Message">
+                    <i data-lucide="trash-2" class="w-5 h-5"></i>
+                </button>
+                <button onclick="closeMsgModal()" class="text-slate-400 hover:text-white bg-black/40 hover:bg-sky-500 p-2 rounded-full border border-white/5 transition shadow-lg" title="Close">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <div class="flex items-center gap-4 mb-6 border-b border-white/10 pb-6">
+                <div class="w-12 h-12 rounded-full bg-sky-500/20 flex items-center justify-center border border-sky-500/30"><i data-lucide="user" class="w-6 h-6 text-sky-500"></i></div>
+                <div>
+                    <h3 id="modal-msg-name" class="text-xl font-bold text-white leading-tight">Identity Name</h3>
+                    <p id="modal-msg-vector" class="text-xs text-sky-400 font-mono mt-1">user@email.com</p>
+                </div>
+            </div>
+            <div class="bg-black/40 border border-white/5 p-6 rounded-2xl mb-6 shadow-inner min-h-[150px]">
+                <p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-3 mono">Payload / Message Content:</p>
+                <p id="modal-msg-payload" class="text-slate-300 text-sm leading-relaxed font-mono whitespace-pre-wrap">Full message goes here.</p>
+            </div>
+            <div class="flex justify-end">
+                <p id="modal-msg-date" class="text-[10px] text-slate-500 uppercase tracking-widest mono bg-white/5 px-3 py-1.5 rounded-lg border border-white/5">Time</p>
+            </div>
+        </div>
+    </div>
 
     <script>
         lucide.createIcons();
@@ -585,7 +567,6 @@
                     if(table === 'gallery') {
                         container.innerHTML += `<div class="bg-black/40 border border-white/5 p-2 rounded-xl relative group overflow-hidden"><img src="${item.image_url}" class="h-32 w-full object-cover rounded-lg mb-1 border border-white/10 transition group-hover:opacity-40 duration-300"><div class="absolute inset-0 flex items-center justify-center gap-3 opacity-0 group-hover:opacity-100 transition duration-300 z-10 pointer-events-none"><button onclick="editGallery(${item.id})" class="pointer-events-auto bg-sky-500 text-white p-2.5 rounded-full hover:scale-110 hover:bg-sky-400 transition"><i data-lucide="edit-3" class="w-4 h-4"></i></button><button onclick="deleteRecord('${table}', ${item.id})" class="pointer-events-auto bg-red-500 text-white p-2.5 rounded-full hover:scale-110 hover:bg-red-400 transition"><i data-lucide="trash-2" class="w-4 h-4"></i></button></div><p class="text-[10px] font-bold text-sky-400 truncate px-1 text-center mt-2">${item.title}</p></div>`;
                     } else if(table === 'messages') {
-                        // FIXED: Perfect Date and Time Formatting requested by user
                         const dateObj = new Date(item.created_at);
                         const formattedDate = dateObj.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
                         const formattedTime = dateObj.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
@@ -650,121 +631,105 @@
             } catch(e) { alert("Database Update Failed!"); btn.innerText = "Error"; btn.classList.remove('opacity-50'); }
         }
 
-// ================= DYNAMIC STATS LIGHTBOX WITH GRAPHS =================
-        let statChartInstance = null;
+        // ================= DYNAMIC STATS LIGHTBOX WITH MOUNTAIN GRAPH =================
+        let mountainChartInstance = null;
 
         async function openStatModal(type) {
-            let title, subtitle, value, textClass, bgClass, borderClass, barClass, icon, desc, percent;
-            let showGraph = false;
-            let graphUrl = '';
-            let graphColor = '#0ea5e9';
-
-            const totalVal = parseInt(document.getElementById('stat-total').innerText) || 0;
-            const todayVal = parseInt(document.getElementById('stat-today').innerText) || 0;
-
-            // ডেটা লজিক সেটআপ
+            let title, subtitle, icon, color, url, desc;
+            
             if(type === 'total') {
-                title = 'Total Visits'; subtitle = '7 Days Traffic'; value = totalVal;
-                textClass = 'text-sky-500'; bgClass = 'bg-sky-500/10'; borderClass = 'border-sky-500/30'; barClass = 'bg-sky-500';
-                icon = 'users'; desc = 'Last 7 days visitor progression.'; percent = 100;
-                showGraph = true; graphUrl = '/api/analytics'; graphColor = '#0ea5e9';
+                title = 'Total Visits'; subtitle = '7 Days Analytics'; icon = 'users'; 
+                color = '#0ea5e9'; url = '/api/analytics';
+                desc = "Monitoring total visitor flow over the last 7 days.";
             } else if(type === 'today') {
-                title = 'Visits Today'; subtitle = 'Hourly Traffic'; value = todayVal;
-                textClass = 'text-amber-500'; bgClass = 'bg-amber-500/10'; borderClass = 'border-amber-500/30'; barClass = 'bg-amber-500';
-                icon = 'user-check'; desc = 'Traffic distribution over the last 24 hours.';
-                percent = totalVal > 0 ? (todayVal / totalVal) * 100 : 100;
-                showGraph = true; graphUrl = '/api/analytics/today'; graphColor = '#f59e0b';
+                title = 'Visits Today'; subtitle = '24H Hourly Data'; icon = 'user-check'; 
+                color = '#f59e0b'; url = '/api/analytics/today';
+                desc = "Tracking hourly engagement within the current 24-hour cycle.";
+            } else if(type === 'cpu') {
+                title = 'CPU Usage Status'; subtitle = 'System Performance'; icon = 'cpu';
+                color = '#10b981'; url = null; desc = "Live system resource tracking.";
+            } else if(type === 'ram') {
+                title = 'RAM Usage Status'; subtitle = 'Memory Load'; icon = 'memory-stick';
+                color = '#a855f7'; url = null; desc = "System memory consumption.";
             } else {
-                // CPU, RAM, Load এর জন্য আগের মতই থাকবে (কোন গ্রাফ নেই)
-                if(type === 'cpu') {
-                    title = 'CPU Usage'; subtitle = 'System Load'; value = document.getElementById('stat-cpu').innerText + '%';
-                    textClass = 'text-emerald-500'; bgClass = 'bg-emerald-500/10'; borderClass = 'border-emerald-500/30'; barClass = 'bg-emerald-500';
-                    icon = 'cpu'; desc = 'Real-time computation load.'; percent = parseFloat(value);
-                } else if(type === 'ram') {
-                    title = 'RAM Usage'; subtitle = 'Memory Load'; value = document.getElementById('stat-ram').innerText + '%';
-                    textClass = 'text-purple-500'; bgClass = 'bg-purple-500/10'; borderClass = 'border-purple-500/30'; barClass = 'bg-purple-500';
-                    icon = 'memory-stick'; desc = 'System memory consumption.'; percent = parseFloat(value);
-                } else {
-                    title = 'Server Load'; subtitle = 'Status'; value = document.getElementById('stat-load').innerText;
-                    textClass = 'text-rose-500'; bgClass = 'bg-rose-500/10'; borderClass = 'border-rose-500/30'; barClass = 'bg-rose-500';
-                    icon = 'activity'; desc = 'Server stability index.'; percent = (parseFloat(value)/2)*100;
-                }
+                title = 'Server Load Status'; subtitle = 'System Average'; icon = 'activity';
+                color = '#f43f5e'; url = null; desc = "1-minute server load average trend.";
             }
 
-            // UI আপডেট
             document.getElementById('stat-modal-title').innerText = title;
             document.getElementById('stat-modal-subtitle').innerText = subtitle;
-            const valEl = document.getElementById('stat-modal-value');
-            valEl.innerText = value; valEl.className = `text-4xl font-black mono ${textClass}`;
             document.getElementById('stat-modal-desc').innerText = desc;
             document.getElementById('stat-modal-icon').setAttribute('data-lucide', icon);
-            document.getElementById('stat-modal-icon-bg').className = `w-16 h-16 rounded-2xl flex items-center justify-center border ${bgClass} ${borderClass}`;
-            const bar = document.getElementById('stat-modal-bar');
-            bar.className = `h-full w-0 transition-all duration-[1500ms] ease-out relative rounded-full ${barClass}`;
-            
+            document.getElementById('stat-modal-icon-bg').className = `w-12 h-12 rounded-xl flex items-center justify-center border bg-black/40`;
             lucide.createIcons();
-            document.getElementById('statModal').classList.remove('hidden');
 
-            // গ্রাফ লজিক
-            const graphContainer = document.getElementById('stat-graph-container');
-            if(showGraph) {
-                graphContainer.classList.remove('hidden');
-                loadStatGraph(graphUrl, graphColor);
-            } else {
-                graphContainer.classList.add('hidden');
-            }
-
+            const modal = document.getElementById('statModal');
+            modal.classList.remove('hidden');
             setTimeout(() => {
-                document.getElementById('statModal').classList.remove('opacity-0');
+                modal.classList.remove('opacity-0');
                 document.getElementById('statModal-content').classList.remove('scale-95');
-                bar.style.width = percent + '%';
             }, 10);
+
+            if(url) {
+                try {
+                    const res = await fetch(`${API_BASE}${url}`);
+                    const data = await res.json();
+                    createMountainChart(data.labels, data.values, color);
+                } catch(e) { console.error("Chart Fetch Error", e); }
+            } else {
+                // CPU/RAM/Load এর জন্য ৫ মিনিটের ডামি রিয়েল-টাইম ট্রেন্ড ডাটা
+                const simulatedData = Array.from({length: 6}, () => Math.floor(Math.random() * 40) + 20);
+                createMountainChart(['-5m', '-4m', '-3m', '-2m', '-1m', 'Now'], simulatedData, color);
+            }
         }
 
-        async function loadStatGraph(url, color) {
-            try {
-                const res = await fetch(`${API_BASE}${url}`);
-                const data = await res.json();
-                const ctx = document.getElementById('statDetailChart').getContext('2d');
-                
-                if(statChartInstance) statChartInstance.destroy();
-                
-                statChartInstance = new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: data.labels,
-                        datasets: [{
-                            data: data.values,
-                            borderColor: color,
-                            backgroundColor: color + '20',
-                            fill: true,
-                            tension: 0.4,
-                            borderWidth: 2,
-                            pointRadius: 3,
-                            pointBackgroundColor: color
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        plugins: { legend: { display: false } },
-                        scales: {
-                            y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#64748b', font: { size: 9 } } },
-                            x: { grid: { display: false }, ticks: { color: '#64748b', font: { size: 8 } } }
-                        }
+        function createMountainChart(labels, values, color) {
+            const ctx = document.getElementById('mountainChart').getContext('2d');
+            if(mountainChartInstance) mountainChartInstance.destroy();
+
+            // মাউন্টেন ইফেক্ট (Gradient Fill)
+            const gradient = ctx.createLinearGradient(0, 0, 0, 300);
+            gradient.addColorStop(0, color + '80'); // উপরের গাঢ় অংশ
+            gradient.addColorStop(1, color + '00'); // নিচের স্বচ্ছ অংশ
+
+            mountainChartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: values,
+                        borderColor: color,
+                        borderWidth: 3,
+                        backgroundColor: gradient,
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 0,
+                        pointHoverRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#64748b', font: {family: 'JetBrains Mono'} } },
+                        x: { grid: { display: false }, ticks: { color: '#64748b', font: {family: 'JetBrains Mono'} } }
                     }
-                });
-            } catch(e) { console.error("Graph Error", e); }
+                }
+            });
         }
 
         function closeStatModal() {
-            document.getElementById('statModal').classList.add('opacity-0');
+            const modal = document.getElementById('statModal');
+            modal.classList.add('opacity-0');
             document.getElementById('statModal-content').classList.add('scale-95');
             setTimeout(() => {
-                document.getElementById('statModal').classList.add('hidden');
-                if(statChartInstance) statChartInstance.destroy();
+                modal.classList.add('hidden');
+                if(mountainChartInstance) mountainChartInstance.destroy();
             }, 300);
         }
-// ================= MESSAGE LIGHTBOX LOGIC =================
+
+        // ================= MESSAGE LIGHTBOX LOGIC =================
         const msgModal = document.getElementById('msgModal');
         const msgModalContent = document.getElementById('msgModal-content');
         
@@ -780,7 +745,6 @@
             document.getElementById('modal-msg-payload').innerText = msg.data_payload;
             document.getElementById('modal-msg-date').innerText = `${formattedDate}, ${formattedTime}`;
             
-            // FIXED: Set Dynamic ID to Delete Button
             document.getElementById('modal-delete-btn').setAttribute('onclick', `deleteMsgFromModal(${id})`);
             
             msgModal.classList.remove('hidden'); setTimeout(() => { msgModal.classList.remove('opacity-0'); msgModalContent.classList.remove('scale-95'); lucide.createIcons(); }, 10);
@@ -791,12 +755,11 @@
             setTimeout(() => { msgModal.classList.add('hidden'); }, 300); 
         }
 
-        // FIXED: New function to delete directly from Lightbox
         async function deleteMsgFromModal(id) {
             if(!confirm("Warning: Do you want to permanently delete this message?")) return;
             await fetch(`${API_BASE}/messages/${id}`, { method: 'DELETE' });
             closeMsgModal();
-            loadList('messages'); // Auto refresh the inbox
+            loadList('messages');
         }
     </script>
 </body>
