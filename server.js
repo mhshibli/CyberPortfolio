@@ -119,6 +119,31 @@ app.post('/api/upload', upload.single('image'), async (req, res) => {
     res.json({ url: pubUrl.publicUrl });
 });
 
+// ================= ANALYTICS API (Last 7 Days) =================
+app.get('/api/analytics', async (req, res) => {
+    try {
+        const { data, error } = await supabase
+            .from('page_views')
+            .select('view_date')
+            .gte('view_date', new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]);
+
+        if (error) throw error;
+
+        // ডাটা ফরম্যাট করা (প্রতিদিনের ভিউ গুনে নেওয়া)
+        const counts = {};
+        data.forEach(row => {
+            counts[row.view_date] = (counts[row.view_date] || 0) + 1;
+        });
+
+        const labels = Object.keys(counts).sort();
+        const values = labels.map(label => counts[label]);
+
+        res.json({ labels, values });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
 // ================= UNIVERSAL CRUD API =================
 const tables = ['education', 'arsenal', 'projects', 'achievements', 'gallery', 'messages'];
 
