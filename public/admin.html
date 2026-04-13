@@ -428,9 +428,11 @@
                     <p id="stat-modal-subtitle" class="text-[10px] text-slate-400 font-mono uppercase tracking-widest mt-1">Real-time Data</p>
                 </div>
             </div>
-            <div class="bg-black/40 border border-white/5 p-4 rounded-2xl shadow-inner mb-4">
-                <canvas id="mountainChart" height="150"></canvas>
+            
+            <div class="bg-black/40 border border-white/5 p-4 rounded-2xl shadow-inner mb-4 relative h-[220px] w-full">
+                <canvas id="mountainChart"></canvas>
             </div>
+            
             <p id="stat-modal-desc" class="text-[10px] text-slate-500 mono uppercase tracking-widest text-center mt-2 leading-relaxed"></p>
         </div>
     </div>
@@ -677,19 +679,26 @@
                     createMountainChart(data.labels, data.values, color);
                 } catch(e) { console.error("Chart Fetch Error", e); }
             } else {
-                // CPU/RAM/Load এর জন্য ৫ মিনিটের ডামি রিয়েল-টাইম ট্রেন্ড ডাটা
+                // CPU/RAM/Load এর জন্য ৫ মিনিটের ডামি রিয়েল-টাইম ট্রেন্ড ডাটা
                 const simulatedData = Array.from({length: 6}, () => Math.floor(Math.random() * 40) + 20);
                 createMountainChart(['-5m', '-4m', '-3m', '-2m', '-1m', 'Now'], simulatedData, color);
             }
         }
 
+        // FIXED: Empty data fallback and specific height styling
         function createMountainChart(labels, values, color) {
-            const ctx = document.getElementById('mountainChart').getContext('2d');
+            const canvas = document.getElementById('mountainChart');
+            const ctx = canvas.getContext('2d');
             if(mountainChartInstance) mountainChartInstance.destroy();
 
+            // ডাটাবেস ফাঁকা থাকলে গ্রাফ ক্র্যাশ করবে না
+            if(!labels || labels.length === 0) {
+                labels = ['No Data Yet']; values = [0];
+            }
+
             // মাউন্টেন ইফেক্ট (Gradient Fill)
-            const gradient = ctx.createLinearGradient(0, 0, 0, 300);
-            gradient.addColorStop(0, color + '80'); // উপরের গাঢ় অংশ
+            const gradient = ctx.createLinearGradient(0, 0, 0, canvas.parentElement.clientHeight || 220);
+            gradient.addColorStop(0, color + '80'); // উপরের গাঢ় অংশ
             gradient.addColorStop(1, color + '00'); // নিচের স্বচ্ছ অংশ
 
             mountainChartInstance = new Chart(ctx, {
@@ -703,13 +712,13 @@
                         backgroundColor: gradient,
                         fill: true,
                         tension: 0.4,
-                        pointRadius: 0,
+                        pointRadius: 3, // FIXED: Changed from 0 to 3 to show single dots
                         pointHoverRadius: 6
                     }]
                 },
                 options: {
                     responsive: true,
-                    maintainAspectRatio: false,
+                    maintainAspectRatio: false, // এটি এখন সঠিকভাবে কাজ করবে
                     plugins: { legend: { display: false } },
                     scales: {
                         y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#64748b', font: {family: 'JetBrains Mono'} } },
