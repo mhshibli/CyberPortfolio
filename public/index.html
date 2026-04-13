@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mahmudul Hasan | Cybersecurity</title>
+    <title>Mahmudul Hasan | Cybersecurity Researcher</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
@@ -13,7 +13,75 @@
         body { font-family: 'Inter', sans-serif; background-color: #020617; color: #f8fafc; overflow-x: hidden; transition: background-color 0.5s, color 0.5s; margin: 0; }
         .mono { font-family: 'JetBrains Mono', monospace; }
         
-        /* 5. PAGE TRANSITION (GLITCH) */
+        /* ================= AGGRESSIVE FAKE EXPLOIT BOOT SEQUENCE ================= */
+        #boot-screen {
+            position: fixed; inset: 0; z-index: 9999; background: #050000; 
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .boot-text-container {
+            width: 100%; max-width: 800px; padding: 20px;
+            font-family: 'JetBrains Mono', monospace; font-size: clamp(12px, 2vw, 16px); 
+            color: #ef4444; 
+            text-shadow: 0 0 5px rgba(239, 68, 68, 0.5);
+            text-align: left;
+        }
+        .typing-cursor::after { content: '█'; animation: blink 0.8s step-start infinite; }
+        @keyframes blink { 50% { opacity: 0; } }
+
+        /* ================= EXTREME CYBER BACKGROUND ================= */
+        .bg-cyber { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; background-color: #020617; overflow: hidden; }
+        .bg-cyber::before { content: ''; position: absolute; top: -20%; left: -10%; width: 50%; height: 50%; background: radial-gradient(circle, rgba(14, 165, 233, 0.1) 0%, transparent 70%); border-radius: 50%; filter: blur(60px); pointer-events: none; }
+        .bg-cyber::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2) 1px, transparent 1px, transparent 3px); z-index: 1; pointer-events: none; opacity: 0.5; }
+        
+        /* Hacker Decals */
+        .hacker-decals { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: bold; opacity: 0.8; animation: backgroundGlitch 4s infinite; }
+        
+        @keyframes backgroundGlitch {
+            0%, 90%, 100% { transform: translate(0, 0); opacity: 0.8; filter: none; }
+            92% { transform: translate(-4px, 2px); opacity: 1; filter: drop-shadow(4px 0 0 rgba(239, 68, 68, 0.7)) drop-shadow(-4px 0 0 rgba(14, 165, 233, 0.7)); }
+            94% { transform: translate(4px, -2px); opacity: 0.5; filter: drop-shadow(-4px 0 0 rgba(239, 68, 68, 0.7)) drop-shadow(4px 0 0 rgba(14, 165, 233, 0.7)); }
+            96% { transform: translate(-1px, 1px); opacity: 0.9; filter: none; }
+        }
+
+        .decal-1 { position: absolute; top: 15%; left: 2%; line-height: 1.6; letter-spacing: 0.1em; color: rgba(14, 165, 233, 0.15); }
+        .decal-2 { position: absolute; bottom: 20%; right: 2%; line-height: 1.6; text-align: right; letter-spacing: 0.1em; color: rgba(16, 185, 129, 0.15); }
+        .decal-3 { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: rgba(255, 255, 255, 0.02); font-size: clamp(80px, 15vw, 200px); font-weight: 900; letter-spacing: -15px; user-select: none; }
+
+        /* General UI Elements */
+        .glass-panel { background: var(--glass-bg); backdrop-filter: blur(24px); border: 1px solid var(--glass-border); border-radius: 24px; transition: all 0.5s; }
+        .glass-nav { background: rgba(2, 6, 23, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255, 255, 255, 0.05); z-index: 100; transition: all 0.3s; }
+        #navbar { transform: translateY(-100%); animation: slideDown 0.5s forwards 4s; }
+        @keyframes slideDown { to { transform: translateY(0); } }
+        
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s ease-out; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+        .modal-overlay { background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(8px); }
+
+        /* ================= SCI-FI CARDS (For Comms) ================= */
+        .sci-fi-card { background: linear-gradient(135deg, rgba(15, 23, 42, 0.8) 0%, rgba(2, 6, 23, 0.95) 100%); border: 1px solid rgba(14, 165, 233, 0.3); position: relative; overflow: hidden; box-shadow: inset 0 0 30px rgba(14, 165, 233, 0.05), 0 5px 15px rgba(0,0,0,0.5); transition: all 0.3s; clip-path: polygon(0 0, calc(100% - 15px) 0, 100% 15px, 100% 100%, 15px 100%, 0 calc(100% - 15px)); }
+        .sci-fi-card::before { content: '['; position: absolute; top: 10px; left: 10px; color: rgba(14, 165, 233, 0.5); font-family: monospace; font-size: 20px; transition: all 0.3s; }
+        .sci-fi-card::after { content: ']'; position: absolute; bottom: 10px; right: 10px; color: rgba(14, 165, 233, 0.5); font-family: monospace; font-size: 20px; transition: all 0.3s; }
+        .sci-fi-card:hover { border-color: rgba(14, 165, 233, 0.8); box-shadow: inset 0 0 20px rgba(14, 165, 233, 0.2), 0 0 20px rgba(14, 165, 233, 0.3); transform: translateY(-5px); }
+        
+        .cyber-line { position: absolute; top: 0; left: -100%; width: 150%; height: 2px; background: linear-gradient(90deg, transparent, rgba(14, 165, 233, 0.8), #fff, rgba(14, 165, 233, 0.8), transparent); animation: glitchScan 2.5s infinite; z-index: 5; opacity: 0.7; mix-blend-mode: overlay; }
+        @keyframes glitchScan { 0% { left: -100%; opacity: 0; } 10% { opacity: 1; } 50% { left: 100%; opacity: 0; } 100% { left: 100%; opacity: 0; } }
+
+        .glow-text { text-shadow: 0 0 8px rgba(255, 255, 255, 0.3); }
+
+        /* ================= PROFILE SCANNER ================= */
+        .profile-box { background: #0A101F; border: 1px solid rgba(14, 165, 233, 0.2); }
+        .scanner-container { position: relative; overflow: hidden; background: rgba(0, 0, 0, 0.2); }
+        .scanner-line { position: absolute; top: 0; left: 0; width: 100%; height: 3px; background: #0ea5e9; box-shadow: 0 0 15px #0ea5e9, 0 0 30px #0ea5e9; animation: slowScan 4s linear infinite; z-index: 10; mix-blend-mode: screen; }
+        @keyframes slowScan { 0% { top: -10%; opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { top: 110%; opacity: 0; } }
+        .scanner-overlay { position: absolute; inset: 0; background: linear-gradient(transparent 50%, rgba(0, 0, 0, 0.25) 50%); background-size: 100% 4px; pointer-events: none; z-index: 5; opacity: 0.5; }
+        .blink-shield { animation: shieldPulse 1.5s ease-in-out infinite alternate; }
+        @keyframes shieldPulse { 0% { opacity: 0.3; transform: scale(0.95); box-shadow: 0 0 0 rgba(14, 165, 233, 0); } 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 20px rgba(14, 165, 233, 0.4); } }
+
+        /* ================= MAIN CONTENT WRAPPER ================= */
+        #main-content { opacity: 0; transition: opacity 1s ease-in; }
+
+        /* ================= PAGE LOADER & TERMINAL ================= */
         #page-loader { position: fixed; inset: 0; z-index: 10000; background: #020617; display: flex; align-items: center; justify-content: center; transition: opacity 0.8s; }
         .glitch-loader { font-size: 3rem; font-weight: 900; color: #fff; position: relative; text-transform: uppercase; }
         .glitch-loader::before, .glitch-loader::after { content: 'LOADING'; position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
@@ -21,203 +89,1031 @@
         .glitch-loader::after { color: #ef4444; left: 2px; animation: glitch 0.3s infinite reverse; }
         @keyframes glitch { 0% { clip: rect(44px, 450px, 56px, 0); } 20% { clip: rect(12px, 450px, 98px, 0); } 40% { clip: rect(67px, 450px, 32px, 0); } 100% { clip: rect(10px, 450px, 88px, 0); } }
 
-        #boot-screen { position: fixed; inset: 0; z-index: 9999; background: #050000; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.8s, transform 0.8s; }
-        .boot-text-container { width: 100%; max-width: 800px; padding: 20px; font-family: 'JetBrains Mono', monospace; font-size: clamp(12px, 2vw, 16px); color: #ef4444; text-shadow: 0 0 5px rgba(239, 68, 68, 0.5); text-align: left; }
-        #hack-progress-bar { transition: width 2s ease-out; }
-
-        /* 4. INTERACTIVE TERMINAL STYLE */
         #terminal-box { background: rgba(2, 6, 23, 0.9); border: 1px solid rgba(14, 165, 233, 0.3); box-shadow: 0 0 30px rgba(14, 165, 233, 0.1); border-radius: 1rem; overflow: hidden; height: 350px; display: flex; flex-direction: column; }
         .terminal-header { background: rgba(14, 165, 233, 0.1); padding: 8px 15px; border-bottom: 1px solid rgba(14, 165, 233, 0.2); display: flex; justify-content: space-between; }
         .terminal-content { flex: 1; overflow-y: auto; padding: 15px; font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #38bdf8; }
         .terminal-input-line { display: flex; align-items: center; gap: 8px; color: #10b981; }
         #term-input { background: transparent; border: none; outline: none; color: #fff; width: 100%; }
 
-        .bg-cyber { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; background-color: #020617; overflow: hidden; }
-        .bg-cyber::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2) 1px, transparent 1px, transparent 3px); z-index: 1; pointer-events: none; opacity: 0.5; }
-        .glass-nav { background: rgba(2, 6, 23, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255, 255, 255, 0.05); z-index: 100; }
-        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s ease-out; }
-        .reveal.active { opacity: 1; transform: translateY(0); }
+        /* ================= DAY MODE FIXES ================= */
+        body.light-mode { background-color: #f1f5f9; color: #0f172a; }
+        body.light-mode .bg-cyber { background-color: #f1f5f9; }
+        body.light-mode .bg-cyber::after { background: repeating-linear-gradient(0deg, rgba(0,0,0,0.03), rgba(0,0,0,0.03) 1px, transparent 1px, transparent 3px); opacity: 0.3; }
+        body.light-mode .decal-1::before { color: rgba(14, 165, 233, 0.3); }
+        body.light-mode .decal-2::before { color: rgba(16, 185, 129, 0.3); }
+        body.light-mode .decal-3::before { color: rgba(0, 0, 0, 0.03); }
+        
+        body.light-mode .glass-panel, body.light-mode .sci-fi-card { background: rgba(255, 255, 255, 0.95); border: 1px solid rgba(14, 165, 233, 0.3); box-shadow: 0 5px 15px rgba(0,0,0,0.05); color: #1e293b; }
+        body.light-mode .sci-fi-card:hover { border-color: rgba(14, 165, 233, 0.6); box-shadow: 0 10px 25px rgba(14, 165, 233, 0.15); }
+        body.light-mode .profile-box { background: #ffffff !important; border: 1px solid rgba(14, 165, 233, 0.3) !important; }
+        body.light-mode .light-shield-box { background-color: #ffffff !important; border: 1px solid rgba(14, 165, 233, 0.2) !important; }
+        body.light-mode .light-scanner { background-color: #f8fafc !important; border: 1px solid rgba(14, 165, 233, 0.2) !important; }
+        body.light-mode .light-inner-box { background-color: rgba(255, 255, 255, 0.95) !important; border: 1px solid rgba(14, 165, 233, 0.2) !important; color: #0f172a !important; }
+        body.light-mode .light-stat-box { background-color: #f1f5f9 !important; border: 1px solid rgba(14, 165, 233, 0.2) !important; }
+        body.light-mode .scanner-overlay { opacity: 0.1; }
+        body.light-mode .text-white { color: #0f172a !important; }
+        body.light-mode .text-slate-300, body.light-mode .text-slate-400 { color: #475569 !important; }
+        body.light-mode .text-slate-500 { color: #64748b !important; }
+        body.light-mode h1, body.light-mode h2, body.light-mode h3 { color: #020617 !important; }
+        body.light-mode .text-sky-400, body.light-mode .text-sky-500 { color: #0284c7 !important; }
+        body.light-mode .text-emerald-400, body.light-mode .text-emerald-500 { color: #059669 !important; }
+        body.light-mode .text-purple-400, body.light-mode .text-purple-500 { color: #7e22ce !important; }
+        body.light-mode .text-amber-400, body.light-mode .text-amber-500 { color: #b45309 !important; }
+        body.light-mode .text-rose-400, body.light-mode .text-rose-500 { color: #e11d48 !important; }
+        body.light-mode .glow-text { text-shadow: none !important; }
+        body.light-mode .glass-nav { background: rgba(255, 255, 255, 0.98); color: #0f172a; border-bottom: 1px solid rgba(0,0,0,0.1); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+        body.light-mode .nav-link { color: #475569; }
+        body.light-mode .nav-link:hover { color: #0ea5e9 !important; }
+        body.light-mode input, body.light-mode textarea { background-color: #fff !important; color: #0f172a !important; border: 1px solid rgba(0, 0, 0, 0.2) !important; }
+        body.light-mode input:focus, body.light-mode textarea:focus { border-color: #0ea5e9 !important; box-shadow: 0 0 0 2px rgba(14,165,233,0.2); }
+        body.light-mode input::placeholder, body.light-mode textarea::placeholder { color: #94a3b8 !important; }
+        body.light-mode .bg-black\/40 { background-color: rgba(241, 245, 249, 0.8) !important; border-color: rgba(0, 0, 0, 0.1) !important; }
+        body.light-mode footer { background-color: #e2e8f0; border-top: 1px solid rgba(0,0,0,0.1); color: #475569; }
+        body.light-mode footer a { border-color: rgba(0,0,0,0.15); color: #475569; background-color: #fff; transition: all 0.3s ease; }
+        body.light-mode footer a:nth-child(1):hover { background-color: rgba(14, 165, 233, 0.1) !important; color: #0ea5e9 !important; border-color: rgba(14, 165, 233, 0.5) !important; }
+        body.light-mode footer a:nth-child(2):hover { background-color: rgba(16, 185, 129, 0.1) !important; color: #10b981 !important; border-color: rgba(16, 185, 129, 0.5) !important; }
+        body.light-mode footer a:nth-child(3):hover { background-color: rgba(37, 99, 235, 0.1) !important; color: #2563eb !important; border-color: rgba(37, 99, 235, 0.5) !important; }
+        body.light-mode footer a:nth-child(4):hover { background-color: rgba(236, 72, 153, 0.1) !important; color: #ec4899 !important; border-color: rgba(236, 72, 153, 0.5) !important; }
+        body.light-mode .modal-overlay .glass-panel { background: rgba(255, 255, 255, 0.98); color: #0f172a; } 
+        body.light-mode .light-mode-divider { background-color: rgba(14, 165, 233, 0.4) !important; }
+
+        /* Unified Light Mode overrides for inner cards */
+        body.light-mode .light-edu-card { background: rgba(255, 255, 255, 0.9); border: 1px solid rgba(0,0,0,0.1); box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        body.light-mode .light-edu-inner { background: rgba(241, 245, 249, 0.8); border: 1px solid rgba(0,0,0,0.05); }
+        body.light-mode .light-edu-inner:hover { border-color: rgba(16, 185, 129, 0.4); }
+
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.2); border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(14, 165, 233, 0.5); border-radius: 4px; }
     </style>
 </head>
 <body>
-
     <div id="page-loader">
         <div class="glitch-loader">LOADING</div>
     </div>
 
     <div id="boot-screen">
         <div class="boot-text-container" id="terminal-text"></div>
+        
         <div id="hack-progress-container" class="w-full max-w-md px-6 hidden flex-col items-center mt-8">
-            <div class="w-full h-1.5 bg-black/50 rounded-full overflow-hidden border border-red-500/20 relative">
-                <div id="hack-progress-bar" class="h-full bg-red-600 w-0 shadow-[0_0_15px_#dc2626]"></div>
+            <div class="w-full h-1.5 bg-black/50 rounded-full overflow-hidden border border-red-500/20 relative shadow-[0_0_15px_rgba(220,38,38,0.2)]">
+                <div id="hack-progress-bar" class="h-full bg-red-600 w-0 transition-all duration-[2000ms] ease-out shadow-[0_0_15px_#dc2626]"></div>
             </div>
             <div class="w-full flex justify-between text-[10px] mono text-red-500 mt-2 font-bold uppercase tracking-widest">
                 <span class="animate-pulse">Extracting Data...</span>
                 <span id="hack-progress-text">0%</span>
             </div>
         </div>
-        <div id="hacked-text" class="hidden mt-8 text-4xl md:text-6xl font-black text-red-600 tracking-tighter uppercase drop-shadow-[0_0_20px_#dc2626] animate-pulse">SYSTEM COMPROMISED</div>
-        <div id="joke-text" class="hidden mt-4 text-sky-400 font-bold text-sm md:text-lg mono text-center">...Just kidding! 😉<br>Welcome to Mahmudul's Secure Node.</div>
+
+        <div id="hacked-text" class="hidden mt-8 text-center text-4xl md:text-6xl font-black text-red-600 tracking-tighter uppercase drop-shadow-[0_0_20px_rgba(220,38,38,0.8)] animate-pulse px-4">
+            SYSTEM COMPROMISED
+        </div>
+
+        <div id="joke-text" class="hidden mt-4 text-sky-400 font-bold text-sm md:text-lg mono text-center drop-shadow-[0_0_10px_rgba(14,165,233,0.5)]">
+            ...Just kidding! 😉<br>Welcome to Mahmudul's Secure Node.
+        </div>
     </div>
 
     <div id="main-content">
-        <nav class="fixed top-0 w-full glass-nav h-16 flex items-center justify-between px-6 lg:px-12 z-[100]">
-            <span class="text-[10px] font-bold uppercase tracking-[0.2em] mono text-emerald-500">System_Online</span>
-            <div class="hidden md:flex gap-8 text-[10px] font-bold uppercase tracking-widest text-slate-300">
-                <a href="#about" class="hover:text-sky-400 transition">Profile</a>
-                <a href="#arsenal" class="hover:text-sky-400 transition">Arsenal</a>
-                <a href="#terminal" class="hover:text-sky-400 transition">Terminal</a>
-                <a href="#archive" class="hover:text-sky-400 transition">Archive</a>
+        <div class="bg-cyber">
+            <div class="hacker-decals">
+                <div class="decal-1">
+                    &gt; INIT SECURE_BOOT...<br>
+                    &gt; LOAD KERNEL_MODULE_0x8F<br>
+                    &gt; BYPASSING FIREWALL... [OK]<br>
+                    &gt; MEM_ALLOC: 0x7FFE4000<br>
+                    &gt; THREAD_SYNC: IN_PROGRESS
+                </div>
+                <div class="decal-2">
+                    SYS_OVERRIDE_ENABLED<br>
+                    --------------------<br>
+                    ROOT ACCESS GRANTED<br>
+                    UPLINK ESTABLISHED<br>
+                    PORT_8080 // LISTENING
+                </div>
+                <div class="decal-3">0xMH</div>
             </div>
-            <button id="themeToggle" class="p-2 bg-black/20 rounded-full border border-white/10"><i data-lucide="sun" class="w-4 h-4 text-amber-400"></i></button>
+        </div>
+
+        <nav class="fixed top-0 w-full glass-nav" id="navbar">
+            <div class="w-full px-6 lg:px-12 h-16 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-3 h-3 rounded-full bg-emerald-500 shadow-[0_0_10px_#10b981] animate-pulse"></div>
+                    <span class="text-[10px] font-bold uppercase tracking-[0.2em] mono text-emerald-500">System_Online</span>
+                </div>
+                <div class="hidden md:flex items-center space-x-8 text-[10px] font-bold uppercase tracking-widest">
+                    <a href="#about" class="nav-link desktop-link text-slate-300 hover:text-sky-400 transition">Profile</a>
+                    <a href="#education" class="nav-link desktop-link text-slate-300 hover:text-sky-400 transition">Education</a>
+                    <a href="#arsenal" class="nav-link desktop-link text-slate-300 hover:text-sky-400 transition">Arsenal</a>
+                    <a href="#project" class="nav-link desktop-link text-slate-300 hover:text-sky-400 transition">Project</a>
+                    <a href="#achievements" class="nav-link desktop-link text-slate-300 hover:text-sky-400 transition">Achievements</a>
+                    <a href="#archive" class="nav-link desktop-link text-slate-300 hover:text-sky-400 transition">Archive</a>
+                </div>
+                <div class="flex items-center gap-4">
+                    <button id="themeToggle" class="p-2 rounded-full bg-black/20 hover:bg-black/40 transition border border-white/10 flex items-center justify-center w-9 h-9"><i data-lucide="sun" class="w-4 h-4 text-amber-400"></i></button>
+                    <a href="/admin.html" target="_blank" class="hidden sm:inline-block text-xs font-bold mono text-sky-500 bg-sky-500/10 px-3 py-1 rounded-full border border-sky-500/20 hover:bg-sky-500/20 transition">MH_ROOT</a>
+                    <button id="mobileMenuBtn" class="md:hidden p-2 text-slate-400 hover:text-sky-500 transition"><i data-lucide="menu" class="w-6 h-6"></i></button>
+                </div>
+            </div>
+            <div id="mobileMenu" class="hidden absolute top-16 left-0 w-full glass-nav flex flex-col items-center py-6 space-y-6 text-[10px] font-bold uppercase tracking-widest shadow-2xl md:hidden">
+                <a href="#about" class="nav-link mobile-link transition">Profile</a>
+                <a href="#education" class="nav-link mobile-link transition">Education</a>
+                <a href="#arsenal" class="nav-link mobile-link transition">Arsenal</a>
+                <a href="#project" class="nav-link mobile-link transition">Project</a>
+                <a href="#achievements" class="nav-link mobile-link transition">Achievements</a>
+                <a href="#archive" class="nav-link mobile-link transition">Archive</a>
+                <a href="/admin.html" class="text-sky-500 mt-2 border border-sky-500/30 px-6 py-2 rounded-full hover:bg-sky-500/10 transition">Admin Login</a>
+            </div>
         </nav>
 
         <main class="max-w-5xl mx-auto px-6 pt-24 pb-20">
-            <section id="about" class="mb-24 reveal flex flex-col md:flex-row items-center gap-10">
-                <div class="flex-1 text-center md:text-left">
-                    <h1 class="text-5xl md:text-7xl font-black tracking-tighter leading-none text-white mb-6">Architecting <br><span class="text-sky-500">Secure AI</span> Futures.</h1>
-                    <p id="profile-bio" class="text-slate-400 text-lg font-medium max-w-xl leading-relaxed mx-auto md:mx-0"></p>
+            
+            <section id="about" class="flex flex-col md:flex-row items-center justify-between mb-24 gap-10 reveal pt-10">
+                <div class="flex-1 space-y-6 text-center md:text-left">
+                    <div class="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-sky-500/5 border border-sky-500/20 text-sky-500">
+                        <i data-lucide="shield-alert" class="w-4 h-4"></i>
+                        <span class="text-[10px] font-bold uppercase tracking-[0.25em] mono">Auth Granted // UID: 0x99A3</span>
+                    </div>
+                    <h1 class="text-5xl md:text-7xl font-black tracking-tighter leading-[0.95] text-white glow-text">
+                        Architecting <br>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-blue-500 to-indigo-500">Secure AI</span><br>
+                        Futures.
+                    </h1>
+                    <p id="profile-bio" class="text-slate-400 text-lg font-medium max-w-xl leading-relaxed mx-auto md:mx-0">Loading biography...</p>
+                </div>
+                
+                <div class="relative w-full max-w-[360px] mx-auto md:mx-0 mt-10 md:mt-0">
+                    <div class="absolute -top-4 -left-4 w-16 h-16 border-t-[1.5px] border-l-[1.5px] border-[#0ea5e9]/40 rounded-tl-3xl pointer-events-none"></div>
+                    <div class="absolute -bottom-4 -right-4 w-16 h-16 border-b-[1.5px] border-r-[1.5px] border-[#0ea5e9]/40 rounded-br-3xl pointer-events-none"></div>
+
+                    <div class="absolute -top-8 -right-8 w-20 h-20 bg-[#050b14] border border-white/5 rounded-full flex items-center justify-center z-20 blink-shield light-shield-box">
+                        <i data-lucide="shield-check" class="w-8 h-8 text-[#0ea5e9]"></i>
+                    </div>
+
+                    <div class="profile-box border border-white/5 rounded-[2rem] p-6 relative z-10 shadow-2xl">
+                        <div class="flex items-center justify-between mb-5 pl-1 pr-6">
+                            <div class="flex gap-1.5">
+                                <div class="w-2 h-2 rounded-full bg-[#0ea5e9]"></div>
+                                <div class="w-2 h-2 rounded-full bg-[#0ea5e9]/60"></div>
+                                <div class="w-2 h-2 rounded-full bg-[#0ea5e9]/30"></div>
+                            </div>
+                            <span class="text-[9px] font-bold text-[#0ea5e9] uppercase tracking-widest mono">IDENTITY.V2.0_SECURE</span>
+                        </div>
+
+                        <div class="scanner-container relative w-full h-[320px] mb-6 border border-white/5 rounded-2xl overflow-hidden shadow-inner light-scanner">
+                            <img src="./profile.jpg" class="w-full h-full object-cover opacity-80" onerror="this.src='https://via.placeholder.com/300x400/020617/0ea5e9?text=Profile+Image'">
+                            <div class="scanner-overlay"></div>
+                            <div class="scanner-line"></div>
+
+                            <div class="absolute top-4 left-4 bg-[#080d1a]/90 px-3 py-1.5 rounded-lg border border-white/10 backdrop-blur-sm light-inner-box">
+                                <p class="text-[6px] text-slate-400 font-bold font-mono tracking-wider mb-0.5">NEURAL PROFILE</p>
+                                <p class="text-[9px] text-[#0ea5e9] font-bold font-mono tracking-widest">ACTIVE_SYNC</p>
+                            </div>
+
+                            <div class="absolute top-4 right-4 border border-white/10 p-1.5 rounded-lg bg-[#080d1a]/80 backdrop-blur-sm light-inner-box">
+                                <i data-lucide="scan-line" class="w-4 h-4 text-slate-400"></i>
+                            </div>
+
+                            <div class="absolute bottom-4 left-4 w-full">
+                                <div class="w-8 h-[1px] bg-slate-500/50 mb-1.5"></div>
+                                <p class="text-[6px] text-slate-500/80 font-mono tracking-widest">COORD: 23.8103° N, 90.4125° E</p>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-between items-end mb-6">
+                            <div>
+                                <h3 id="profile-name" class="text-[28px] font-extrabold text-white leading-none mb-1.5 tracking-tight">Mahmudul Hasan</h3>
+                                <p id="profile-title" class="text-[9px] font-bold text-[#0ea5e9] uppercase tracking-[0.2em] mono">SECURITY RESEARCHER</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-[7px] text-slate-400 mono tracking-widest mb-1 uppercase">CLEARANCE</p>
+                                <p class="text-[12px] font-bold text-[#10b981] mono uppercase">LVL_01</p>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3">
+                            <div class="bg-[#0f172a]/60 p-4 rounded-xl border border-white/5 light-stat-box">
+                                <p class="text-[7px] text-slate-400 mono tracking-widest mb-1.5 uppercase">CORE_NODE</p>
+                                <p class="text-[11px] font-bold text-white mono uppercase">CYBER_AI</p>
+                            </div>
+                            <div class="bg-[#0f172a]/60 p-4 rounded-xl border border-white/5 light-stat-box">
+                                <p class="text-[7px] text-slate-400 mono tracking-widest mb-1.5 uppercase">PROTOCOL</p>
+                                <p class="text-[11px] font-bold text-white mono uppercase">ADVERSARIAL</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </section>
 
-            <section id="terminal" class="mb-32 reveal">
-                <div class="text-center mb-12">
-                    <h2 class="text-3xl font-black text-white mono uppercase"><span class="text-slate-500">~/root/</span>interactive_shell</h2>
-                    <p class="text-slate-400 text-xs font-bold uppercase tracking-[0.3em] mt-2">Accessing System Kernel</p>
-                </div>
-                <div id="terminal-box" class="max-w-3xl mx-auto">
-                    <div class="terminal-header">
-                        <div class="flex gap-2">
-                            <div class="w-3 h-3 rounded-full bg-red-500"></div>
-                            <div class="w-3 h-3 rounded-full bg-amber-500"></div>
-                            <div class="w-3 h-3 rounded-full bg-emerald-500"></div>
-                        </div>
-                        <span class="text-[10px] mono text-slate-400">root@mahmudul-node: ~</span>
+            <section id="education" class="mb-32 reveal pt-10">
+                <div class="text-center mb-16">
+                    <div class="inline-flex items-center justify-center p-3 bg-emerald-500/10 rounded-full border border-emerald-500/30 mb-4 shadow-[0_0_15px_rgba(16,185,129,0.2)]">
+                        <i data-lucide="cpu" class="w-6 h-6 text-emerald-500"></i>
                     </div>
-                    <div class="terminal-content custom-scrollbar" id="term-body">
-                        <p class="mb-2">Welcome to SecureShell V2.0. Type 'help' to see commands.</p>
-                        <div id="term-outputs"></div>
-                        <div class="terminal-input-line mt-2">
-                            <span>$</span>
-                            <input type="text" id="term-input" autocomplete="off" autofocus>
+                    <h2 class="text-3xl md:text-4xl font-black mb-2 text-white mono lowercase tracking-tight">
+                        <span class="text-slate-500">~/root/</span><span class="text-emerald-500">education</span>
+                    </h2>
+                    <p class="text-slate-300 text-sm font-bold uppercase tracking-[0.2em] mb-2">Academic Records</p>
+                    <p class="text-slate-500 text-[10px] mono uppercase tracking-widest">Database_Query: Education_Node</p>
+                </div>
+                
+                <div class="bg-[#0A101F]/90 backdrop-blur-xl border border-white/5 rounded-3xl p-6 md:p-10 lg:p-12 relative overflow-hidden shadow-2xl light-edu-card">
+                    <div class="absolute -top-32 -left-32 w-64 h-64 bg-emerald-500/5 rounded-full blur-3xl pointer-events-none"></div>
+                    <div class="absolute -bottom-32 -right-32 w-64 h-64 bg-sky-500/5 rounded-full blur-3xl pointer-events-none"></div>
+
+                    <div class="flex flex-col lg:flex-row gap-8 lg:gap-12 relative z-10">
+                        
+                        <div class="flex-1 flex flex-col justify-center">
+                            <p id="edu-inst" class="text-[10px] font-bold text-emerald-500 uppercase tracking-widest mono mb-4">MAJOR_OPERATION.EDU</p>
+                            <h3 id="edu-degree" class="text-3xl md:text-5xl font-black text-white mb-6 leading-tight tracking-tight">Loading...</h3>
+                            
+                            <p id="edu-desc" class="text-slate-400 text-sm md:text-base leading-relaxed border-l-2 border-emerald-500/30 pl-4 md:pl-5 mb-8 md:mb-10 max-w-2xl">
+                                Loading academic details...
+                            </p>
+                            
+                            <div class="inline-flex items-center gap-4 bg-emerald-500/5 border border-emerald-500/20 px-5 md:px-6 py-3 md:py-4 rounded-xl shadow-inner w-fit light-edu-inner">
+                                <i data-lucide="calendar-check-2" class="w-6 h-6 md:w-8 md:h-8 text-emerald-500"></i>
+                                <div>
+                                    <p class="text-[8px] md:text-[9px] text-emerald-500/70 font-bold uppercase tracking-widest mb-1 mono">GRADUATION YEAR</p>
+                                    <p id="edu-year" class="text-white font-bold text-base md:text-lg font-mono">Loading...</p>
+                                </div>
+                            </div>
                         </div>
+
+                        <div id="edu-right-side" class="w-full lg:w-80 shrink-0 flex flex-col gap-4 md:gap-6 justify-center">
+                            
+                            <div id="thesis-card" class="bg-black/20 border border-white/5 p-5 md:p-6 rounded-2xl hover:border-emerald-500/40 transition duration-300 group shadow-lg light-edu-inner hidden">
+                                <div class="flex items-center gap-3 mb-4">
+                                    <div class="bg-emerald-500/20 p-2 rounded-full border border-emerald-500/20">
+                                        <i data-lucide="microscope" class="w-5 h-5 text-emerald-500"></i>
+                                    </div>
+                                    <span class="text-[10px] font-bold text-white uppercase tracking-widest mono">ACTIVE THESIS</span>
+                                </div>
+                                <h4 id="thesis-desc" class="text-white font-bold italic mb-3 leading-tight group-hover:text-emerald-400 transition"></h4>
+                            </div>
+
+                            <div id="core-focus-card" class="bg-black/20 border border-white/5 p-5 md:p-6 rounded-2xl hover:border-sky-500/40 transition duration-300 group shadow-lg light-edu-inner hidden">
+                                <div class="flex items-center gap-3 mb-4">
+                                    <div class="bg-sky-500/20 p-2 rounded-full border border-sky-500/20">
+                                        <i data-lucide="book-open" class="w-5 h-5 text-sky-500"></i>
+                                    </div>
+                                    <span class="text-[10px] font-bold text-white uppercase tracking-widest mono">CORE FOCUS</span>
+                                </div>
+                                <h4 id="focus-desc" class="text-white font-bold mb-3 leading-tight group-hover:text-sky-400 transition"></h4>
+                            </div>
+
+                        </div>
+                    </div>
+                    
+                    <div id="olderEducationContainer" class="mt-8 pt-8 border-t border-white/5 grid sm:grid-cols-2 gap-4 hidden relative z-10"></div>
+                </div>
+            </section>
+
+            <section id="arsenal" class="mb-32 reveal pt-10">
+                <div class="text-center mb-16">
+                    <div class="inline-flex items-center justify-center p-3 bg-rose-500/10 rounded-full border border-rose-500/30 mb-4 shadow-[0_0_15px_rgba(244,63,94,0.2)]">
+                        <i data-lucide="crosshair" class="w-6 h-6 text-rose-500"></i>
+                    </div>
+                    <h2 class="text-3xl md:text-4xl font-black mb-2 text-white mono lowercase tracking-tight">
+                        <span class="text-slate-500">~/root/</span><span class="text-rose-500">arsenal</span>
+                    </h2>
+                    <p class="text-slate-300 text-sm font-bold uppercase tracking-[0.2em] mb-2">Cyber Arsenal</p>
+                    <p class="text-slate-500 text-[10px] mono uppercase tracking-widest">Tactical_Tools_&_Frameworks</p>
+                </div>
+                
+                <div class="bg-[#0A101F]/90 backdrop-blur-xl border border-white/5 rounded-3xl p-6 md:p-10 lg:p-12 relative overflow-hidden shadow-2xl light-edu-card">
+                    <div class="absolute -top-32 -left-32 w-64 h-64 bg-rose-500/5 rounded-full blur-3xl pointer-events-none"></div>
+                    <div class="absolute -bottom-32 -right-32 w-64 h-64 bg-rose-500/5 rounded-full blur-3xl pointer-events-none"></div>
+                    
+                    <div id="arsenalContainer" class="grid md:grid-cols-2 gap-6 relative z-10"></div>
+                    
+                    <div class="text-center mt-10 relative z-10">
+                        <button id="loadMoreArsBtn" class="hidden px-8 py-3 border border-rose-500/30 rounded-full text-rose-500 text-xs font-bold hover:bg-rose-500/20 transition mono shadow-[0_0_15px_rgba(244,63,94,0.2)] hover:shadow-[0_0_25px_rgba(244,63,94,0.4)] bg-black/20">LOAD_MORE_ARSENAL //...</button>
                     </div>
                 </div>
             </section>
+
+            <section id="project" class="mb-32 reveal pt-10">
+                <div class="text-center mb-16">
+                    <div class="inline-flex items-center justify-center p-3 bg-purple-500/10 rounded-full border border-purple-500/30 mb-4 shadow-[0_0_15px_rgba(168,85,247,0.2)]">
+                        <i data-lucide="terminal-square" class="w-6 h-6 text-purple-500"></i>
+                    </div>
+                    <h2 class="text-3xl md:text-4xl font-black mb-2 text-white mono lowercase tracking-tight">
+                        <span class="text-slate-500">~/root/</span><span class="text-purple-500">projects</span>
+                    </h2>
+                    <p class="text-slate-300 text-sm font-bold uppercase tracking-[0.2em] mb-2">Active Deployments</p>
+                    <p class="text-slate-500 text-[10px] mono uppercase tracking-widest">Executing_Operations</p>
+                </div>
+                
+                <div class="bg-[#0A101F]/90 backdrop-blur-xl border border-white/5 rounded-3xl p-6 md:p-10 lg:p-12 relative overflow-hidden shadow-2xl light-edu-card">
+                    <div class="absolute -top-32 -left-32 w-64 h-64 bg-purple-500/5 rounded-full blur-3xl pointer-events-none"></div>
+                    <div class="absolute -bottom-32 -right-32 w-64 h-64 bg-purple-500/5 rounded-full blur-3xl pointer-events-none"></div>
+                    
+                    <div id="projectContainer" class="grid md:grid-cols-2 gap-8 relative z-10"></div>
+
+                    <div class="text-center mt-10 relative z-10">
+                        <button id="loadMoreProjBtn" class="hidden px-8 py-3 border border-purple-500/30 rounded-full text-purple-500 text-xs font-bold hover:bg-purple-500/20 transition mono shadow-[0_0_15px_rgba(168,85,247,0.2)] hover:shadow-[0_0_25px_rgba(168,85,247,0.4)] bg-black/20">LOAD_MORE_PROJECTS //...</button>
+                    </div>
+                </div>
+            </section>
+
+            <section id="achievements" class="mb-32 reveal pt-10">
+                <div class="text-center mb-16">
+                    <div class="inline-flex items-center justify-center p-3 bg-amber-500/10 rounded-full border border-amber-500/30 mb-4 shadow-[0_0_15px_rgba(245,158,11,0.2)]">
+                        <i data-lucide="award" class="w-6 h-6 text-amber-500"></i>
+                    </div>
+                    <h2 class="text-3xl md:text-4xl font-black mb-2 text-white mono lowercase tracking-tight">
+                        <span class="text-slate-500">~/root/</span><span class="text-amber-500">achievements</span>
+                    </h2>
+                    <p class="text-slate-300 text-sm font-bold uppercase tracking-[0.2em] mb-2">Achievements & Certifications</p>
+                    <p class="text-slate-500 text-[10px] mono uppercase tracking-widest">Verified_Credentials</p>
+                </div>
+                
+                <div class="bg-[#0A101F]/90 backdrop-blur-xl border border-white/5 rounded-3xl p-6 md:p-10 lg:p-12 relative overflow-hidden shadow-2xl light-edu-card">
+                    <div class="absolute -top-32 -left-32 w-64 h-64 bg-amber-500/5 rounded-full blur-3xl pointer-events-none"></div>
+                    <div class="absolute -bottom-32 -right-32 w-64 h-64 bg-amber-500/5 rounded-full blur-3xl pointer-events-none"></div>
+                    
+                    <div id="certContainer" class="grid md:grid-cols-2 gap-6 relative z-10"></div>
+
+                    <div class="text-center mt-10 relative z-10">
+                        <button id="loadMoreAchBtn" class="hidden px-8 py-3 border border-amber-500/30 rounded-full text-amber-500 text-xs font-bold hover:bg-amber-500/20 transition mono shadow-[0_0_15px_rgba(245,158,11,0.2)] hover:shadow-[0_0_25px_rgba(245,158,11,0.4)] bg-black/20">LOAD_MORE_RECORDS //...</button>
+                    </div>
+                </div>
+            </section>
+
+            <section id="archive" class="mb-32 reveal pt-10">
+                <div class="text-center mb-16">
+                    <div class="inline-flex items-center justify-center p-3 bg-sky-500/10 rounded-full border border-sky-500/30 mb-4 shadow-[0_0_15px_rgba(14,165,233,0.2)]">
+                        <i data-lucide="database" class="w-6 h-6 text-sky-500"></i>
+                    </div>
+                    <h2 class="text-3xl md:text-4xl font-black mb-2 text-white mono lowercase tracking-tight">
+                        <span class="text-slate-500">~/root/</span><span class="text-sky-500">archive</span>
+                    </h2>
+                    <p class="text-slate-300 text-sm font-bold uppercase tracking-[0.2em] mb-2">Visual Archives</p>
+                    <p class="text-slate-500 text-[10px] mono uppercase tracking-widest">Secure_Gallery_Access</p>
+                </div>
+                <div id="galleryContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"></div>
+                <div class="text-center mt-12">
+                    <button id="loadMoreBtn" class="hidden px-8 py-3 border border-sky-500/30 rounded-full text-sky-500 text-xs font-bold hover:bg-sky-500/20 transition mono shadow-[0_0_15px_rgba(14,165,233,0.2)] hover:shadow-[0_0_25px_rgba(14,165,233,0.4)] bg-black/20">LOAD_MORE_ARCHIVES //...</button>
+                </div>
+            </section>
+
+            <section id="communication" class="reveal mb-10 pt-10">
+                <div class="glass-panel p-6 md:p-16 border-t-2 border-sky-500/80 relative overflow-hidden rounded-[2rem]">
+                    <div class="cyber-line"></div>
+                    <div class="relative z-10 max-w-2xl mx-auto">
+                        <div class="text-center mb-12">
+                            <i data-lucide="radio-tower" class="w-10 h-10 text-sky-500 mx-auto mb-4 animate-pulse drop-shadow-[0_0_10px_rgba(14,165,233,0.8)]"></i>
+                            <h2 class="text-3xl md:text-4xl font-black mb-2 text-white mono lowercase tracking-tight">
+                                <span class="text-slate-500">~/root/</span><span class="text-sky-500">comms</span>
+                            </h2>
+                            <p class="text-slate-300 text-sm font-bold uppercase tracking-[0.2em] mb-4">Initialize Uplink</p>
+                            <p class="text-slate-400 text-sm leading-relaxed">Secure protocol established for recruitment and research collaboration.</p>
+                        </div>
+                        <form id="commForm" class="space-y-6">
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div class="group">
+                                    <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2 block mono">Identity_Name</label>
+                                    <div class="relative">
+                                        <i data-lucide="user" class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500"></i>
+                                        <input type="text" id="i-name" required placeholder="GUEST_USER" class="w-full bg-black/40 border border-white/10 focus:border-sky-500/80 rounded-2xl pl-12 pr-4 py-4 text-xs outline-none transition mono text-white">
+                                    </div>
+                                </div>
+                                <div class="group">
+                                    <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2 block mono">Contact_Vector</label>
+                                    <div class="relative">
+                                        <i data-lucide="mail" class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500"></i>
+                                        <input type="email" id="i-email" required placeholder="USER@DOMAIN.COM" class="w-full bg-black/40 border border-white/10 focus:border-sky-500/80 rounded-2xl pl-12 pr-4 py-4 text-xs outline-none transition mono text-white">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="group">
+                                <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2 block mono">Data_Payload</label>
+                                <div class="relative">
+                                    <i data-lucide="message-square" class="absolute left-4 top-6 w-4 h-4 text-slate-500"></i>
+                                    <textarea id="i-msg" required rows="4" placeholder="ENTER_MESSAGE_HERE..." class="w-full bg-black/40 border border-white/10 focus:border-sky-500/80 rounded-2xl pl-12 pr-4 py-6 text-xs outline-none transition mono text-white"></textarea>
+                                </div>
+                            </div>
+                            <button type="submit" id="submitBtn" class="w-full py-5 bg-sky-600 hover:bg-sky-500 text-white rounded-2xl font-bold text-[10px] uppercase tracking-[0.3em] shadow-[0_0_20px_rgba(14,165,233,0.3)] hover:shadow-[0_0_30px_rgba(14,165,233,0.5)] flex items-center justify-center gap-3 transition">
+                                <i data-lucide="send" class="w-4 h-4"></i> Transmit Packet
+                            </button>
+                        </form>
+                        <p id="formSuccess" class="hidden text-emerald-500 text-xs font-bold mono text-center mt-4 bg-emerald-500/10 p-2 rounded-lg border border-emerald-500/20">✓ Payload Transmitted Securely.</p>
+                    </div>
+                </div>
+            </section>
+
         </main>
-    </div>
 
-    <script>
+        <footer class="pb-12 pt-10 text-center relative z-50 transition-colors duration-500">
+            <div class="flex justify-center gap-6 mb-12">
+                <a href="https://www.linkedin.com/in/mahmudul-hasan-0730a1211/" target="_blank" class="flex items-center justify-center w-12 h-12 rounded-full bg-black/40 hover:bg-sky-500/20 hover:text-sky-500 hover:border-sky-500/50 transition text-slate-400 border border-white/10"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg></a>
+                <a href="https://github.com/mhshibli" target="_blank" class="flex items-center justify-center w-12 h-12 rounded-full bg-black/40 hover:bg-emerald-500/20 hover:text-emerald-500 hover:border-emerald-500/50 transition text-slate-400 border border-white/10"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"></path><path d="M9 18c-4.51 2-5-2-7-2"></path></svg></a>
+                <a href="https://www.facebook.com/mahmudulhasan.shibli.5" target="_blank" class="flex items-center justify-center w-12 h-12 rounded-full bg-black/40 hover:bg-blue-600/20 hover:text-blue-600 hover:border-blue-600/50 transition text-slate-400 border border-white/10"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg></a>
+                <a href="https://www.instagram.com/shibli__mahmud/" target="_blank" class="flex items-center justify-center w-12 h-12 rounded-full bg-black/40 hover:bg-pink-500/20 hover:text-pink-500 hover:border-pink-500/50 transition text-slate-400 border border-white/10"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+            </div>
+            
+            <div class="flex flex-col items-center justify-center">
+                <p class="text-[8px] md:text-[9px] text-slate-500/70 font-bold uppercase tracking-[0.5em] mono ml-[0.5em] mb-6">
+                    BUILD_VERSION: 2.0.4 // REGION: BD-DHAKA // STATUS: SECURE
+                </p>
+                <div class="w-16 h-[2px] bg-[#0ea5e9]/50 rounded-full mb-6 light-mode-divider"></div>
+                <p id="footer-text" class="text-[10px] text-slate-500 font-bold uppercase tracking-widest mono">© 2026 MAHMUDUL HASAN. DESIGN: HYPER-SECURITY OS V2</p>
+            </div>
+        </footer>
+
+        <a href="#communication" id="floatingMsg" class="fixed bottom-6 right-6 md:bottom-10 md:right-10 z-[100] glass-panel border-sky-500/50 p-4 rounded-full text-sky-500 hover:text-sky-400 hover:bg-sky-500/10 shadow-[0_0_15px_rgba(14,165,233,0.3)] hover:shadow-[0_0_25px_rgba(14,165,233,0.5)] transition-all duration-300 transform hover:-translate-y-1 flex items-center justify-center group bg-black/60 backdrop-blur-xl">
+            <i data-lucide="message-square" class="w-6 h-6 group-hover:scale-110 transition-transform"></i>
+        </a>
+
+        <div id="galleryModal" class="fixed inset-0 modal-overlay z-[150] hidden flex items-center justify-center p-4 md:p-10 opacity-0 transition-opacity duration-300">
+            <div class="glass-panel w-full h-full max-h-[85vh] flex flex-col p-6 md:p-8 relative transform scale-95 transition-transform duration-300" id="galleryModal-content">
+                <div class="flex justify-between items-center mb-6 border-b border-white/10 pb-4 shrink-0">
+                    <div><h2 class="text-2xl font-black text-white">Complete <span class="text-sky-500">Archives</span></h2></div>
+                    <button onclick="closeGalleryModal()" class="text-slate-400 hover:text-red-500 bg-black/40 p-2 rounded-full border border-white/5 transition"><i data-lucide="x" class="w-6 h-6"></i></button>
+                </div>
+                <div id="all-gallery-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 overflow-y-auto pr-2 pb-4 flex-1 custom-scrollbar content-start auto-rows-max"></div>
+            </div>
+        </div>
+        
+        <div id="singleLightbox" class="fixed inset-0 modal-overlay z-[200] hidden flex items-center justify-center p-4 opacity-0 transition-opacity duration-300">
+            <div class="glass-panel max-w-3xl w-full p-6 md:p-8 relative transform scale-95 transition-transform duration-300 border-sky-500/50 shadow-[0_0_30px_rgba(14,165,233,0.15)]" id="singleLightbox-content">
+                <button onclick="closeSingleLightbox()" class="absolute top-4 right-4 text-slate-400 hover:text-red-500 bg-black/40 p-2 rounded-full border border-white/5 z-10 transition"><i data-lucide="x" class="w-6 h-6"></i></button>
+                <div id="modal-body" class="mt-2 text-white text-center"></div>
+            </div>
+        </div>
+
+        <div id="eduModal" class="fixed inset-0 modal-overlay z-[200] hidden flex items-center justify-center p-4 opacity-0 transition-opacity duration-300">
+            <div class="glass-panel max-w-4xl w-full p-6 md:p-8 relative transform scale-95 transition-transform duration-300 border-emerald-500/50 shadow-[0_0_30px_rgba(16,185,129,0.15)]" id="eduModal-content">
+                <button onclick="closeEduModal()" class="absolute top-4 right-4 text-slate-400 hover:text-red-500 bg-black/40 p-2 rounded-full border border-white/5 z-20 transition"><i data-lucide="x" class="w-6 h-6"></i></button>
+                <div class="flex flex-col lg:flex-row gap-6 relative z-10">
+                    <div class="flex-1">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="bg-emerald-500/20 p-2 rounded-full border border-emerald-500/30">
+                                <i data-lucide="cpu" class="w-5 h-5 text-emerald-500"></i>
+                            </div>
+                            <span class="text-[10px] font-bold text-emerald-500 uppercase tracking-[0.3em] mono">DATA_NODE_EXPANDED</span>
+                        </div>
+                        <h3 id="modal-edu-degree" class="text-2xl md:text-3xl font-black text-white mb-2 leading-tight">Degree Name</h3>
+                        <p id="modal-edu-inst" class="text-emerald-500 font-mono text-sm mb-4 border-b border-white/10 pb-4">Institution Name</p>
+                        <div class="bg-black/30 border border-white/5 p-5 rounded-xl mb-4 shadow-inner">
+                            <p id="modal-edu-desc" class="text-slate-300 text-sm leading-relaxed">Description goes here.</p>
+                        </div>
+                        <div class="inline-flex items-center gap-3 bg-emerald-500/10 border border-emerald-500/20 px-4 py-2 rounded-lg">
+                            <i data-lucide="calendar" class="w-4 h-4 text-emerald-500"></i>
+                            <span class="text-xs text-emerald-500 font-mono font-bold" id="modal-edu-year">Year</span>
+                        </div>
+                    </div>
+                    <div id="modal-edu-right-side" class="w-full lg:w-72 shrink-0 flex flex-col gap-4 justify-center">
+                        <div id="modal-thesis-card" class="bg-black/20 border border-white/5 p-5 rounded-xl hover:border-emerald-500/40 transition duration-300 shadow-lg light-edu-inner hidden">
+                            <div class="flex items-center gap-2 mb-3">
+                                <div class="bg-emerald-500/20 p-1.5 rounded-full border border-emerald-500/20">
+                                    <i data-lucide="microscope" class="w-4 h-4 text-emerald-500"></i>
+                                </div>
+                                <span class="text-[9px] font-bold text-white uppercase tracking-widest mono">ACTIVE THESIS</span>
+                            </div>
+                            <p id="modal-thesis-desc" class="text-xs text-emerald-400 font-bold italic leading-relaxed"></p>
+                        </div>
+                        <div id="modal-focus-card" class="bg-black/20 border border-white/5 p-5 rounded-xl hover:border-sky-500/40 transition duration-300 shadow-lg light-edu-inner hidden">
+                            <div class="flex items-center gap-2 mb-3">
+                                <div class="bg-sky-500/20 p-1.5 rounded-full border border-sky-500/20">
+                                    <i data-lucide="book-open" class="w-4 h-4 text-sky-500"></i>
+                                </div>
+                                <span class="text-[9px] font-bold text-white uppercase tracking-widest mono">CORE FOCUS</span>
+                            </div>
+                            <p id="modal-focus-desc" class="text-xs text-sky-400 font-bold leading-relaxed"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="arsenalModal" class="fixed inset-0 modal-overlay z-[150] hidden flex items-center justify-center p-4 md:p-10 opacity-0 transition-opacity duration-300">
+            <div class="glass-panel w-full h-full max-h-[85vh] flex flex-col p-6 md:p-8 relative transform scale-95 transition-transform duration-300 border-rose-500/30" id="arsenalModal-content">
+                <div class="flex justify-between items-center mb-6 border-b border-white/10 pb-4 shrink-0">
+                    <div><h2 class="text-2xl font-black text-white">Complete <span class="text-rose-500">Arsenal</span></h2></div>
+                    <button onclick="closeArsenalModal()" class="text-slate-400 hover:text-red-500 bg-black/40 p-2 rounded-full border border-white/5 transition"><i data-lucide="x" class="w-6 h-6"></i></button>
+                </div>
+                <div id="all-arsenal-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 overflow-y-auto pr-2 pb-4 flex-1 custom-scrollbar content-start auto-rows-max"></div>
+            </div>
+        </div>
+
+        <div id="projectModal" class="fixed inset-0 modal-overlay z-[150] hidden flex items-center justify-center p-4 md:p-10 opacity-0 transition-opacity duration-300">
+            <div class="glass-panel w-full h-full max-h-[85vh] flex flex-col p-6 md:p-8 relative transform scale-95 transition-transform duration-300 border-purple-500/30" id="projectModal-content">
+                <div class="flex justify-between items-center mb-6 border-b border-white/10 pb-4 shrink-0">
+                    <div><h2 class="text-2xl font-black text-white">All <span class="text-purple-500">Deployments</span></h2></div>
+                    <button onclick="closeProjectModal()" class="text-slate-400 hover:text-red-500 bg-black/40 p-2 rounded-full border border-white/5 transition"><i data-lucide="x" class="w-6 h-6"></i></button>
+                </div>
+                <div id="all-project-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6 overflow-y-auto pr-2 pb-4 flex-1 custom-scrollbar content-start auto-rows-max"></div>
+            </div>
+        </div>
+
+        <div id="achModal" class="fixed inset-0 modal-overlay z-[150] hidden flex items-center justify-center p-4 md:p-10 opacity-0 transition-opacity duration-300">
+            <div class="glass-panel w-full h-full max-h-[85vh] flex flex-col p-6 md:p-8 relative transform scale-95 transition-transform duration-300 border-amber-500/30" id="achModal-content">
+                <div class="flex justify-between items-center mb-6 border-b border-white/10 pb-4 shrink-0">
+                    <div><h2 class="text-2xl font-black text-white">All <span class="text-amber-500">Achievements</span></h2></div>
+                    <button onclick="closeAchModal()" class="text-slate-400 hover:text-red-500 bg-black/40 p-2 rounded-full border border-white/5 transition"><i data-lucide="x" class="w-6 h-6"></i></button>
+                </div>
+                <div id="all-ach-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 overflow-y-auto pr-2 pb-4 flex-1 custom-scrollbar content-start auto-rows-max"></div>
+            </div>
+        </div>
+
+    </div> <script>
         lucide.createIcons();
         const API_BASE = 'https://iammahmudul.onrender.com/api';
 
-        // 5. PAGE LOADER & BOOT ANIMATION
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                document.getElementById('page-loader').style.opacity = '0';
-                setTimeout(() => { document.getElementById('page-loader').style.display = 'none'; typeLine(); }, 800);
-            }, 1000);
-        });
-
+        // ================= SCARY BOOT SEQUENCE LOGIC =================
         const bootLines = [
-            "INIT SECURE_BOOT...",
-            "BYPASSING FIREWALL... [OK]",
-            "EXTRACTING CREDENTIALS...",
-            "ENCRYPTING LOCAL DRIVES... [LOCKED]",
-            "SYSTEM FULLY COMPROMISED."
+            "<span class='text-red-500 font-bold'>[CRITICAL] KERNEL PANIC: UNAUTHORIZED ROOT ACCESS DETECTED!</span>",
+            "OVERRIDING SYSTEM DEFENSES... <span class='text-emerald-500'>[BYPASSED]</span>",
+            "INJECTING MALICIOUS PAYLOAD: <span class='text-purple-500'>0x89F3A1</span>...",
+            "<span class='text-red-500'>[!] DOWNLOADING SYSTEM REGISTRY AND SAVED CREDENTIALS...</span>",
+            "BYPASSING ENCRYPTION (AES-256)... <span class='text-emerald-500'>[OK]</span>",
+            "ESTABLISHING BACKDOOR CONNECTION... <span class='text-emerald-500'>[CONNECTED]</span>"
         ];
+        
+        const terminalText = document.getElementById('terminal-text');
         let lineIndex = 0;
+        
         function typeLine() {
             if (lineIndex < bootLines.length) {
-                const p = document.createElement('p'); p.className = 'mb-1 text-slate-300';
+                const p = document.createElement('p');
+                p.className = 'mb-1 text-slate-300';
                 p.innerHTML = `<span class="text-emerald-500">></span> ${bootLines[lineIndex]}`;
-                document.getElementById('terminal-text').appendChild(p);
+                terminalText.appendChild(p);
                 lineIndex++;
-                setTimeout(typeLine, Math.random() * 200 + 100);
+                
+                let delay = Math.random() * 150 + 50; 
+                if (lineIndex === 4) delay = 800; 
+                
+                setTimeout(typeLine, delay);
             } else {
-                document.getElementById('hack-progress-container').classList.remove('hidden');
-                document.getElementById('hack-progress-container').classList.add('flex');
+                // Show Progress Bar
+                const progContainer = document.getElementById('hack-progress-container');
+                const progBar = document.getElementById('hack-progress-bar');
+                const progText = document.getElementById('hack-progress-text');
+                
+                progContainer.classList.remove('hidden');
+                progContainer.classList.add('flex');
+                
                 setTimeout(() => {
-                    document.getElementById('hack-progress-bar').style.width = '100%';
+                    progBar.style.width = '100%';
                     let count = 0;
-                    const itv = setInterval(() => {
-                        count += 5; document.getElementById('hack-progress-text').innerText = count + '%';
-                        if(count >= 100) { clearInterval(itv); finishBoot(); }
-                    }, 100);
-                }, 500);
+                    const counter = setInterval(() => {
+                        count += 2;
+                        if(count > 100) count = 100;
+                        progText.innerText = count + '%';
+                        if(count === 100) {
+                            clearInterval(counter);
+                            finishBoot();
+                        }
+                    }, 40); // 40 * 50 = 2000ms duration
+                }, 300);
             }
         }
+        
         function finishBoot() {
             setTimeout(() => {
-                document.getElementById('terminal-text').style.display = 'none';
-                document.getElementById('hack-progress-container').style.display = 'none';
-                document.getElementById('hacked-text').classList.remove('hidden');
+                document.getElementById('hack-progress-container').classList.add('hidden');
+                document.getElementById('terminal-text').classList.add('hidden');
+                
+                const hackedText = document.getElementById('hacked-text');
+                const jokeText = document.getElementById('joke-text');
+                
+                hackedText.classList.remove('hidden');
+                
                 setTimeout(() => {
-                    document.getElementById('hacked-text').style.display = 'none';
-                    document.getElementById('joke-text').classList.remove('hidden');
+                    hackedText.classList.add('hidden');
+                    jokeText.classList.remove('hidden');
+                    
                     setTimeout(() => {
                         document.getElementById('boot-screen').style.opacity = '0';
+                        document.getElementById('boot-screen').style.transform = 'scale(1.1)';
                         document.getElementById('main-content').style.opacity = '1';
-                        setTimeout(() => document.getElementById('boot-screen').style.display = 'none', 800);
+                        setTimeout(() => { document.getElementById('boot-screen').style.display = 'none'; }, 800);
                     }, 2000);
                 }, 2000);
             }, 500);
         }
 
-        // 4. TERMINAL LOGIC
+window.addEventListener('load', () => {
+            fetchAllDynamicData();
+            setTimeout(() => {
+                document.getElementById('page-loader').style.opacity = '0';
+                setTimeout(() => { 
+                    document.getElementById('page-loader').style.display = 'none'; 
+                    typeLine(); // Start boot sequence after loader
+                }, 800);
+            }, 1500);
+        });
+
+        // ================= INTERACTIVE TERMINAL LOGIC =================
         const termInput = document.getElementById('term-input');
         const termOutputs = document.getElementById('term-outputs');
         const commands = {
-            help: "Available: whoami, skills, clear, exit, target, date",
+            help: "Available: whoami, skills, target, date, clear",
             whoami: "Mahmudul Hasan - Cybersecurity Researcher.",
-            skills: "Red Teaming, AI Security, Cryptography, Python.",
-            target: "CSE-CIC-IDS2018 Dataset. Accuracy: 97.2%",
+            skills: "Red Teaming, Explainable GANs, Cryptography, Python.",
+            target: "Researching on CSE-CIC-IDS2018 Dataset.",
             date: new Date().toString(),
             clear: "clear"
         };
 
-        termInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') {
-                const val = termInput.value.toLowerCase().trim();
-                const line = document.createElement('div');
-                line.innerHTML = `<span class="text-emerald-500">$ ${val}</span>`;
-                termOutputs.appendChild(line);
+        if(termInput) {
+            termInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    const val = termInput.value.toLowerCase().trim();
+                    const line = document.createElement('div');
+                    line.innerHTML = `<span class="text-emerald-500">$ ${val}</span>`;
+                    termOutputs.appendChild(line);
 
-                if (commands[val]) {
-                    if (commands[val] === "clear") termOutputs.innerHTML = "";
-                    else {
-                        const res = document.createElement('p');
-                        res.className = "text-slate-300 mb-2";
-                        res.innerText = commands[val];
-                        termOutputs.appendChild(res);
+                    if (commands[val]) {
+                        if (commands[val] === "clear") termOutputs.innerHTML = "";
+                        else {
+                            const res = document.createElement('p');
+                            res.className = "text-slate-300 mb-2"; res.innerText = commands[val];
+                            termOutputs.appendChild(res);
+                        }
+                    } else if(val !== "") {
+                        const error = document.createElement('p');
+                        error.className = "text-red-500 mb-2"; error.innerText = `bash: ${val}: command not found`;
+                        termOutputs.appendChild(error);
+                    }
+                    termInput.value = "";
+                    document.getElementById('term-body').scrollTop = document.getElementById('term-body').scrollHeight;
+                }
+            });
+        }
+
+        // Global variables to store data for modals
+        let globalEduData = [];
+        let allArsenalItems = [];
+        let allProjectItems = [];
+        let allAchItems = [];
+        let allGalleryItems = [];
+
+        // Fetch Dynamic Data from Backend
+        async function fetchAllDynamicData() {
+            try {
+                // 1. Profile 
+                const profRes = await fetch(`${API_BASE}/profile`);
+                const rawProfData = await profRes.json();
+                const profData = Array.isArray(rawProfData) ? rawProfData[0] : rawProfData;
+                
+                if(profData && profData.full_name) {
+                    document.getElementById('profile-name').innerText = profData.full_name;
+                    document.getElementById('profile-title').innerText = profData.job_title;
+                    
+                    // --- Custom Bio Color Formatter ---
+                    let formattedBio = profData.bio
+                        .replace(/\*\*(.*?)\*\*/g, '<span class="text-white font-bold">$1</span>') // **Text** will be White
+                        .replace(/\*(.*?)\*/g, '<span class="text-sky-400 font-bold drop-shadow-[0_0_8px_rgba(56,189,248,0.5)]">$1</span>'); // *Text* will be Glowing Blue
+                    document.getElementById('profile-bio').innerHTML = formattedBio;
+                    // ----------------------------------
+
+                    document.getElementById('footer-text').innerText = `© 2026 ${profData.full_name.toUpperCase()}. DESIGN: HYPER-SECURITY OS V2`;
+                }
+
+                // 2. Education
+                const eduRes = await fetch(`${API_BASE}/education`);
+                const eduData = await eduRes.json();
+                globalEduData = eduData; 
+
+                if(eduData.length > 0) {
+                    const latestEdu = eduData[0]; 
+                    document.getElementById('edu-degree').innerText = latestEdu.degree;
+                    document.getElementById('edu-inst').innerText = latestEdu.institution;
+                    document.getElementById('edu-desc').innerText = latestEdu.details;
+                    document.getElementById('edu-year').innerText = latestEdu.pass_year;
+                    
+                    const thesisCard = document.getElementById('thesis-card');
+                    const focusCard = document.getElementById('core-focus-card');
+                    const rightSideContainer = document.getElementById('edu-right-side');
+                    
+                    if (latestEdu.active_thesis) {
+                        document.getElementById('thesis-desc').innerText = latestEdu.active_thesis;
+                        thesisCard.classList.remove('hidden');
+                    } else { thesisCard.classList.add('hidden'); }
+
+                    if (latestEdu.core_focus) {
+                        document.getElementById('focus-desc').innerText = latestEdu.core_focus;
+                        focusCard.classList.remove('hidden');
+                    } else { focusCard.classList.add('hidden'); }
+
+                    if (!latestEdu.active_thesis && !latestEdu.core_focus) {
+                        rightSideContainer.classList.add('hidden');
+                    } else { rightSideContainer.classList.remove('hidden'); }
+
+                    const olderContainer = document.getElementById('olderEducationContainer');
+                    if (eduData.length > 1) {
+                        olderContainer.classList.remove('hidden');
+                        olderContainer.innerHTML = '';
+                        for(let i = 1; i < eduData.length; i++) {
+                            const item = eduData[i];
+                            olderContainer.innerHTML += `
+                                <div onclick="openEduModal(${item.id})" class="bg-black/20 border border-white/5 p-4 rounded-xl flex items-center justify-between shadow-inner light-edu-inner cursor-pointer hover:border-emerald-500/50 hover:bg-emerald-500/5 transition duration-300 group">
+                                    <div>
+                                        <h5 class="text-sm font-bold text-white group-hover:text-emerald-400 transition">${item.degree}</h5>
+                                        <p class="text-[10px] text-slate-500 mono uppercase tracking-wider">${item.institution}</p>
+                                    </div>
+                                    <div class="flex items-center gap-3">
+                                        <span class="text-xs text-emerald-500 font-mono font-bold bg-emerald-500/10 border border-emerald-500/20 px-2 py-1 rounded">${item.pass_year}</span>
+                                        <i data-lucide="external-link" class="w-4 h-4 text-emerald-500/50 group-hover:text-emerald-500 transition"></i>
+                                    </div>
+                                </div>
+                            `;
+                        }
                     }
                 } else {
-                    const error = document.createElement('p');
-                    error.className = "text-red-500 mb-2";
-                    error.innerText = `Command '${val}' not found.`;
-                    termOutputs.appendChild(error);
+                    document.getElementById('edu-desc').innerText = 'No academic records found.';
                 }
-                termInput.value = "";
-                document.getElementById('term-body').scrollTop = document.getElementById('term-body').scrollHeight;
-            }
-        });
 
-        // Core dynamic data fetching
-        async function fetchAllDynamicData() {
-            const res = await fetch(`${API_BASE}/profile`);
-            const data = await res.json();
-            if(data.bio) {
-                document.getElementById('profile-bio').innerHTML = data.bio
-                    .replace(/\*\*(.*?)\*\*/g, '<span class="text-white font-bold">$1</span>')
-                    .replace(/\*(.*?)\*/g, '<span class="text-sky-400 font-bold">$1</span>');
+                // 3. Arsenal (Limit 2)
+                const arsRes = await fetch(`${API_BASE}/arsenal`);
+                const arsData = await arsRes.json();
+                allArsenalItems = arsData;
+                const arsContainer = document.getElementById('arsenalContainer');
+                arsContainer.innerHTML = '';
+                
+                if(arsData.length > 0) {
+                    arsData.slice(0, 2).forEach((item) => {
+                        arsContainer.innerHTML += `
+                            <div class="bg-black/20 border border-white/5 p-6 rounded-2xl hover:border-rose-500/40 hover:bg-rose-500/5 transition duration-300 group shadow-lg light-edu-inner relative z-10 flex flex-col h-full">
+                                <div class="flex justify-between items-start mb-4">
+                                    <div class="bg-rose-500/20 p-2.5 rounded-full border border-rose-500/20">
+                                        <i data-lucide="crosshair" class="w-5 h-5 text-rose-500"></i>
+                                    </div>
+                                    <span class="text-[9px] mono text-rose-500 uppercase font-bold tracking-widest bg-rose-500/10 px-3 py-1 rounded-full border border-rose-500/20">${item.category}</span>
+                                </div>
+                                <h3 class="text-xl font-bold text-white mb-3 group-hover:text-rose-400 transition">${item.title}</h3>
+                                <p class="text-xs text-slate-400 leading-relaxed flex-1">${item.details}</p>
+                            </div>
+                        `;
+                    });
+                } else { arsContainer.innerHTML = '<p class="text-xs text-slate-500 col-span-full text-center mono">No arsenal inventory found.</p>'; }
+                
+                const arsBtn = document.getElementById('loadMoreArsBtn');
+                if (arsData.length > 2) { arsBtn.classList.remove('hidden'); arsBtn.onclick = () => openArsenalModal(); } 
+                else { arsBtn.classList.add('hidden'); }
+
+                // 4. Projects (Limit 2)
+                const projRes = await fetch(`${API_BASE}/projects`);
+                const projData = await projRes.json();
+                allProjectItems = projData;
+                const projContainer = document.getElementById('projectContainer');
+                projContainer.innerHTML = '';
+
+                if(projData.length > 0) {
+                    projData.slice(0, 2).forEach(item => {
+                        const tagsHtml = item.tags.split(',').map(tag => `<span class="text-[9px] font-bold text-purple-400 bg-purple-500/10 px-3 py-1 rounded-full border border-purple-500/20 uppercase tracking-wider mono">${tag.trim()}</span>`).join('');
+                        const linkHtml = item.link && item.link.trim() !== '' ? `<a href="${item.link}" target="_blank" class="inline-flex items-center gap-2 text-[10px] font-bold text-purple-500 hover:text-purple-400 mono tracking-widest mt-auto group/link bg-purple-500/10 hover:bg-purple-500/20 px-4 py-2 rounded-lg border border-purple-500/20 transition w-fit"><i data-lucide="external-link" class="w-4 h-4 group-hover/link:scale-110 transition"></i> VIEW_DEPLOYMENT</a>` : '';
+                        
+                        projContainer.innerHTML += `
+                            <div class="bg-black/20 border border-white/5 p-6 md:p-8 rounded-2xl hover:border-purple-500/40 hover:bg-purple-500/5 transition duration-300 group shadow-lg light-edu-inner relative z-10 flex flex-col h-full">
+                                <div class="flex justify-between items-start mb-6">
+                                    <h3 class="text-2xl font-black text-white group-hover:text-purple-400 transition tracking-tight">${item.title}</h3>
+                                    <div class="bg-purple-500/20 p-3 rounded-full border border-purple-500/20 shrink-0 ml-4">
+                                        <i data-lucide="terminal-square" class="w-5 h-5 text-purple-500"></i>
+                                    </div>
+                                </div>
+                                <p class="text-sm text-slate-400 leading-relaxed mb-6 flex-1">${item.description}</p>
+                                <div class="flex flex-wrap gap-2 mb-6">${tagsHtml}</div>
+                                ${linkHtml}
+                            </div>
+                        `;
+                    });
+                } else { projContainer.innerHTML = '<p class="text-xs text-slate-500 col-span-full text-center mono">No active projects found.</p>'; }
+
+                const projBtn = document.getElementById('loadMoreProjBtn');
+                if (projData.length > 2) { projBtn.classList.remove('hidden'); projBtn.onclick = () => openProjectModal(); } 
+                else { projBtn.classList.add('hidden'); }
+
+                // 5. Achievements (Limit 2)
+                const achRes = await fetch(`${API_BASE}/achievements`);
+                const achData = await achRes.json();
+                allAchItems = achData;
+                const certContainer = document.getElementById('certContainer');
+                certContainer.innerHTML = '';
+
+                if(achData.length > 0) {
+                    achData.slice(0, 2).forEach((item) => {
+                        certContainer.innerHTML += `
+                            <div class="bg-black/20 border border-white/5 p-6 rounded-2xl hover:border-amber-500/40 hover:bg-amber-500/5 transition duration-300 group shadow-lg light-edu-inner relative z-10 flex flex-col h-full">
+                                <div class="flex justify-between items-start mb-5">
+                                    <div class="bg-amber-500/20 p-2.5 rounded-full border border-amber-500/20">
+                                        <i data-lucide="award" class="w-5 h-5 text-amber-500"></i>
+                                    </div>
+                                    <span class="text-[9px] mono text-amber-500 uppercase font-bold tracking-widest bg-amber-500/10 px-3 py-1 rounded-full border border-amber-500/20">YEAR: ${item.year}</span>
+                                </div>
+                                <h3 class="text-lg font-black text-white mb-2 group-hover:text-amber-400 transition leading-tight">${item.title}</h3>
+                                <p class="text-[10px] text-amber-500/80 font-mono tracking-widest uppercase mb-4">${item.organization}</p>
+                                <p class="text-xs text-slate-400 leading-relaxed flex-1">${item.details}</p>
+                            </div>
+                        `;
+                    });
+                } else { certContainer.innerHTML = '<p class="text-xs text-slate-500 col-span-full text-center mono">No achievements found.</p>'; }
+
+                const achBtn = document.getElementById('loadMoreAchBtn');
+                if (achData.length > 2) { achBtn.classList.remove('hidden'); achBtn.onclick = () => openAchModal(); } 
+                else { achBtn.classList.add('hidden'); }
+                
+                lucide.createIcons();
+                
+                // 6. Archives
+                loadMainGallery();
+            } catch (e) {
+                console.error("Data fetching error", e);
             }
         }
-        fetchAllDynamicData();
 
+        // --- Core UI Logic ---
         window.addEventListener("scroll", () => {
             document.querySelectorAll(".reveal").forEach(el => {
                 if (el.getBoundingClientRect().top < window.innerHeight - 100) el.classList.add("active");
             });
+            let current = "";
+            document.querySelectorAll("section").forEach((section) => {
+                const sectionTop = section.offsetTop;
+                if (window.scrollY >= sectionTop - 200) { current = section.getAttribute("id"); }
+            });
+            
+            document.querySelectorAll(".nav-link").forEach((link) => {
+                link.classList.remove("text-sky-500", "text-slate-300", "text-slate-400");
+                if (current && link.getAttribute("href") === `#${current}`) { link.classList.add("text-sky-500"); } 
+                else {
+                    if (link.classList.contains("mobile-link")) { link.classList.add("text-slate-400"); } 
+                    else if (link.classList.contains("desktop-link")) { link.classList.add("text-slate-300"); }
+                }
+            });
+        });
+        window.dispatchEvent(new Event("scroll"));
+
+        document.querySelectorAll(".nav-link, #floatingMsg").forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if(target) window.scrollTo({ top: target.offsetTop - 80, behavior: 'smooth' });
+                document.getElementById('mobileMenu').classList.add('hidden');
+            });
+        });
+
+        const themeToggle = document.getElementById('themeToggle');
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('light-mode');
+            themeToggle.innerHTML = document.body.classList.contains('light-mode') ? '<i data-lucide="moon" class="w-4 h-4 text-slate-600"></i>' : '<i data-lucide="sun" class="w-4 h-4 text-amber-400"></i>';
+            lucide.createIcons();
+        });
+
+        document.getElementById('mobileMenuBtn').addEventListener('click', () => document.getElementById('mobileMenu').classList.toggle('hidden'));
+
+        // ================= GALLERY LOGIC =================
+        async function loadMainGallery() {
+            try {
+                const res = await fetch(`${API_BASE}/gallery`);
+                allGalleryItems = await res.json();
+                const container = document.getElementById('galleryContainer'); container.innerHTML = '';
+                if(!allGalleryItems || allGalleryItems.length === 0) { container.innerHTML = '<p class="text-xs text-slate-500 col-span-full text-center mono">No archives found.</p>'; return; }
+
+                allGalleryItems.slice(0, 4).forEach(item => {
+                    const safeDetails = (item.details || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
+                    container.innerHTML += `
+                        <div class="glass-panel p-2 rounded-2xl overflow-hidden cursor-pointer hover:border-sky-500/80 hover:shadow-[0_0_20px_rgba(14,165,233,0.2)] hover:-translate-y-2 transition duration-300 group bg-black/20" onclick="openSingleLightbox('${item.image_url}', '${item.title}', '${safeDetails}')">
+                            <div class="relative h-48 w-full mb-3 rounded-xl overflow-hidden"><img src="${item.image_url}" class="absolute inset-0 w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" onerror="this.src='https://via.placeholder.com/400x300'"></div>
+                            <p class="text-[10px] font-bold text-sky-500 mb-1 mono px-2">${item.title}</p>
+                            <p class="text-xs font-bold text-slate-400 px-2 pb-2 truncate">${item.subtitle || ''}</p>
+                        </div>
+                    `;
+                });
+                const btn = document.getElementById('loadMoreBtn');
+                if (allGalleryItems.length > 4) { btn.classList.remove('hidden'); btn.onclick = () => openGalleryModal(); } 
+                else btn.classList.add('hidden');
+            } catch(e){}
+        }
+
+        // ================= ALL LIGHTBOX/MODAL LOGIC =================
+        
+        // 1. Gallery Modal
+        const galleryModal = document.getElementById('galleryModal');
+        const galleryContent = document.getElementById('galleryModal-content');
+        function openGalleryModal() {
+            const grid = document.getElementById('all-gallery-grid'); grid.innerHTML = '';
+            allGalleryItems.forEach(item => {
+                const safeDetails = (item.details || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
+                grid.innerHTML += `
+                    <div class="glass-panel p-3 rounded-xl overflow-hidden cursor-pointer hover:border-sky-500/80 transition group bg-black/20 hover:shadow-[0_0_15px_rgba(14,165,233,0.2)]" onclick="openSingleLightbox('${item.image_url}', '${item.title}', '${safeDetails}')">
+                        <div class="relative h-40 md:h-48 w-full mb-3 rounded-lg overflow-hidden border border-white/5 group-hover:border-sky-500/50 transition"><img src="${item.image_url}" class="absolute inset-0 w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500"></div>
+                        <p class="text-xs font-bold text-sky-500 mb-1 mono px-1 truncate">${item.title}</p>
+                    </div>`;
+            });
+            galleryModal.classList.remove('hidden'); setTimeout(() => { galleryModal.classList.remove('opacity-0'); galleryContent.classList.remove('scale-95'); }, 10);
+        }
+        function closeGalleryModal() { galleryModal.classList.add('opacity-0'); galleryContent.classList.add('scale-95'); setTimeout(() => galleryModal.classList.add('hidden'), 300); }
+
+        const singleLightbox = document.getElementById('singleLightbox');
+        const singleContent = document.getElementById('singleLightbox-content');
+        function openSingleLightbox(img, title, details) {
+            document.getElementById('modal-body').innerHTML = `<img src="${img}" class="w-full max-h-[50vh] object-contain rounded-xl mb-6 mx-auto bg-black/20 border border-white/10"><h3 class="text-2xl font-black text-sky-500 mb-3">${title}</h3><p class="text-sm text-slate-300 leading-relaxed">${details}</p>`;
+            singleLightbox.classList.remove('hidden'); setTimeout(() => { singleLightbox.classList.remove('opacity-0'); singleContent.classList.remove('scale-95'); }, 10);
+        }
+        function closeSingleLightbox() { singleLightbox.classList.add('opacity-0'); singleContent.classList.add('scale-95'); setTimeout(() => singleLightbox.classList.add('hidden'), 300); }
+
+        // 2. Education Modal
+        const eduModal = document.getElementById('eduModal');
+        const eduModalContent = document.getElementById('eduModal-content');
+        function openEduModal(id) {
+            const edu = globalEduData.find(e => e.id === id);
+            if(!edu) return;
+            document.getElementById('modal-edu-degree').innerText = edu.degree;
+            document.getElementById('modal-edu-inst').innerText = edu.institution;
+            document.getElementById('modal-edu-year').innerText = edu.pass_year;
+            document.getElementById('modal-edu-desc').innerText = edu.details;
+            
+            const thesisCard = document.getElementById('modal-thesis-card');
+            const focusCard = document.getElementById('modal-focus-card');
+            const rightSide = document.getElementById('modal-edu-right-side');
+            
+            if (edu.active_thesis && edu.active_thesis.trim() !== '') { document.getElementById('modal-thesis-desc').innerText = edu.active_thesis; thesisCard.classList.remove('hidden'); } else { thesisCard.classList.add('hidden'); }
+            if (edu.core_focus && edu.core_focus.trim() !== '') { document.getElementById('modal-focus-desc').innerText = edu.core_focus; focusCard.classList.remove('hidden'); } else { focusCard.classList.add('hidden'); }
+            if ((!edu.active_thesis || edu.active_thesis.trim() === '') && (!edu.core_focus || edu.core_focus.trim() === '')) { rightSide.classList.add('hidden'); } else { rightSide.classList.remove('hidden'); }
+
+            eduModal.classList.remove('hidden'); setTimeout(() => { eduModal.classList.remove('opacity-0'); eduModalContent.classList.remove('scale-95'); }, 10);
+        }
+        function closeEduModal() { eduModal.classList.add('opacity-0'); eduModalContent.classList.add('scale-95'); setTimeout(() => eduModal.classList.add('hidden'), 300); }
+
+        // 3. Arsenal Modal
+        const arsenalModal = document.getElementById('arsenalModal');
+        const arsenalModalContent = document.getElementById('arsenalModal-content');
+        function openArsenalModal() {
+            const grid = document.getElementById('all-arsenal-grid'); grid.innerHTML = '';
+            allArsenalItems.forEach(item => {
+                grid.innerHTML += `
+                    <div class="bg-black/20 border border-white/5 p-6 rounded-2xl hover:border-rose-500/40 hover:bg-rose-500/5 transition duration-300 group shadow-lg light-edu-inner relative z-10 flex flex-col h-full">
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="bg-rose-500/20 p-2.5 rounded-full border border-rose-500/20"><i data-lucide="crosshair" class="w-5 h-5 text-rose-500"></i></div>
+                            <span class="text-[9px] mono text-rose-500 uppercase font-bold tracking-widest bg-rose-500/10 px-3 py-1 rounded-full border border-rose-500/20">${item.category}</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-3 group-hover:text-rose-400 transition">${item.title}</h3>
+                        <p class="text-xs text-slate-400 leading-relaxed flex-1">${item.details}</p>
+                    </div>`;
+            });
+            arsenalModal.classList.remove('hidden'); setTimeout(() => { arsenalModal.classList.remove('opacity-0'); arsenalModalContent.classList.remove('scale-95'); lucide.createIcons(); }, 10);
+        }
+        function closeArsenalModal() { arsenalModal.classList.add('opacity-0'); arsenalModalContent.classList.add('scale-95'); setTimeout(() => arsenalModal.classList.add('hidden'), 300); }
+
+        // 4. Project Modal
+        const projectModal = document.getElementById('projectModal');
+        const projectModalContent = document.getElementById('projectModal-content');
+        function openProjectModal() {
+            const grid = document.getElementById('all-project-grid'); grid.innerHTML = '';
+            allProjectItems.forEach(item => {
+                const tagsHtml = item.tags.split(',').map(tag => `<span class="text-[9px] font-bold text-purple-400 bg-purple-500/10 px-3 py-1 rounded-full border border-purple-500/20 uppercase tracking-wider mono">${tag.trim()}</span>`).join('');
+                const linkHtml = item.link && item.link.trim() !== '' ? `<a href="${item.link}" target="_blank" class="inline-flex items-center gap-2 text-[10px] font-bold text-purple-500 hover:text-purple-400 mono tracking-widest mt-auto group/link bg-purple-500/10 hover:bg-purple-500/20 px-4 py-2 rounded-lg border border-purple-500/20 transition w-fit"><i data-lucide="external-link" class="w-4 h-4 group-hover/link:scale-110 transition"></i> VIEW_DEPLOYMENT</a>` : '';
+                grid.innerHTML += `
+                    <div class="bg-black/20 border border-white/5 p-6 md:p-8 rounded-2xl hover:border-purple-500/40 hover:bg-purple-500/5 transition duration-300 group shadow-lg light-edu-inner relative z-10 flex flex-col h-full">
+                        <div class="flex justify-between items-start mb-6">
+                            <h3 class="text-2xl font-black text-white group-hover:text-purple-400 transition tracking-tight">${item.title}</h3>
+                            <div class="bg-purple-500/20 p-3 rounded-full border border-purple-500/20 shrink-0 ml-4"><i data-lucide="terminal-square" class="w-5 h-5 text-purple-500"></i></div>
+                        </div>
+                        <p class="text-sm text-slate-400 leading-relaxed mb-6 flex-1">${item.description}</p>
+                        <div class="flex flex-wrap gap-2 mb-6">${tagsHtml}</div>
+                        ${linkHtml}
+                    </div>`;
+            });
+            projectModal.classList.remove('hidden'); setTimeout(() => { projectModal.classList.remove('opacity-0'); projectModalContent.classList.remove('scale-95'); lucide.createIcons(); }, 10);
+        }
+        function closeProjectModal() { projectModal.classList.add('opacity-0'); projectModalContent.classList.add('scale-95'); setTimeout(() => projectModal.classList.add('hidden'), 300); }
+
+        // 5. Achievements Modal
+        const achModal = document.getElementById('achModal');
+        const achModalContent = document.getElementById('achModal-content');
+        function openAchModal() {
+            const grid = document.getElementById('all-ach-grid'); grid.innerHTML = '';
+            allAchItems.forEach(item => {
+                grid.innerHTML += `
+                    <div class="bg-black/20 border border-white/5 p-6 rounded-2xl hover:border-amber-500/40 hover:bg-amber-500/5 transition duration-300 group shadow-lg light-edu-inner relative z-10 flex flex-col h-full">
+                        <div class="flex justify-between items-start mb-5">
+                            <div class="bg-amber-500/20 p-2.5 rounded-full border border-amber-500/20"><i data-lucide="award" class="w-5 h-5 text-amber-500"></i></div>
+                            <span class="text-[9px] mono text-amber-500 uppercase font-bold tracking-widest bg-amber-500/10 px-3 py-1 rounded-full border border-amber-500/20">YEAR: ${item.year}</span>
+                        </div>
+                        <h3 class="text-lg font-black text-white mb-2 group-hover:text-amber-400 transition leading-tight">${item.title}</h3>
+                        <p class="text-[10px] text-amber-500/80 font-mono tracking-widest uppercase mb-4">${item.organization}</p>
+                        <p class="text-xs text-slate-400 leading-relaxed flex-1">${item.details}</p>
+                    </div>`;
+            });
+            achModal.classList.remove('hidden'); setTimeout(() => { achModal.classList.remove('opacity-0'); achModalContent.classList.remove('scale-95'); lucide.createIcons(); }, 10);
+        }
+        function closeAchModal() { achModal.classList.add('opacity-0'); achModalContent.classList.add('scale-95'); setTimeout(() => achModal.classList.add('hidden'), 300); }
+
+        // Form Submit
+        document.getElementById('commForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('submitBtn'); const orgText = btn.innerHTML;
+            btn.innerHTML = '<i data-lucide="loader" class="w-4 h-4 animate-spin"></i> Transmitting...'; lucide.createIcons();
+            try {
+                await fetch(`${API_BASE}/messages`, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({identity_name: document.getElementById('i-name').value, contact_vector: document.getElementById('i-email').value, data_payload: document.getElementById('i-msg').value}) });
+                e.target.reset(); document.getElementById('formSuccess').classList.remove('hidden'); setTimeout(() => document.getElementById('formSuccess').classList.add('hidden'), 5000);
+            } catch(err){ alert("Failed!"); }
+            btn.innerHTML = orgText; lucide.createIcons();
         });
     </script>
 </body>
