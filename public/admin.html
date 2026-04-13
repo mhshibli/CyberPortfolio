@@ -107,8 +107,8 @@
             </div>
         </header>
 
-        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
-            <div class="glass p-4 rounded-2xl border-emerald-500/20 flex flex-col items-center justify-center relative overflow-hidden group min-h-[100px]">
+       <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
+            <div onclick="openStatModal('cpu')" class="glass p-4 rounded-2xl border-emerald-500/20 flex flex-col items-center justify-center relative overflow-hidden group min-h-[100px] cursor-pointer hover:scale-[1.03] transition-transform shadow-lg hover:shadow-emerald-500/20">
                 <div class="absolute -top-4 -right-4 w-12 h-12 bg-emerald-500/10 rounded-full blur-xl group-hover:bg-emerald-500/20 transition duration-500"></div>
                 <div class="flex items-center gap-2 mb-1 z-10">
                     <i data-lucide="cpu" class="w-4 h-4 text-emerald-500"></i>
@@ -117,7 +117,7 @@
                 <h3 class="text-xl font-black text-white mono tracking-tighter z-10"><span id="stat-cpu">--</span><span class="text-emerald-500 text-sm ml-1">%</span></h3>
             </div>
             
-            <div class="glass p-4 rounded-2xl border-purple-500/20 flex flex-col items-center justify-center relative overflow-hidden group min-h-[100px]">
+            <div onclick="openStatModal('ram')" class="glass p-4 rounded-2xl border-purple-500/20 flex flex-col items-center justify-center relative overflow-hidden group min-h-[100px] cursor-pointer hover:scale-[1.03] transition-transform shadow-lg hover:shadow-purple-500/20">
                 <div class="absolute -top-4 -right-4 w-12 h-12 bg-purple-500/10 rounded-full blur-xl group-hover:bg-purple-500/20 transition duration-500"></div>
                 <div class="flex items-center gap-2 mb-1 z-10">
                     <i data-lucide="memory-stick" class="w-4 h-4 text-purple-500"></i>
@@ -126,7 +126,7 @@
                 <h3 class="text-xl font-black text-white mono tracking-tighter z-10"><span id="stat-ram">--</span><span class="text-purple-500 text-sm ml-1">%</span></h3>
             </div>
 
-            <div class="glass p-4 rounded-2xl border-rose-500/20 flex flex-col items-center justify-center relative overflow-hidden group min-h-[100px]">
+            <div onclick="openStatModal('load')" class="glass p-4 rounded-2xl border-rose-500/20 flex flex-col items-center justify-center relative overflow-hidden group min-h-[100px] cursor-pointer hover:scale-[1.03] transition-transform shadow-lg hover:shadow-rose-500/20">
                 <div class="absolute -top-4 -right-4 w-12 h-12 bg-rose-500/10 rounded-full blur-xl group-hover:bg-rose-500/20 transition duration-500"></div>
                 <div class="flex items-center gap-2 mb-1 z-10">
                     <i data-lucide="activity" class="w-4 h-4 text-rose-500"></i>
@@ -135,7 +135,7 @@
                 <h3 class="text-xl font-black text-white mono tracking-tighter z-10" id="stat-load">--</h3>
             </div>
 
-            <div class="glass p-4 rounded-2xl border-sky-500/20 flex flex-col items-center justify-center relative overflow-hidden group min-h-[100px]">
+            <div onclick="openStatModal('total')" class="glass p-4 rounded-2xl border-sky-500/20 flex flex-col items-center justify-center relative overflow-hidden group min-h-[100px] cursor-pointer hover:scale-[1.03] transition-transform shadow-lg hover:shadow-sky-500/20">
                 <div class="absolute -top-4 -right-4 w-12 h-12 bg-sky-500/10 rounded-full blur-xl group-hover:bg-sky-500/20 transition duration-500"></div>
                 <div class="flex items-center gap-2 mb-1 z-10">
                     <i data-lucide="users" class="w-4 h-4 text-sky-500"></i>
@@ -144,7 +144,7 @@
                 <h3 class="text-xl font-black text-white mono tracking-tighter z-10" id="stat-total">--</h3>
             </div>
 
-            <div class="glass p-4 rounded-2xl border-amber-500/20 flex flex-col items-center justify-center relative overflow-hidden group col-span-2 md:col-span-1 lg:col-span-1 min-h-[100px]">
+            <div onclick="openStatModal('today')" class="glass p-4 rounded-2xl border-amber-500/20 flex flex-col items-center justify-center relative overflow-hidden group col-span-2 md:col-span-1 lg:col-span-1 min-h-[100px] cursor-pointer hover:scale-[1.03] transition-transform shadow-lg hover:shadow-amber-500/20">
                 <div class="absolute -top-4 -right-4 w-12 h-12 bg-amber-500/10 rounded-full blur-xl group-hover:bg-amber-500/20 transition duration-500"></div>
                 <div class="flex items-center gap-2 mb-1 z-10">
                     <i data-lucide="user-check" class="w-4 h-4 text-amber-500"></i>
@@ -153,6 +153,39 @@
                 <h3 class="text-xl font-black text-white mono tracking-tighter z-10" id="stat-today">--</h3>
             </div>
         </div>
+
+        <div id="statModal" class="fixed inset-0 modal-overlay z-[9999] hidden flex items-center justify-center p-4 opacity-0 transition-opacity duration-300">
+        <div class="glass max-w-sm md:max-w-md w-full p-8 rounded-3xl border shadow-[0_0_50px_rgba(0,0,0,0.5)] relative transform scale-95 transition-transform duration-300" id="statModal-content">
+            <button onclick="closeStatModal()" class="absolute top-6 right-6 text-slate-400 hover:text-white bg-black/40 hover:bg-red-500 p-2 rounded-full border border-white/5 transition shadow-lg">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+
+            <div class="flex items-center gap-4 mb-8">
+                <div id="stat-modal-icon-bg" class="w-16 h-16 rounded-2xl flex items-center justify-center border shadow-inner">
+                    <i id="stat-modal-icon" data-lucide="cpu" class="w-8 h-8"></i>
+                </div>
+                <div>
+                    <h3 id="stat-modal-title" class="text-2xl font-black text-white uppercase tracking-tight">CPU Usage</h3>
+                    <p id="stat-modal-subtitle" class="text-[10px] font-bold font-mono mt-1 uppercase tracking-[0.2em] text-slate-400">System Core</p>
+                </div>
+            </div>
+
+            <div class="bg-black/40 border border-white/5 p-6 rounded-2xl shadow-inner">
+                <div class="flex justify-between items-end mb-4 border-b border-white/5 pb-4">
+                    <span class="text-[10px] text-slate-500 font-bold uppercase tracking-widest mono">Current Value</span>
+                    <span id="stat-modal-value" class="text-4xl font-black text-white mono tracking-tighter">--</span>
+                </div>
+                
+                <div class="w-full h-4 bg-black/60 rounded-full overflow-hidden border border-white/10 relative shadow-inner mb-4">
+                    <div id="stat-modal-bar" class="h-full w-0 transition-all duration-[1500ms] ease-out relative rounded-full">
+                        <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent w-full animate-[pulse_2s_ease-in-out_infinite]"></div>
+                    </div>
+                </div>
+                
+                <p id="stat-modal-desc" class="text-[10px] text-slate-500 mono uppercase tracking-widest text-center mt-2 leading-relaxed">Monitoring real-time server resources.</p>
+            </div>
+        </div>
+    </div>
 
         <div class="grid lg:grid-cols-4 gap-8">
             <nav class="lg:col-span-1 space-y-4">
@@ -612,6 +645,84 @@
             } catch(e) { alert("Database Update Failed!"); btn.innerText = "Error"; btn.classList.remove('opacity-50'); }
         }
 
+        // ================= DYNAMIC STATS LIGHTBOX LOGIC =================
+        const statModal = document.getElementById('statModal');
+        const statModalContent = document.getElementById('statModal-content');
+
+        function openStatModal(type) {
+            let title, subtitle, value, textClass, bgClass, borderClass, barClass, icon, desc, percent;
+
+            const cpuVal = parseFloat(document.getElementById('stat-cpu').innerText) || 0;
+            const ramVal = parseFloat(document.getElementById('stat-ram').innerText) || 0;
+            const loadVal = parseFloat(document.getElementById('stat-load').innerText) || 0;
+            const totalVal = parseInt(document.getElementById('stat-total').innerText) || 0;
+            const todayVal = parseInt(document.getElementById('stat-today').innerText) || 0;
+
+            switch(type) {
+                case 'cpu':
+                    title = 'CPU Usage'; subtitle = 'Processor Load'; value = cpuVal + '%';
+                    textClass = 'text-emerald-500'; bgClass = 'bg-emerald-500/10'; borderClass = 'border-emerald-500/30'; barClass = 'bg-emerald-500 shadow-[0_0_15px_#10b981]';
+                    icon = 'cpu'; desc = 'Real-time computation load across all active cores.'; percent = cpuVal; break;
+                case 'ram':
+                    title = 'RAM Usage'; subtitle = 'Memory Allocation'; value = ramVal + '%';
+                    textClass = 'text-purple-500'; bgClass = 'bg-purple-500/10'; borderClass = 'border-purple-500/30'; barClass = 'bg-purple-500 shadow-[0_0_15px_#a855f7]';
+                    icon = 'memory-stick'; desc = 'Real-time active memory consumption on server.'; percent = ramVal; break;
+                case 'load':
+                    title = 'Server Load'; subtitle = 'System Average'; value = loadVal;
+                    textClass = 'text-rose-500'; bgClass = 'bg-rose-500/10'; borderClass = 'border-rose-500/30'; barClass = 'bg-rose-500 shadow-[0_0_15px_#f43f5e]';
+                    icon = 'activity'; desc = '1-minute server load average. Normal range is under 2.0.'; percent = Math.min((loadVal / 4) * 100, 100); break;
+                case 'total':
+                    title = 'Total Visits'; subtitle = 'All Time Traffic'; value = totalVal;
+                    textClass = 'text-sky-500'; bgClass = 'bg-sky-500/10'; borderClass = 'border-sky-500/30'; barClass = 'bg-sky-500 shadow-[0_0_15px_#0ea5e9]';
+                    icon = 'users'; desc = 'Total number of page views since initial deployment.'; percent = 100; break;
+                case 'today':
+                    title = 'Visits Today'; subtitle = '24H Traffic'; value = todayVal;
+                    textClass = 'text-amber-500'; bgClass = 'bg-amber-500/10'; borderClass = 'border-amber-500/30'; barClass = 'bg-amber-500 shadow-[0_0_15px_#f59e0b]';
+                    icon = 'user-check'; desc = 'Number of page views recorded in the current day.'; percent = totalVal > 0 ? (todayVal / totalVal) * 100 : 100; break;
+            }
+
+            // Update Texts
+            document.getElementById('stat-modal-title').innerText = title;
+            document.getElementById('stat-modal-subtitle').innerText = subtitle;
+            
+            const valEl = document.getElementById('stat-modal-value');
+            valEl.innerText = value;
+            valEl.className = `text-4xl font-black tracking-tighter mono ${textClass}`;
+            document.getElementById('stat-modal-desc').innerText = desc;
+
+            // Update Icons
+            const iconEl = document.getElementById('stat-modal-icon');
+            iconEl.setAttribute('data-lucide', icon);
+            iconEl.className = `w-8 h-8 ${textClass}`;
+
+            const iconBg = document.getElementById('stat-modal-icon-bg');
+            iconBg.className = `w-16 h-16 rounded-2xl flex items-center justify-center border shadow-inner ${bgClass} ${borderClass}`;
+
+            // Update Progress Bar
+            const bar = document.getElementById('stat-modal-bar');
+            bar.className = `h-full w-0 transition-all duration-[1500ms] ease-out relative rounded-full ${barClass}`;
+
+            // Update Main Container
+            statModalContent.className = `glass max-w-sm md:max-w-md w-full p-8 rounded-3xl border shadow-[0_0_50px_rgba(0,0,0,0.5)] relative transform scale-95 transition-transform duration-300 ${borderClass}`;
+
+            lucide.createIcons();
+            statModal.classList.remove('hidden');
+
+            // Trigger Animation
+            setTimeout(() => {
+                statModal.classList.remove('opacity-0');
+                statModalContent.classList.remove('scale-95');
+                bar.style.width = percent + '%';
+            }, 10);
+        }
+
+        function closeStatModal() {
+            statModal.classList.add('opacity-0');
+            statModalContent.classList.add('scale-95');
+            document.getElementById('stat-modal-bar').style.width = '0%';
+            setTimeout(() => statModal.classList.add('hidden'), 300);
+        }
+        
 // ================= MESSAGE LIGHTBOX LOGIC =================
         const msgModal = document.getElementById('msgModal');
         const msgModalContent = document.getElementById('msgModal-content');
