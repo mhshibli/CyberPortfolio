@@ -32,6 +32,31 @@ app.use(async (req, res, next) => {
 
 app.use(express.static('public'));
 
+// ================= HOURLY ANALYTICS (Today) =================
+app.get('/api/analytics/today', async (req, res) => {
+    try {
+        const today = new Date().toISOString().split('T')[0];
+        const { data, error } = await supabase
+            .from('page_views')
+            .select('created_at')
+            .eq('view_date', today);
+
+        if (error) throw error;
+
+        // ২৪ ঘণ্টার জন্য ০-২৩ ইনডেক্স তৈরি
+        const hourlyCounts = new Array(24).fill(0);
+        
+        data.forEach(row => {
+            const hour = new Date(row.created_at).getHours();
+            hourlyCounts[hour]++;
+        });
+
+        const labels = Array.from({length: 24}, (_, i) => `${i}:00`);
+        res.json({ labels, values: hourlyCounts });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
 // ================= REAL-TIME SYSTEM STATS API =================
 app.get('/api/system-stats', async (req, res) => {
     try {
