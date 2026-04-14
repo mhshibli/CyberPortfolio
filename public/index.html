@@ -12,10 +12,6 @@
         html { scroll-behavior: smooth; }
         body { font-family: 'Inter', sans-serif; background-color: #020617; color: #f8fafc; overflow-x: hidden; transition: background-color 0.5s, color 0.5s; margin: 0; }
         .mono { font-family: 'JetBrains Mono', monospace; }
-        
-        /* ================= 1. LIVE ATTACK MAP ================= */
-        #attack-map { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; opacity: 0.6; pointer-events: none; }
-        body.light-mode #attack-map { opacity: 0.1; filter: invert(1); }
 
         /* ================= AGGRESSIVE FAKE EXPLOIT BOOT SEQUENCE ================= */
         #boot-screen {
@@ -62,7 +58,7 @@
         /* 4. TERMINAL STYLES */
         #terminal-box { background: rgba(2, 6, 23, 0.9); border: 1px solid rgba(239, 68, 68, 0.3); box-shadow: 0 0 30px rgba(239, 68, 68, 0.1); border-radius: 1rem; overflow: hidden; height: 350px; display: flex; flex-direction: column; transition: all 0.5s;}
         .terminal-header { background: rgba(239, 68, 68, 0.1); padding: 8px 15px; border-bottom: 1px solid rgba(239, 68, 68, 0.2); display: flex; justify-content: space-between; }
-        .terminal-content { flex: 1; overflow-y: auto; padding: 15px; font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #f87171; }
+        .terminal-content { flex: 1; overflow-y: auto; padding: 15px; font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #f87171; cursor: text; }
         .terminal-input-line { display: flex; align-items: center; color: #10b981; }
 
         /* ================= SCI-FI CARDS (For Comms) ================= */
@@ -144,8 +140,6 @@
     </style>
 </head>
 <body>
-
-    <canvas id="attack-map"></canvas>
 
     <div id="boot-screen">
         <div class="boot-text-container" id="terminal-text"></div>
@@ -459,7 +453,7 @@
                         </div>
                         <span class="text-[10px] mono text-slate-400">mh_root@offensive-node: ~</span>
                     </div>
-                    <div class="terminal-content custom-scrollbar" id="term-body">
+                    <div class="terminal-content custom-scrollbar" id="term-body" onclick="document.getElementById('term-input').focus()">
                         <p class="mb-2">Secure Shell V3.0 (Red Team Ed.). Type 'help' to see commands.</p>
                         <p class="mb-4 text-[10px] text-slate-500">Hint: Explore the file system. Are you root?</p>
                         <div id="term-outputs"></div>
@@ -654,52 +648,6 @@
         lucide.createIcons();
         const API_BASE = 'https://iammahmudul.onrender.com/api';
 
-        // ================= 1. LIVE ATTACK MAP LOGIC =================
-        const mapCanvas = document.getElementById('attack-map');
-        const mapCtx = mapCanvas.getContext('2d');
-        function resizeCanvas() { mapCanvas.width = window.innerWidth; mapCanvas.height = window.innerHeight; }
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
-
-        const mapParticles = [];
-        function createAttack() {
-            const startX = Math.random() * mapCanvas.width;
-            const startY = Math.random() * mapCanvas.height;
-            const endX = mapCanvas.width / 2 + (Math.random() - 0.5) * 400; 
-            const endY = mapCanvas.height / 2 + (Math.random() - 0.5) * 400;
-            mapParticles.push({ x: startX, y: startY, targetX: endX, targetY: endY, progress: 0, speed: Math.random() * 0.015 + 0.01 });
-        }
-
-        function drawMap() {
-            mapCtx.clearRect(0, 0, mapCanvas.width, mapCanvas.height);
-            if(Math.random() < 0.05) createAttack(); 
-
-            for(let i = mapParticles.length - 1; i >= 0; i--) {
-                let p = mapParticles[i];
-                p.progress += p.speed;
-                if(p.progress >= 1) { mapParticles.splice(i, 1); continue; }
-
-                const currentX = p.x + (p.targetX - p.x) * p.progress;
-                const currentY = p.y + (p.targetY - p.y) * p.progress;
-
-                mapCtx.beginPath();
-                mapCtx.moveTo(p.x, p.y);
-                mapCtx.lineTo(currentX, currentY);
-                mapCtx.strokeStyle = `rgba(239, 68, 68, ${1 - p.progress})`; 
-                mapCtx.lineWidth = 1.5;
-                mapCtx.stroke();
-
-                if(p.progress > 0.9) {
-                    mapCtx.beginPath();
-                    mapCtx.arc(p.targetX, p.targetY, (p.progress - 0.9) * 40, 0, Math.PI * 2);
-                    mapCtx.fillStyle = `rgba(239, 68, 68, ${1 - p.progress})`;
-                    mapCtx.fill();
-                }
-            }
-            requestAnimationFrame(drawMap);
-        }
-        drawMap();
-
         // ================= SCARY BOOT SEQUENCE LOGIC =================
         const bootLines = [
             "<span class='text-red-500 font-bold'>[CRITICAL] KERNEL PANIC: UNAUTHORIZED ROOT ACCESS DETECTED!</span>",
@@ -810,7 +758,6 @@
         }
         updatePrompt();
 
-        // History navigation
         termInput.addEventListener('keydown', (e) => {
             if(e.key === 'ArrowUp') {
                 if(historyIndex < cmdHistory.length - 1) {
@@ -836,7 +783,6 @@
                     historyIndex = -1;
                 }
                 
-                // Print command echo
                 const user = isRoot ? 'root' : 'mh_guest';
                 const symbol = isRoot ? '#' : '$';
                 const color = isRoot ? 'text-red-500' : 'text-emerald-500';
@@ -862,160 +808,165 @@
                     return div;
                 };
 
-                switch(cmd) {
-                    case "help":
-                        appendOut("Available Commands:<br>" + 
-                                  "  <b>whoami</b>    : Print current user<br>" +
-                                  "  <b>pwd</b>       : Print working directory<br>" +
-                                  "  <b>cd</b>        : Change directory<br>" +
-                                  "  <b>ls</b>        : List directory contents<br>" +
-                                  "  <b>cat</b>       : Read file content<br>" +
-                                  "  <b>uname</b>     : Print system information<br>" +
-                                  "  <b>ifconfig</b>  : View network interfaces<br>" +
-                                  "  <b>netstat</b>   : Print network connections<br>" +
-                                  "  <b>ps</b>        : Report current processes<br>" +
-                                  "  <b>top</b>       : Display system tasks<br>" +
-                                  "  <b>uptime</b>    : System uptime<br>" +
-                                  "  <b>history</b>   : Command history<br>" +
-                                  "  <b>date</b>      : System date and time<br>" +
-                                  "  <b>echo</b>      : Print text to terminal<br>" +
-                                  "  <b>ping</b>      : Send ICMP ECHO_REQUEST<br>" +
-                                  "  <b>nmap</b>      : Network exploration and security scanner<br>" +
-                                  "  <b>sqlmap</b>    : Automatic SQL injection tool<br>" +
-                                  "  <b>hydra</b>     : Network logon cracker<br>" +
-                                  "  <b>skills</b>    : View operator skill matrix<br>" +
-                                  "  <b>target</b>    : View current operation focus<br>" +
-                                  "  <b>clear</b>     : Clear terminal output<br>" +
-                                  "  <b>exit</b>      : Terminate session");
-                        break;
-                    case "whoami":
-                        appendOut(isRoot ? "root" : "mh_guest");
-                        break;
-                    case "pwd":
-                        appendOut(isRoot ? (currentDir === "~" ? "/root" : `/root/${currentDir.replace('~/','')}`) : (currentDir === "~" ? "/home/mh_guest" : `/home/mh_guest/${currentDir.replace('~/','')}`));
-                        break;
-                    case "cd":
-                        if(!args[1] || args[1] === "~") currentDir = "~";
-                        else if(args[1] === "..") {
-                            const parts = currentDir.split('/');
-                            if(parts.length > 1) { parts.pop(); currentDir = parts.join('/') || "/"; }
-                        } else currentDir = currentDir === "~" ? `~/${args[1]}` : currentDir === "/" ? `/${args[1]}` : `${currentDir}/${args[1]}`;
-                        updatePrompt();
-                        break;
-                    case "ls":
-                        if(currentDir === "~") appendOut(Object.keys(fileSystem).map(f => `<span class="text-sky-400">${f}</span>`).join('&nbsp;&nbsp;&nbsp;&nbsp;'));
-                        else appendOut("");
-                        break;
-                    case "cat":
-                        if(!args[1]) appendOut("cat: missing file operand", "text-red-500 mb-2");
-                        else if(fileSystem[args[1]] && currentDir === "~") {
-                            if(args[1] === "secret_flag.txt" || args[1] === "shadow.bak") {
-                                if(isRoot) {
-                                    if(args[1] === "secret_flag.txt") appendOut("flag{R3D_T34M_M4ST3R_H4CK3R_UNL0CK3D}", "text-emerald-500 font-bold mb-2");
-                                    else appendOut(fileSystem[args[1]]);
-                                } else appendOut("cat: Permission denied. Root privileges required.", "text-red-500 mb-2 font-bold");
-                            } else appendOut(fileSystem[args[1]]);
-                        } else appendOut(`cat: ${args[1]}: No such file or directory`, "text-red-500 mb-2");
-                        break;
-                    case "uname":
-                        appendOut(`Linux offensive-node 6.1.0-kali-amd64 #1 SMP PREEMPT_DYNAMIC Kali 6.1.27-1 x86_64 GNU/Linux`);
-                        break;
-                    case "ifconfig":
-                    case "ip":
-                        appendOut(`eth0: flags=4163&lt;UP,BROADCAST,RUNNING,MULTICAST&gt;  mtu 1500<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;inet 10.0.2.15  netmask 255.255.255.0  broadcast 10.0.2.255<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ether 08:00:27:11:22:33  txqueuelen 1000  (Ethernet)<br><br>lo:&nbsp;&nbsp; flags=73&lt;UP,LOOPBACK,RUNNING&gt;  mtu 65536<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;inet 127.0.0.1  netmask 255.0.0.0`);
-                        break;
-                    case "netstat":
-                        appendOut(`Active Internet connections (only servers)<br>Proto Recv-Q Send-Q Local Address           Foreign Address         State<br>tcp        0      0 0.0.0.0:22              0.0.0.0:* LISTEN<br>tcp        0      0 127.0.0.1:3306          0.0.0.0:* LISTEN<br>tcp6       0      0 :::80                   :::* LISTEN`);
-                        break;
-                    case "ps":
-                        appendOut(`PID   USER     TIME  COMMAND<br>  1   root     0:03  /sbin/init<br> 42   root     0:00  /usr/sbin/sshd -D<br> 88   www-data 0:01  nginx: worker process<br>104   ${isRoot?'root':'mh_guest'} 0:00  -bash`);
-                        break;
-                    case "top":
-                        appendOut(`top - ${new Date().toLocaleTimeString()} up 14 days,  2:32,  1 user,  load average: 0.12, 0.08, 0.05<br>Tasks: 104 total,   1 running, 103 sleeping<br>%Cpu(s):  2.5 us,  1.2 sy,  0.0 ni, 96.0 id,  0.2 wa<br>MiB Mem :   7954.2 total,   2145.6 free,   3450.1 used,   2358.5 buff/cache`);
-                        break;
-                    case "uptime":
-                        appendOut(`${new Date().toLocaleTimeString()} up 14 days,  2:32,  1 user,  load average: 0.12, 0.08, 0.05`);
-                        break;
-                    case "history":
-                        appendOut(cmdHistory.map((c, i) => `&nbsp;&nbsp;${i+1}&nbsp;&nbsp;${c}`).join('<br>'));
-                        break;
-                    case "date":
-                        appendOut(new Date().toUTCString());
-                        break;
-                    case "echo":
-                        appendOut(args.slice(1).join(" "));
-                        break;
-                    case "ping":
-                        const targetIp = args[1] || "8.8.8.8";
-                        const outPing = appendOut(`PING ${targetIp} 56(84) bytes of data.<br>`);
-                        for(let i=1; i<=3; i++) {
-                            await sleep(800);
-                            outPing.innerHTML += `64 bytes from ${targetIp}: icmp_seq=${i} ttl=54 time=${(Math.random()*20+10).toFixed(1)} ms<br>`;
-                            termBody.scrollTop = termBody.scrollHeight;
-                        }
-                        await sleep(500);
-                        outPing.innerHTML += `--- ${targetIp} ping statistics ---<br>3 packets transmitted, 3 received, 0% packet loss`;
-                        termBody.scrollTop = termBody.scrollHeight;
-                        break;
-                    case "nmap":
-                        const nIp = args[1] || "127.0.0.1";
-                        const outNmap = appendOut(`Starting Nmap 7.93 ( https://nmap.org ) at ${new Date().toUTCString()}<br>Nmap scan report for ${nIp}<br>Host is up (0.00013s latency).<br><br>`);
-                        await sleep(1500);
-                        outNmap.innerHTML += `PORT&nbsp;&nbsp;&nbsp;&nbsp;STATE SERVICE<br>22/tcp&nbsp;&nbsp;open&nbsp;&nbsp;ssh<br>80/tcp&nbsp;&nbsp;open&nbsp;&nbsp;http<br>${isRoot ? '443/tcp&nbsp;open&nbsp;&nbsp;https<br>3306/tcp open&nbsp;&nbsp;mysql<br>' : ''}<br>Nmap done: 1 IP address (1 host up) scanned in 1.34 seconds`;
-                        termBody.scrollTop = termBody.scrollHeight;
-                        break;
-                    case "sqlmap":
-                        const outSql = appendOut(`___<br>__H__<br>___ ___[']_____ ___ ___  {1.6.8#stable}<br>|_ -| . [']     | .'| . |<br>|___|_  ["]_|_|_|__,|  _|<br>      |_|V...       |_|   https://sqlmap.org<br><br>[*] starting @ ${new Date().toLocaleTimeString()}<br>`);
-                        await sleep(800); outSql.innerHTML += `[INFO] testing connection to the target URL<br>`; termBody.scrollTop = termBody.scrollHeight;
-                        await sleep(1000); outSql.innerHTML += `[INFO] checking if the parameter 'id' is dynamic<br>`; termBody.scrollTop = termBody.scrollHeight;
-                        await sleep(1200); outSql.innerHTML += `<span class="text-emerald-500">[INFO] parameter 'id' appears to be dynamic</span><br>`; termBody.scrollTop = termBody.scrollHeight;
-                        await sleep(1000);
-                        if(isRoot) {
-                            outSql.innerHTML += `<span class="text-red-500">[SUCCESS] Database dumped! Extracted 13 tables, 400 records.</span>`;
-                        } else {
-                            outSql.innerHTML += `<span class="text-rose-500">[ERROR] Insufficient local privileges to write dump file. Switch to root.</span>`;
-                        }
-                        termBody.scrollTop = termBody.scrollHeight;
-                        break;
-                    case "hydra":
-                        const hTarget = args[1] || "ssh://10.0.0.5";
-                        const outHydra = appendOut(`Hydra v9.3 (c) 2022 by van Hauser/THC<br>[INFO] Starting brute force against ${hTarget}<br>`);
-                        await sleep(800); outHydra.innerHTML += `[DATA] max 16 tasks per 1 server, overall 16 tasks, 25000 login tries<br>`; termBody.scrollTop = termBody.scrollHeight;
-                        await sleep(1500);
-                        outHydra.innerHTML += `<span class="text-emerald-500">[80] [ssh] host: ${hTarget.replace('ssh://','')}   login: admin   password: password123</span><br>`;
-                        await sleep(500); outHydra.innerHTML += `[INFO] 1 valid password found`;
-                        termBody.scrollTop = termBody.scrollHeight;
-                        break;
-                    case "skills":
-                        appendOut(isRoot ? "Red Teaming, Exploit Dev, AI Security, Reverse Engineering, Cryptography." : "Access Denied. Root privileges required.", isRoot ? "text-slate-300" : "text-red-500 font-bold");
-                        break;
-                    case "target":
-                        appendOut("Current objective: Evaluate CSE-CIC-IDS2018 Dataset using XAI GANs.");
-                        break;
-                    case "clear":
-                        termOutputs.innerHTML = "";
-                        break;
-                    case "sudo":
-                    case "su":
-                    case "hack":
-                        if(args[0] === "hack" || args[1] === "su" || args[1] === "root" || args[0] === "su") {
-                            isRoot = true;
+                try {
+                    switch(cmd) {
+                        case "help":
+                            appendOut("Available Commands:<br>" + 
+                                      "  <b>whoami</b>    : Print current user<br>" +
+                                      "  <b>pwd</b>       : Print working directory<br>" +
+                                      "  <b>cd</b>        : Change directory<br>" +
+                                      "  <b>ls</b>        : List directory contents<br>" +
+                                      "  <b>cat</b>       : Read file content<br>" +
+                                      "  <b>uname</b>     : Print system information<br>" +
+                                      "  <b>ifconfig</b>  : View network interfaces<br>" +
+                                      "  <b>netstat</b>   : Print network connections<br>" +
+                                      "  <b>ps</b>        : Report current processes<br>" +
+                                      "  <b>top</b>       : Display system tasks<br>" +
+                                      "  <b>uptime</b>    : System uptime<br>" +
+                                      "  <b>history</b>   : Command history<br>" +
+                                      "  <b>date</b>      : System date and time<br>" +
+                                      "  <b>echo</b>      : Print text to terminal<br>" +
+                                      "  <b>ping</b>      : Send ICMP ECHO_REQUEST<br>" +
+                                      "  <b>nmap</b>      : Network exploration and security scanner<br>" +
+                                      "  <b>sqlmap</b>    : Automatic SQL injection tool<br>" +
+                                      "  <b>hydra</b>     : Network logon cracker<br>" +
+                                      "  <b>skills</b>    : View operator skill matrix<br>" +
+                                      "  <b>target</b>    : View current operation focus<br>" +
+                                      "  <b>clear</b>     : Clear terminal output<br>" +
+                                      "  <b>exit</b>      : Terminate session");
+                            break;
+                        case "whoami":
+                            appendOut(isRoot ? "root" : "mh_guest");
+                            break;
+                        case "pwd":
+                            appendOut(isRoot ? (currentDir === "~" ? "/root" : `/root/${currentDir.replace('~/','')}`) : (currentDir === "~" ? "/home/mh_guest" : `/home/mh_guest/${currentDir.replace('~/','')}`));
+                            break;
+                        case "cd":
+                            if(!args[1] || args[1] === "~") currentDir = "~";
+                            else if(args[1] === "..") {
+                                const parts = currentDir.split('/');
+                                if(parts.length > 1) { parts.pop(); currentDir = parts.join('/') || "/"; }
+                            } else currentDir = currentDir === "~" ? `~/${args[1]}` : currentDir === "/" ? `/${args[1]}` : `${currentDir}/${args[1]}`;
                             updatePrompt();
-                            appendOut("SYSTEM OVERRIDE DETECTED... ACCESS GRANTED.<br>Welcome to the shadows.<br><span class='text-white bg-red-600 px-2 py-1 mt-2 inline-block rounded'>Root Privileges Elevated. Try 'cat secret_flag.txt'</span>", "text-red-500 font-bold mb-2 p-3 bg-red-500/10 border border-red-500/30 mt-2 shadow-[0_0_15px_rgba(239,68,68,0.2)]");
-                            document.getElementById('terminal-box').style.borderColor = "#ef4444";
-                            document.getElementById('terminal-box').style.boxShadow = "0 0 50px rgba(239,68,68,0.4)";
-                        } else {
-                            appendOut(`sudo: ${args[1] || ''}: command not found`, "text-red-500 mb-2");
-                        }
-                        break;
-                    case "exit":
-                        appendOut("Connection closed by foreign host.<br>Just kidding! Refresh the page to actually leave.");
-                        break;
-                    default:
-                        appendOut(`bash: ${cmd}: command not found. Type 'help' for a list of commands.`, "text-red-500 mb-2");
+                            break;
+                        case "ls":
+                            if(currentDir === "~") appendOut(Object.keys(fileSystem).map(f => `<span class="text-sky-400">${f}</span>`).join('&nbsp;&nbsp;&nbsp;&nbsp;'));
+                            else appendOut("");
+                            break;
+                        case "cat":
+                            if(!args[1]) appendOut("cat: missing file operand", "text-red-500 mb-2");
+                            else if(fileSystem[args[1]] && currentDir === "~") {
+                                if(args[1] === "secret_flag.txt" || args[1] === "shadow.bak") {
+                                    if(isRoot) {
+                                        if(args[1] === "secret_flag.txt") appendOut("flag{R3D_T34M_M4ST3R_H4CK3R_UNL0CK3D}", "text-emerald-500 font-bold mb-2");
+                                        else appendOut(fileSystem[args[1]]);
+                                    } else appendOut("cat: Permission denied. Root privileges required.", "text-red-500 mb-2 font-bold");
+                                } else appendOut(fileSystem[args[1]]);
+                            } else appendOut(`cat: ${args[1]}: No such file or directory`, "text-red-500 mb-2");
+                            break;
+                        case "uname":
+                            appendOut(`Linux offensive-node 6.1.0-kali-amd64 #1 SMP PREEMPT_DYNAMIC Kali 6.1.27-1 x86_64 GNU/Linux`);
+                            break;
+                        case "ifconfig":
+                        case "ip":
+                            appendOut(`eth0: flags=4163&lt;UP,BROADCAST,RUNNING,MULTICAST&gt;  mtu 1500<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;inet 10.0.2.15  netmask 255.255.255.0  broadcast 10.0.2.255<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ether 08:00:27:11:22:33  txqueuelen 1000  (Ethernet)<br><br>lo:&nbsp;&nbsp; flags=73&lt;UP,LOOPBACK,RUNNING&gt;  mtu 65536<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;inet 127.0.0.1  netmask 255.0.0.0`);
+                            break;
+                        case "netstat":
+                            appendOut(`Active Internet connections (only servers)<br>Proto Recv-Q Send-Q Local Address           Foreign Address         State<br>tcp        0      0 0.0.0.0:22              0.0.0.0:* LISTEN<br>tcp        0      0 127.0.0.1:3306          0.0.0.0:* LISTEN<br>tcp6       0      0 :::80                   :::* LISTEN`);
+                            break;
+                        case "ps":
+                            appendOut(`PID   USER     TIME  COMMAND<br>  1   root     0:03  /sbin/init<br> 42   root     0:00  /usr/sbin/sshd -D<br> 88   www-data 0:01  nginx: worker process<br>104   ${isRoot?'root':'mh_guest'} 0:00  -bash`);
+                            break;
+                        case "top":
+                            appendOut(`top - ${new Date().toLocaleTimeString()} up 14 days,  2:32,  1 user,  load average: 0.12, 0.08, 0.05<br>Tasks: 104 total,   1 running, 103 sleeping<br>%Cpu(s):  2.5 us,  1.2 sy,  0.0 ni, 96.0 id,  0.2 wa<br>MiB Mem :   7954.2 total,   2145.6 free,   3450.1 used,   2358.5 buff/cache`);
+                            break;
+                        case "uptime":
+                            appendOut(`${new Date().toLocaleTimeString()} up 14 days,  2:32,  1 user,  load average: 0.12, 0.08, 0.05`);
+                            break;
+                        case "history":
+                            appendOut(cmdHistory.map((c, i) => `&nbsp;&nbsp;${i+1}&nbsp;&nbsp;${c}`).join('<br>'));
+                            break;
+                        case "date":
+                            appendOut(new Date().toUTCString());
+                            break;
+                        case "echo":
+                            appendOut(args.slice(1).join(" "));
+                            break;
+                        case "ping":
+                            const targetIp = args[1] || "8.8.8.8";
+                            const outPing = appendOut(`PING ${targetIp} 56(84) bytes of data.<br>`);
+                            for(let i=1; i<=3; i++) {
+                                await sleep(800);
+                                outPing.innerHTML += `64 bytes from ${targetIp}: icmp_seq=${i} ttl=54 time=${(Math.random()*20+10).toFixed(1)} ms<br>`;
+                                termBody.scrollTop = termBody.scrollHeight;
+                            }
+                            await sleep(500);
+                            outPing.innerHTML += `--- ${targetIp} ping statistics ---<br>3 packets transmitted, 3 received, 0% packet loss`;
+                            termBody.scrollTop = termBody.scrollHeight;
+                            break;
+                        case "nmap":
+                            const nIp = args[1] || "127.0.0.1";
+                            const outNmap = appendOut(`Starting Nmap 7.93 ( https://nmap.org ) at ${new Date().toUTCString()}<br>Nmap scan report for ${nIp}<br>Host is up (0.00013s latency).<br><br>`);
+                            await sleep(1500);
+                            outNmap.innerHTML += `PORT&nbsp;&nbsp;&nbsp;&nbsp;STATE SERVICE<br>22/tcp&nbsp;&nbsp;open&nbsp;&nbsp;ssh<br>80/tcp&nbsp;&nbsp;open&nbsp;&nbsp;http<br>${isRoot ? '443/tcp&nbsp;open&nbsp;&nbsp;https<br>3306/tcp open&nbsp;&nbsp;mysql<br>' : ''}<br>Nmap done: 1 IP address (1 host up) scanned in 1.34 seconds`;
+                            termBody.scrollTop = termBody.scrollHeight;
+                            break;
+                        case "sqlmap":
+                            const outSql = appendOut(`___<br>__H__<br>___ ___[']_____ ___ ___  {1.6.8#stable}<br>|_ -| . [']     | .'| . |<br>|___|_  ["]_|_|_|__,|  _|<br>      |_|V...       |_|   https://sqlmap.org<br><br>[*] starting @ ${new Date().toLocaleTimeString()}<br>`);
+                            await sleep(800); outSql.innerHTML += `[INFO] testing connection to the target URL<br>`; termBody.scrollTop = termBody.scrollHeight;
+                            await sleep(1000); outSql.innerHTML += `[INFO] checking if the parameter 'id' is dynamic<br>`; termBody.scrollTop = termBody.scrollHeight;
+                            await sleep(1200); outSql.innerHTML += `<span class="text-emerald-500">[INFO] parameter 'id' appears to be dynamic</span><br>`; termBody.scrollTop = termBody.scrollHeight;
+                            await sleep(1000);
+                            if(isRoot) {
+                                outSql.innerHTML += `<span class="text-red-500">[SUCCESS] Database dumped! Extracted 13 tables, 400 records.</span>`;
+                            } else {
+                                outSql.innerHTML += `<span class="text-rose-500">[ERROR] Insufficient local privileges to write dump file. Switch to root.</span>`;
+                            }
+                            termBody.scrollTop = termBody.scrollHeight;
+                            break;
+                        case "hydra":
+                            const hTarget = args[1] || "ssh://10.0.0.5";
+                            const outHydra = appendOut(`Hydra v9.3 (c) 2022 by van Hauser/THC<br>[INFO] Starting brute force against ${hTarget}<br>`);
+                            await sleep(800); outHydra.innerHTML += `[DATA] max 16 tasks per 1 server, overall 16 tasks, 25000 login tries<br>`; termBody.scrollTop = termBody.scrollHeight;
+                            await sleep(1500);
+                            outHydra.innerHTML += `<span class="text-emerald-500">[80] [ssh] host: ${hTarget.replace('ssh://','')}   login: admin   password: password123</span><br>`;
+                            await sleep(500); outHydra.innerHTML += `[INFO] 1 valid password found`;
+                            termBody.scrollTop = termBody.scrollHeight;
+                            break;
+                        case "skills":
+                            appendOut(isRoot ? "Red Teaming, Exploit Dev, AI Security, Reverse Engineering, Cryptography." : "Access Denied. Root privileges required.", isRoot ? "text-slate-300" : "text-red-500 font-bold");
+                            break;
+                        case "target":
+                            appendOut("Current objective: Evaluate CSE-CIC-IDS2018 Dataset using XAI GANs.");
+                            break;
+                        case "clear":
+                            termOutputs.innerHTML = "";
+                            break;
+                        case "sudo":
+                        case "su":
+                        case "hack":
+                            if(args[0] === "hack" || args[1] === "su" || args[1] === "root" || args[0] === "su") {
+                                isRoot = true;
+                                updatePrompt();
+                                appendOut("SYSTEM OVERRIDE DETECTED... ACCESS GRANTED.<br>Welcome to the shadows.<br><span class='text-white bg-red-600 px-2 py-1 mt-2 inline-block rounded'>Root Privileges Elevated. Try 'cat secret_flag.txt'</span>", "text-red-500 font-bold mb-2 p-3 bg-red-500/10 border border-red-500/30 mt-2 shadow-[0_0_15px_rgba(239,68,68,0.2)]");
+                                document.getElementById('terminal-box').style.borderColor = "#ef4444";
+                                document.getElementById('terminal-box').style.boxShadow = "0 0 50px rgba(239,68,68,0.4)";
+                            } else {
+                                appendOut(`sudo: ${args[1] || ''}: command not found`, "text-red-500 mb-2");
+                            }
+                            break;
+                        case "exit":
+                            appendOut("Connection closed by foreign host.<br>Just kidding! Refresh the page to actually leave.");
+                            break;
+                        default:
+                            appendOut(`bash: ${cmd}: command not found. Type 'help' for a list of commands.`, "text-red-500 mb-2");
+                    }
+                } catch(err) {
+                    appendOut("bash: internal execution error.", "text-red-500 mb-2");
+                } finally {
+                    termInput.disabled = false;
+                    termInput.focus();
                 }
-                termInput.disabled = false;
-                termInput.focus();
             }
         });
 
