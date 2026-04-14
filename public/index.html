@@ -61,17 +61,6 @@
         .terminal-content { flex: 1; overflow-y: auto; padding: 15px; font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #f87171; cursor: text; }
         .terminal-input-line { display: flex; align-items: center; color: #10b981; }
 
-        /* ================= SCI-FI CARDS (For Comms) ================= */
-        .sci-fi-card { background: linear-gradient(135deg, rgba(15, 23, 42, 0.8) 0%, rgba(2, 6, 23, 0.95) 100%); border: 1px solid rgba(14, 165, 233, 0.3); position: relative; overflow: hidden; box-shadow: inset 0 0 30px rgba(14, 165, 233, 0.05), 0 5px 15px rgba(0,0,0,0.5); transition: all 0.3s; clip-path: polygon(0 0, calc(100% - 15px) 0, 100% 15px, 100% 100%, 15px 100%, 0 calc(100% - 15px)); }
-        .sci-fi-card::before { content: '['; position: absolute; top: 10px; left: 10px; color: rgba(14, 165, 233, 0.5); font-family: monospace; font-size: 20px; transition: all 0.3s; }
-        .sci-fi-card::after { content: ']'; position: absolute; bottom: 10px; right: 10px; color: rgba(14, 165, 233, 0.5); font-family: monospace; font-size: 20px; transition: all 0.3s; }
-        .sci-fi-card:hover { border-color: rgba(14, 165, 233, 0.8); box-shadow: inset 0 0 20px rgba(14, 165, 233, 0.2), 0 0 20px rgba(14, 165, 233, 0.3); transform: translateY(-5px); }
-        
-        .cyber-line { position: absolute; top: 0; left: -100%; width: 150%; height: 2px; background: linear-gradient(90deg, transparent, rgba(14, 165, 233, 0.8), #fff, rgba(14, 165, 233, 0.8), transparent); animation: glitchScan 2.5s infinite; z-index: 5; opacity: 0.7; mix-blend-mode: overlay; }
-        @keyframes glitchScan { 0% { left: -100%; opacity: 0; } 10% { opacity: 1; } 50% { left: 100%; opacity: 0; } 100% { left: 100%; opacity: 0; } }
-
-        .glow-text { text-shadow: 0 0 8px rgba(255, 255, 255, 0.3); }
-
         /* ================= PROFILE SCANNER ================= */
         .profile-box { background: #0A101F; border: 1px solid rgba(14, 165, 233, 0.2); }
         .scanner-container { position: relative; overflow: hidden; background: rgba(0, 0, 0, 0.2); }
@@ -92,8 +81,7 @@
         body.light-mode .decal-2::before { color: rgba(16, 185, 129, 0.3); }
         body.light-mode .decal-3::before { color: rgba(0, 0, 0, 0.03); }
         
-        body.light-mode .glass-panel, body.light-mode .sci-fi-card { background: rgba(255, 255, 255, 0.95); border: 1px solid rgba(14, 165, 233, 0.3); box-shadow: 0 5px 15px rgba(0,0,0,0.05); color: #1e293b; }
-        body.light-mode .sci-fi-card:hover { border-color: rgba(14, 165, 233, 0.6); box-shadow: 0 10px 25px rgba(14, 165, 233, 0.15); }
+        body.light-mode .glass-panel { background: rgba(255, 255, 255, 0.95); border: 1px solid rgba(14, 165, 233, 0.3); box-shadow: 0 5px 15px rgba(0,0,0,0.05); color: #1e293b; }
         body.light-mode .profile-box { background: #ffffff !important; border: 1px solid rgba(14, 165, 233, 0.3) !important; }
         body.light-mode .light-shield-box { background-color: #ffffff !important; border: 1px solid rgba(14, 165, 233, 0.2) !important; }
         body.light-mode .light-scanner { background-color: #f8fafc !important; border: 1px solid rgba(14, 165, 233, 0.2) !important; }
@@ -133,6 +121,18 @@
         body.light-mode #terminal-box { background: #fff; border-color: rgba(0,0,0,0.2); box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
         body.light-mode .terminal-header { background: #f1f5f9; border-color: rgba(0,0,0,0.1); }
         body.light-mode .terminal-content { color: #334155; }
+
+        /* Loader animation for IP Tracker */
+        .scan-loader {
+            width: 100%; height: 2px; background-color: rgba(244, 63, 94, 0.2); position: relative; overflow: hidden;
+        }
+        .scan-loader::after {
+            content: ''; position: absolute; top: 0; left: 0; height: 100%; width: 30%; background-color: #f43f5e;
+            animation: scanAnim 1.5s infinite linear;
+        }
+        @keyframes scanAnim {
+            0% { left: -30%; } 100% { left: 100%; }
+        }
 
         .custom-scrollbar::-webkit-scrollbar { width: 6px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.2); border-radius: 4px; }
@@ -234,8 +234,7 @@
                     
                     <p id="profile-bio" class="text-slate-400 text-lg font-medium max-w-xl leading-relaxed mx-auto md:mx-0">Loading biography...</p>
 
-                    <div id="visitor-scanner" class="mt-8 glass-panel p-5 border-l-4 border-red-500 relative overflow-hidden max-w-md mx-auto md:mx-0 opacity-0 transform translate-y-4 transition-all duration-1000 delay-500">
-                        <div class="absolute top-0 left-0 w-[200%] h-[2px] bg-gradient-to-r from-transparent via-red-500 to-transparent animate-[glitchScan_3s_infinite]"></div>
+                    <div id="visitor-scanner" class="mt-8 bg-black/40 p-5 border border-white/10 rounded-2xl relative overflow-hidden max-w-md mx-auto md:mx-0 opacity-0 transform translate-y-4 transition-all duration-1000 delay-500">
                         <div class="flex items-center gap-3 mb-4 border-b border-white/5 pb-3">
                             <i data-lucide="radar" class="w-5 h-5 text-red-500 animate-pulse"></i>
                             <span class="text-[10px] font-bold text-red-500 uppercase tracking-widest mono">Connection Intercepted</span>
@@ -385,11 +384,11 @@
                     <h2 class="text-3xl md:text-4xl font-black mb-2 text-white mono lowercase tracking-tight">
                         <span class="text-slate-500">~/root/</span><span class="text-rose-500">arsenal</span>
                     </h2>
-                    <p class="text-slate-300 text-sm font-bold uppercase tracking-[0.2em] mb-2">Cyber Arsenal</p>
-                    <p class="text-slate-500 text-[10px] mono uppercase tracking-widest">Tactical_Tools_&_Frameworks</p>
+                    <p class="text-slate-300 text-sm font-bold uppercase tracking-[0.2em] mb-2">Cyber Arsenal & Tools</p>
+                    <p class="text-slate-500 text-[10px] mono uppercase tracking-widest">Tactical_Frameworks</p>
                 </div>
                 
-                <div class="bg-[#0A101F]/90 backdrop-blur-xl border border-white/5 rounded-3xl p-6 md:p-10 lg:p-12 relative overflow-hidden shadow-2xl light-edu-card">
+                <div class="bg-[#0A101F]/90 backdrop-blur-xl border border-white/5 rounded-3xl p-6 md:p-10 lg:p-12 relative overflow-hidden shadow-2xl light-edu-card mb-8">
                     <div class="absolute -top-32 -left-32 w-64 h-64 bg-rose-500/5 rounded-full blur-3xl pointer-events-none"></div>
                     <div class="absolute -bottom-32 -right-32 w-64 h-64 bg-rose-500/5 rounded-full blur-3xl pointer-events-none"></div>
                     
@@ -397,6 +396,43 @@
                     
                     <div class="text-center mt-10 relative z-10">
                         <button id="loadMoreArsBtn" class="hidden px-8 py-3 border border-rose-500/30 rounded-full text-rose-500 text-xs font-bold hover:bg-rose-500/20 transition mono shadow-[0_0_15px_rgba(244,63,94,0.2)] hover:shadow-[0_0_25px_rgba(244,63,94,0.4)] bg-black/20">LOAD_MORE_ARSENAL //...</button>
+                    </div>
+                </div>
+
+                <div class="bg-black/40 border border-white/10 rounded-3xl p-8 relative overflow-hidden">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="bg-rose-500/20 p-2 rounded-full border border-rose-500/30"><i data-lucide="map-pin" class="w-5 h-5 text-rose-500"></i></div>
+                        <h3 class="text-xl font-bold text-white mono">Target_IP_Locator</h3>
+                    </div>
+                    
+                    <div class="flex flex-col md:flex-row gap-4 mb-6">
+                        <input type="text" id="target-ip-input" placeholder="Enter Target IP (e.g. 8.8.8.8)" class="flex-1 bg-black/50 border border-white/10 rounded-xl px-6 py-4 text-sm outline-none focus:border-rose-500 mono text-white">
+                        <button onclick="scanTargetIP()" id="scan-ip-btn" class="bg-rose-600 hover:bg-rose-500 text-white font-bold px-8 py-4 rounded-xl transition shadow-[0_0_15px_rgba(244,63,94,0.3)] mono uppercase tracking-widest text-[10px] flex items-center justify-center gap-2 w-full md:w-auto">
+                            <i data-lucide="search" class="w-4 h-4"></i> Initialize Scan
+                        </button>
+                    </div>
+
+                    <div id="ip-results" class="hidden">
+                        <div class="scan-loader hidden mb-6" id="ip-loader"></div>
+                        <div id="ip-data-box" class="hidden grid grid-cols-2 md:grid-cols-4 gap-4 bg-[#0A101F] p-6 rounded-2xl border border-white/5 shadow-inner">
+                            <div>
+                                <p class="text-[9px] text-slate-500 font-bold uppercase tracking-widest mb-1 mono">ISP / ORG</p>
+                                <p id="res-isp" class="text-xs text-white font-bold truncate">...</p>
+                            </div>
+                            <div>
+                                <p class="text-[9px] text-slate-500 font-bold uppercase tracking-widest mb-1 mono">COUNTRY</p>
+                                <p id="res-country" class="text-xs text-white font-bold truncate">...</p>
+                            </div>
+                            <div>
+                                <p class="text-[9px] text-slate-500 font-bold uppercase tracking-widest mb-1 mono">CITY</p>
+                                <p id="res-city" class="text-xs text-white font-bold truncate">...</p>
+                            </div>
+                            <div>
+                                <p class="text-[9px] text-slate-500 font-bold uppercase tracking-widest mb-1 mono">COORDINATES</p>
+                                <p id="res-coord" class="text-xs text-rose-400 font-mono font-bold truncate">...</p>
+                            </div>
+                        </div>
+                        <p id="ip-error" class="hidden text-rose-500 text-xs font-mono font-bold mt-4 p-3 bg-rose-500/10 rounded-lg border border-rose-500/20"></p>
                     </div>
                 </div>
             </section>
@@ -775,6 +811,50 @@
             setTimeout(typeLine, 500);
             fetchAllDynamicData(); 
         });
+
+        // ================= 2. CYBER TOOL: IP TRACKER LOGIC =================
+        async function scanTargetIP() {
+            const input = document.getElementById('target-ip-input').value.trim();
+            const btn = document.getElementById('scan-ip-btn');
+            const resultsBox = document.getElementById('ip-results');
+            const dataBox = document.getElementById('ip-data-box');
+            const errorBox = document.getElementById('ip-error');
+            const loader = document.getElementById('ip-loader');
+
+            if(!input) return alert("Please enter a valid IP Address!");
+
+            btn.innerHTML = '<i data-lucide="loader" class="w-4 h-4 animate-spin"></i> SCANNING...';
+            btn.classList.add('opacity-50', 'cursor-not-allowed');
+            lucide.createIcons();
+            
+            resultsBox.classList.remove('hidden');
+            dataBox.classList.add('hidden');
+            errorBox.classList.add('hidden');
+            loader.classList.remove('hidden');
+
+            try {
+                const res = await fetch(`https://ipapi.co/${input}/json/`);
+                const data = await res.json();
+
+                if(data.error) throw new Error(data.reason || "Invalid IP or Rate Limited");
+
+                document.getElementById('res-isp').innerText = data.org || data.asn || "Unknown ISP";
+                document.getElementById('res-country').innerText = data.country_name || "Unknown";
+                document.getElementById('res-city').innerText = data.city || "Unknown";
+                document.getElementById('res-coord').innerText = `${data.latitude || '0.00'}, ${data.longitude || '0.00'}`;
+
+                loader.classList.add('hidden');
+                dataBox.classList.remove('hidden');
+            } catch(e) {
+                loader.classList.add('hidden');
+                errorBox.classList.remove('hidden');
+                errorBox.innerText = `[ERROR] Failed to trace IP: ${e.message}`;
+            } finally {
+                btn.innerHTML = '<i data-lucide="search" class="w-4 h-4"></i> Initialize Scan';
+                btn.classList.remove('opacity-50', 'cursor-not-allowed');
+                lucide.createIcons();
+            }
+        }
 
         // ================= 4. ADVANCED TERMINAL (INTERACTIVE CTF + 24 COMMANDS) =================
         const termInput = document.getElementById('term-input');
