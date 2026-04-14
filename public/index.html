@@ -1,803 +1,1543 @@
 <!DOCTYPE html>
 <html lang="en" class="dark">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mahmudul Hasan | Cybersecurity Researcher</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap');
-        :root { --glass-bg: rgba(15, 23, 42, 0.7); --glass-border: rgba(255, 255, 255, 0.1); }
-        html { scroll-behavior: smooth; }
-        body { font-family: 'Inter', sans-serif; background-color: #020617; color: #f8fafc; overflow-x: hidden; transition: background-color 0.5s, color 0.5s; margin: 0; }
-        .mono { font-family: 'JetBrains Mono', monospace; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mahmudul Hasan | Cybersecurity Researcher</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap');
+        :root { --glass-bg: rgba(15, 23, 42, 0.7); --glass-border: rgba(255, 255, 255, 0.1); }
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Inter', sans-serif; background-color: #020617; color: #f8fafc; overflow-x: hidden; transition: background-color 0.5s, color 0.5s; margin: 0; }
+        .mono { font-family: 'JetBrains Mono', monospace; }
 
-        /* ================= 1. LIVE ATTACK MAP ================= */
-        #attack-map { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; opacity: 0.6; pointer-events: none; }
-        body.light-mode #attack-map { opacity: 0.1; filter: invert(1); }
+        /* ================= 1. LIVE ATTACK MAP ================= */
+        #attack-map { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; opacity: 0.6; pointer-events: none; }
+        body.light-mode #attack-map { opacity: 0.1; filter: invert(1); }
 
-        /* ================= AGGRESSIVE FAKE EXPLOIT BOOT SEQUENCE ================= */
-        #boot-screen {
-            position: fixed; inset: 0; z-index: 9999; background: #050000; 
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
-        }
-        .boot-text-container {
-            width: 100%; max-width: 800px; padding: 20px;
-            font-family: 'JetBrains Mono', monospace; font-size: clamp(12px, 2vw, 16px); 
-            color: #ef4444; 
-            text-shadow: 0 0 5px rgba(239, 68, 68, 0.5);
-            text-align: left;
-        }
-        .typing-cursor::after { content: '█'; animation: blink 0.8s step-start infinite; }
-        @keyframes blink { 50% { opacity: 0; } }
+        /* ================= AGGRESSIVE FAKE EXPLOIT BOOT SEQUENCE ================= */
+        #boot-screen {
+            position: fixed; inset: 0; z-index: 9999; background: #050000; 
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .boot-text-container {
+            width: 100%; max-width: 800px; padding: 20px;
+            font-family: 'JetBrains Mono', monospace; font-size: clamp(12px, 2vw, 16px); 
+            color: #ef4444; 
+            text-shadow: 0 0 5px rgba(239, 68, 68, 0.5);
+            text-align: left;
+        }
+        .typing-cursor::after { content: '█'; animation: blink 0.8s step-start infinite; }
+        @keyframes blink { 50% { opacity: 0; } }
 
-        /* ================= EXTREME CYBER BACKGROUND ================= */
-        .bg-cyber { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; background-color: #020617; overflow: hidden; }
-        .bg-cyber::before { content: ''; position: absolute; top: -20%; left: -10%; width: 50%; height: 50%; background: radial-gradient(circle, rgba(14, 165, 233, 0.1) 0%, transparent 70%); border-radius: 50%; filter: blur(60px); pointer-events: none; }
-        .bg-cyber::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2) 1px, transparent 1px, transparent 3px); z-index: 1; pointer-events: none; opacity: 0.5; }
-        
-        .hacker-decals { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: bold; opacity: 0.8; animation: backgroundGlitch 4s infinite; }
-        @keyframes backgroundGlitch {
-            0%, 90%, 100% { transform: translate(0, 0); opacity: 0.8; filter: none; }
-            92% { transform: translate(-4px, 2px); opacity: 1; filter: drop-shadow(4px 0 0 rgba(239, 68, 68, 0.7)) drop-shadow(-4px 0 0 rgba(14, 165, 233, 0.7)); }
-            94% { transform: translate(4px, -2px); opacity: 0.5; filter: drop-shadow(-4px 0 0 rgba(239, 68, 68, 0.7)) drop-shadow(4px 0 0 rgba(14, 165, 233, 0.7)); }
-            96% { transform: translate(-1px, 1px); opacity: 0.9; filter: none; }
-        }
-        .decal-1 { position: absolute; top: 15%; left: 2%; line-height: 1.6; letter-spacing: 0.1em; color: rgba(14, 165, 233, 0.15); }
-        .decal-2 { position: absolute; bottom: 20%; right: 2%; line-height: 1.6; text-align: right; letter-spacing: 0.1em; color: rgba(16, 185, 129, 0.15); }
-        .decal-3 { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: rgba(255, 255, 255, 0.02); font-size: clamp(80px, 15vw, 200px); font-weight: 900; letter-spacing: -15px; user-select: none; }
+        /* ================= EXTREME CYBER BACKGROUND ================= */
+        .bg-cyber { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; background-color: #020617; overflow: hidden; }
+        .bg-cyber::before { content: ''; position: absolute; top: -20%; left: -10%; width: 50%; height: 50%; background: radial-gradient(circle, rgba(14, 165, 233, 0.1) 0%, transparent 70%); border-radius: 50%; filter: blur(60px); pointer-events: none; }
+        .bg-cyber::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2) 1px, transparent 1px, transparent 3px); z-index: 1; pointer-events: none; opacity: 0.5; }
+        
+        .hacker-decals { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: bold; opacity: 0.8; animation: backgroundGlitch 4s infinite; }
+        @keyframes backgroundGlitch {
+            0%, 90%, 100% { transform: translate(0, 0); opacity: 0.8; filter: none; }
+            92% { transform: translate(-4px, 2px); opacity: 1; filter: drop-shadow(4px 0 0 rgba(239, 68, 68, 0.7)) drop-shadow(-4px 0 0 rgba(14, 165, 233, 0.7)); }
+            94% { transform: translate(4px, -2px); opacity: 0.5; filter: drop-shadow(-4px 0 0 rgba(239, 68, 68, 0.7)) drop-shadow(4px 0 0 rgba(14, 165, 233, 0.7)); }
+            96% { transform: translate(-1px, 1px); opacity: 0.9; filter: none; }
+        }
+        .decal-1 { position: absolute; top: 15%; left: 2%; line-height: 1.6; letter-spacing: 0.1em; color: rgba(14, 165, 233, 0.15); }
+        .decal-2 { position: absolute; bottom: 20%; right: 2%; line-height: 1.6; text-align: right; letter-spacing: 0.1em; color: rgba(16, 185, 129, 0.15); }
+        .decal-3 { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: rgba(255, 255, 255, 0.02); font-size: clamp(80px, 15vw, 200px); font-weight: 900; letter-spacing: -15px; user-select: none; }
 
-        /* General UI Elements */
-        .glass-panel { background: var(--glass-bg); backdrop-filter: blur(24px); border: 1px solid var(--glass-border); border-radius: 24px; transition: all 0.5s; }
-        .glass-nav { background: rgba(2, 6, 23, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255, 255, 255, 0.05); z-index: 100; transition: all 0.3s; }
-        #navbar { transform: translateY(-100%); animation: slideDown 0.5s forwards 4s; }
-        @keyframes slideDown { to { transform: translateY(0); } }
-        
-        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s ease-out; }
-        .reveal.active { opacity: 1; transform: translateY(0); }
-        .modal-overlay { background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(8px); }
+        /* General UI Elements */
+        .glass-panel { background: var(--glass-bg); backdrop-filter: blur(24px); border: 1px solid var(--glass-border); border-radius: 24px; transition: all 0.5s; }
+        .glass-nav { background: rgba(2, 6, 23, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255, 255, 255, 0.05); z-index: 100; transition: all 0.3s; }
+        #navbar { transform: translateY(-100%); animation: slideDown 0.5s forwards 4s; }
+        @keyframes slideDown { to { transform: translateY(0); } }
+        
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s ease-out; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+        .modal-overlay { background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(8px); }
 
-        /* TERMINAL & IDS STYLES */
-        #terminal-box, #ids-box, #hex-box { background: rgba(2, 6, 23, 0.9); border: 1px solid rgba(239, 68, 68, 0.3); box-shadow: 0 0 30px rgba(239, 68, 68, 0.1); border-radius: 1rem; overflow: hidden; display: flex; flex-direction: column; transition: all 0.5s;}
-        #terminal-box { height: 350px; }
-        #ids-box { border-color: rgba(16, 185, 129, 0.3); box-shadow: 0 0 30px rgba(16, 185, 129, 0.1); }
-        #hex-box { height: 350px; border-color: rgba(139, 92, 246, 0.3); box-shadow: 0 0 30px rgba(139, 92, 246, 0.1); }
-        
-        .terminal-header { background: rgba(239, 68, 68, 0.1); padding: 8px 15px; border-bottom: 1px solid rgba(239, 68, 68, 0.2); display: flex; justify-content: space-between; }
-        .ids-header { background: rgba(16, 185, 129, 0.1); padding: 8px 15px; border-bottom: 1px solid rgba(16, 185, 129, 0.2); display: flex; justify-content: space-between; }
-        .hex-header { background: rgba(139, 92, 246, 0.1); padding: 8px 15px; border-bottom: 1px solid rgba(139, 92, 246, 0.2); display: flex; justify-content: space-between; }
-        
-        .terminal-content { flex: 1; overflow-y: auto; padding: 15px; font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #f87171; cursor: text; }
-        .ids-content { flex: 1; overflow-y: auto; padding: 15px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #a7f3d0; }
-        .hex-content { flex: 1; overflow-y: hidden; padding: 15px; font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #c4b5fd; line-height: 1.2; word-break: break-all; opacity: 0.8;}
-        .terminal-input-line { display: flex; align-items: center; color: #10b981; }
+        /* TERMINAL & IDS STYLES */
+        #terminal-box, #ids-box { background: rgba(2, 6, 23, 0.9); border: 1px solid rgba(239, 68, 68, 0.3); box-shadow: 0 0 30px rgba(239, 68, 68, 0.1); border-radius: 1rem; overflow: hidden; display: flex; flex-direction: column; transition: all 0.5s;}
+        #terminal-box { height: 350px; }
+        #ids-box { border-color: rgba(16, 185, 129, 0.3); box-shadow: 0 0 30px rgba(16, 185, 129, 0.1); }
+        
+        .terminal-header { background: rgba(239, 68, 68, 0.1); padding: 8px 15px; border-bottom: 1px solid rgba(239, 68, 68, 0.2); display: flex; justify-content: space-between; }
+        .ids-header { background: rgba(16, 185, 129, 0.1); padding: 8px 15px; border-bottom: 1px solid rgba(16, 185, 129, 0.2); display: flex; justify-content: space-between; }
+        
+        .terminal-content { flex: 1; overflow-y: auto; padding: 15px; font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #f87171; cursor: text; }
+        .ids-content { flex: 1; overflow-y: auto; padding: 15px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #a7f3d0; }
+        .terminal-input-line { display: flex; align-items: center; color: #10b981; }
 
-        /* ================= SCI-FI CARDS (For Comms) ================= */
-        .sci-fi-card { background: linear-gradient(135deg, rgba(15, 23, 42, 0.8) 0%, rgba(2, 6, 23, 0.95) 100%); border: 1px solid rgba(14, 165, 233, 0.3); position: relative; overflow: hidden; box-shadow: inset 0 0 30px rgba(14, 165, 233, 0.05), 0 5px 15px rgba(0,0,0,0.5); transition: all 0.3s; clip-path: polygon(0 0, calc(100% - 15px) 0, 100% 15px, 100% 100%, 15px 100%, 0 calc(100% - 15px)); }
-        .sci-fi-card::before { content: '['; position: absolute; top: 10px; left: 10px; color: rgba(14, 165, 233, 0.5); font-family: monospace; font-size: 20px; transition: all 0.3s; }
-        .sci-fi-card::after { content: ']'; position: absolute; bottom: 10px; right: 10px; color: rgba(14, 165, 233, 0.5); font-family: monospace; font-size: 20px; transition: all 0.3s; }
-        .sci-fi-card:hover { border-color: rgba(14, 165, 233, 0.8); box-shadow: inset 0 0 20px rgba(14, 165, 233, 0.2), 0 0 20px rgba(14, 165, 233, 0.3); transform: translateY(-5px); }
-        
-        .cyber-line { position: absolute; top: 0; left: -100%; width: 150%; height: 2px; background: linear-gradient(90deg, transparent, rgba(14, 165, 233, 0.8), #fff, rgba(14, 165, 233, 0.8), transparent); animation: glitchScan 2.5s infinite; z-index: 5; opacity: 0.7; mix-blend-mode: overlay; }
-        @keyframes glitchScan { 0% { left: -100%; opacity: 0; } 10% { opacity: 1; } 50% { left: 100%; opacity: 0; } 100% { left: 100%; opacity: 0; } }
+        /* ================= SCI-FI CARDS (For Comms) ================= */
+        .sci-fi-card { background: linear-gradient(135deg, rgba(15, 23, 42, 0.8) 0%, rgba(2, 6, 23, 0.95) 100%); border: 1px solid rgba(14, 165, 233, 0.3); position: relative; overflow: hidden; box-shadow: inset 0 0 30px rgba(14, 165, 233, 0.05), 0 5px 15px rgba(0,0,0,0.5); transition: all 0.3s; clip-path: polygon(0 0, calc(100% - 15px) 0, 100% 15px, 100% 100%, 15px 100%, 0 calc(100% - 15px)); }
+        .sci-fi-card::before { content: '['; position: absolute; top: 10px; left: 10px; color: rgba(14, 165, 233, 0.5); font-family: monospace; font-size: 20px; transition: all 0.3s; }
+        .sci-fi-card::after { content: ']'; position: absolute; bottom: 10px; right: 10px; color: rgba(14, 165, 233, 0.5); font-family: monospace; font-size: 20px; transition: all 0.3s; }
+        .sci-fi-card:hover { border-color: rgba(14, 165, 233, 0.8); box-shadow: inset 0 0 20px rgba(14, 165, 233, 0.2), 0 0 20px rgba(14, 165, 233, 0.3); transform: translateY(-5px); }
+        
+        .cyber-line { position: absolute; top: 0; left: -100%; width: 150%; height: 2px; background: linear-gradient(90deg, transparent, rgba(14, 165, 233, 0.8), #fff, rgba(14, 165, 233, 0.8), transparent); animation: glitchScan 2.5s infinite; z-index: 5; opacity: 0.7; mix-blend-mode: overlay; }
+        @keyframes glitchScan { 0% { left: -100%; opacity: 0; } 10% { opacity: 1; } 50% { left: 100%; opacity: 0; } 100% { left: 100%; opacity: 0; } }
 
-        .glow-text { text-shadow: 0 0 8px rgba(255, 255, 255, 0.3); }
+        .glow-text { text-shadow: 0 0 8px rgba(255, 255, 255, 0.3); }
 
-        /* ================= DEF CON BADGE ================= */
-        .defcon-badge { display: inline-flex; align-items: center; gap: 6px; padding: 2px 8px; border: 1px solid #ef4444; background: rgba(239, 68, 68, 0.1); color: #ef4444; font-family: 'JetBrains Mono', monospace; font-size: 9px; font-weight: bold; letter-spacing: 0.1em; border-radius: 4px; animation: badgeGlitch 3s infinite; cursor: crosshair; }
-        .defcon-badge i { width: 10px; height: 10px; }
-        @keyframes badgeGlitch { 0%, 96%, 100% { opacity: 1; transform: translate(0); } 97% { opacity: 0.5; transform: translate(-2px, 1px); } 98% { opacity: 0.8; transform: translate(2px, -1px); } 99% { opacity: 0.3; transform: translate(-1px, -1px); } }
+        /* ================= PROFILE SCANNER ================= */
+        .profile-box { background: #0A101F; border: 1px solid rgba(14, 165, 233, 0.2); }
+        .scanner-container { position: relative; overflow: hidden; background: rgba(0, 0, 0, 0.2); }
+        .scanner-line { position: absolute; top: 0; left: 0; width: 100%; height: 3px; background: #0ea5e9; box-shadow: 0 0 15px #0ea5e9, 0 0 30px #0ea5e9; animation: slowScan 4s linear infinite; z-index: 10; mix-blend-mode: screen; }
+        @keyframes slowScan { 0% { top: -10%; opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { top: 110%; opacity: 0; } }
+        .scanner-overlay { position: absolute; inset: 0; background: linear-gradient(transparent 50%, rgba(0, 0, 0, 0.25) 50%); background-size: 100% 4px; pointer-events: none; z-index: 5; opacity: 0.5; }
+        .blink-shield { animation: shieldPulse 1.5s ease-in-out infinite alternate; }
+        @keyframes shieldPulse { 0% { opacity: 0.3; transform: scale(0.95); box-shadow: 0 0 0 rgba(14, 165, 233, 0); } 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 20px rgba(14, 165, 233, 0.4); } }
 
-        /* ================= PANIC BUTTON ================= */
-        .panic-btn { display: flex; align-items: center; gap: 4px; padding: 4px 10px; background: rgba(239, 68, 68, 0.2); border: 1px solid #ef4444; color: #ef4444; font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: bold; border-radius: 6px; cursor: pointer; transition: all 0.2s; }
-        .panic-btn:hover { background: #ef4444; color: white; box-shadow: 0 0 15px rgba(239, 68, 68, 0.6); }
-        #panic-overlay { position: fixed; inset: 0; z-index: 10000; background: rgba(239, 68, 68, 0.9); display: none; flex-direction: column; align-items: center; justify-content: center; color: white; font-family: 'JetBrains Mono', monospace; }
-        .panic-active { animation: strobe 0.5s infinite alternate; }
-        @keyframes strobe { 0% { background: rgba(239, 68, 68, 0.8); } 100% { background: rgba(153, 27, 27, 0.9); } }
+        /* ================= MAIN CONTENT WRAPPER ================= */
+        #main-content { opacity: 0; transition: opacity 1s ease-in; }
 
-        /* ================= PROFILE SCANNER ================= */
-        .profile-box { background: #0A101F; border: 1px solid rgba(14, 165, 233, 0.2); }
-        .scanner-container { position: relative; overflow: hidden; background: rgba(0, 0, 0, 0.2); }
-        .scanner-line { position: absolute; top: 0; left: 0; width: 100%; height: 3px; background: #0ea5e9; box-shadow: 0 0 15px #0ea5e9, 0 0 30px #0ea5e9; animation: slowScan 4s linear infinite; z-index: 10; mix-blend-mode: screen; }
-        @keyframes slowScan { 0% { top: -10%; opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { top: 110%; opacity: 0; } }
-        .scanner-overlay { position: absolute; inset: 0; background: linear-gradient(transparent 50%, rgba(0, 0, 0, 0.25) 50%); background-size: 100% 4px; pointer-events: none; z-index: 5; opacity: 0.5; }
-        .blink-shield { animation: shieldPulse 1.5s ease-in-out infinite alternate; }
-        @keyframes shieldPulse { 0% { opacity: 0.3; transform: scale(0.95); box-shadow: 0 0 0 rgba(14, 165, 233, 0); } 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 20px rgba(14, 165, 233, 0.4); } }
+        /* ================= IP TRACKER LOADER ================= */
+        .scan-loader {
+            width: 100%; height: 2px; background-color: rgba(244, 63, 94, 0.2); position: relative; overflow: hidden;
+        }
+        .scan-loader::after {
+            content: ''; position: absolute; top: 0; left: 0; height: 100%; width: 30%; background-color: #f43f5e;
+            animation: scanAnim 1.5s infinite linear;
+        }
+        @keyframes scanAnim {
+            0% { left: -30%; } 100% { left: 100%; }
+        }
 
-        /* ================= MAIN CONTENT WRAPPER ================= */
-        #main-content { opacity: 0; transition: opacity 1s ease-in; }
+        /* ================= DAY MODE FIXES ================= */
+        body.light-mode { background-color: #f1f5f9; color: #0f172a; }
+        body.light-mode .bg-cyber { background-color: #f1f5f9; }
+        body.light-mode .bg-cyber::after { background: repeating-linear-gradient(0deg, rgba(0,0,0,0.03), rgba(0,0,0,0.03) 1px, transparent 1px, transparent 3px); opacity: 0.3; }
+        body.light-mode .decal-1::before { color: rgba(14, 165, 233, 0.3); }
+        body.light-mode .decal-2::before { color: rgba(16, 185, 129, 0.3); }
+        body.light-mode .decal-3::before { color: rgba(0, 0, 0, 0.03); }
+        
+        body.light-mode .glass-panel, body.light-mode .sci-fi-card { background: rgba(255, 255, 255, 0.95); border: 1px solid rgba(14, 165, 233, 0.3); box-shadow: 0 5px 15px rgba(0,0,0,0.05); color: #1e293b; }
+        body.light-mode .sci-fi-card:hover { border-color: rgba(14, 165, 233, 0.6); box-shadow: 0 10px 25px rgba(14, 165, 233, 0.15); }
+        body.light-mode .profile-box { background: #ffffff !important; border: 1px solid rgba(14, 165, 233, 0.3) !important; }
+        body.light-mode .light-shield-box { background-color: #ffffff !important; border: 1px solid rgba(14, 165, 233, 0.2) !important; }
+        body.light-mode .light-scanner { background-color: #f8fafc !important; border: 1px solid rgba(14, 165, 233, 0.2) !important; }
+        body.light-mode .light-inner-box { background-color: rgba(255, 255, 255, 0.95) !important; border: 1px solid rgba(14, 165, 233, 0.2) !important; color: #0f172a !important; }
+        body.light-mode .light-stat-box { background-color: #f1f5f9 !important; border: 1px solid rgba(14, 165, 233, 0.2) !important; }
+        body.light-mode .scanner-overlay { opacity: 0.1; }
+        body.light-mode .text-white { color: #0f172a !important; }
+        body.light-mode .text-slate-300, body.light-mode .text-slate-400 { color: #475569 !important; }
+        body.light-mode .text-slate-500 { color: #64748b !important; }
+        body.light-mode h1, body.light-mode h2, body.light-mode h3 { color: #020617 !important; }
+        body.light-mode .text-sky-400, body.light-mode .text-sky-500 { color: #0284c7 !important; }
+        body.light-mode .text-emerald-400, body.light-mode .text-emerald-500 { color: #059669 !important; }
+        body.light-mode .text-purple-400, body.light-mode .text-purple-500 { color: #7e22ce !important; }
+        body.light-mode .text-amber-400, body.light-mode .text-amber-500 { color: #b45309 !important; }
+        body.light-mode .text-rose-400, body.light-mode .text-rose-500 { color: #e11d48 !important; }
+        body.light-mode .glow-text { text-shadow: none !important; }
+        body.light-mode .glass-nav { background: rgba(255, 255, 255, 0.98); color: #0f172a; border-bottom: 1px solid rgba(0,0,0,0.1); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+        body.light-mode .nav-link { color: #475569; }
+        body.light-mode .nav-link:hover { color: #0ea5e9 !important; }
+        body.light-mode input, body.light-mode textarea { background-color: #fff !important; color: #0f172a !important; border: 1px solid rgba(0, 0, 0, 0.2) !important; }
+        body.light-mode input:focus, body.light-mode textarea:focus { border-color: #0ea5e9 !important; box-shadow: 0 0 0 2px rgba(14,165,233,0.2); }
+        body.light-mode input::placeholder, body.light-mode textarea::placeholder { color: #94a3b8 !important; }
+        body.light-mode .bg-black\/40 { background-color: rgba(241, 245, 249, 0.8) !important; border-color: rgba(0, 0, 0, 0.1) !important; }
+        body.light-mode footer { background-color: #e2e8f0; border-top: 1px solid rgba(0,0,0,0.1); color: #475569; }
+        body.light-mode footer a { border-color: rgba(0,0,0,0.15); color: #475569; background-color: #fff; transition: all 0.3s ease; }
+        body.light-mode footer a:nth-child(1):hover { background-color: rgba(14, 165, 233, 0.1) !important; color: #0ea5e9 !important; border-color: rgba(14, 165, 233, 0.5) !important; }
+        body.light-mode footer a:nth-child(2):hover { background-color: rgba(16, 185, 129, 0.1) !important; color: #10b981 !important; border-color: rgba(16, 185, 129, 0.5) !important; }
+        body.light-mode footer a:nth-child(3):hover { background-color: rgba(37, 99, 235, 0.1) !important; color: #2563eb !important; border-color: rgba(37, 99, 235, 0.5) !important; }
+        body.light-mode footer a:nth-child(4):hover { background-color: rgba(236, 72, 153, 0.1) !important; color: #ec4899 !important; border-color: rgba(236, 72, 153, 0.5) !important; }
+        body.light-mode .modal-overlay .glass-panel { background: rgba(255, 255, 255, 0.98); color: #0f172a; } 
+        body.light-mode .light-mode-divider { background-color: rgba(14, 165, 233, 0.4) !important; }
 
-        /* ================= IP TRACKER LOADER ================= */
-        .scan-loader { width: 100%; height: 2px; background-color: rgba(244, 63, 94, 0.2); position: relative; overflow: hidden; }
-        .scan-loader::after { content: ''; position: absolute; top: 0; left: 0; height: 100%; width: 30%; background-color: #f43f5e; animation: scanAnim 1.5s infinite linear; }
-        @keyframes scanAnim { 0% { left: -30%; } 100% { left: 100%; } }
+        body.light-mode .light-edu-card { background: rgba(255, 255, 255, 0.9); border: 1px solid rgba(0,0,0,0.1); box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        body.light-mode .light-edu-inner { background: rgba(241, 245, 249, 0.8); border: 1px solid rgba(0,0,0,0.05); }
+        body.light-mode .light-edu-inner:hover { border-color: rgba(16, 185, 129, 0.4); }
 
-        /* ================= DAY MODE FIXES ================= */
-        body.light-mode { background-color: #f1f5f9; color: #0f172a; }
-        body.light-mode .bg-cyber { background-color: #f1f5f9; }
-        body.light-mode .bg-cyber::after { background: repeating-linear-gradient(0deg, rgba(0,0,0,0.03), rgba(0,0,0,0.03) 1px, transparent 1px, transparent 3px); opacity: 0.3; }
-        body.light-mode .decal-1::before { color: rgba(14, 165, 233, 0.3); }
-        body.light-mode .decal-2::before { color: rgba(16, 185, 129, 0.3); }
-        body.light-mode .decal-3::before { color: rgba(0, 0, 0, 0.03); }
-        
-        body.light-mode .glass-panel, body.light-mode .sci-fi-card { background: rgba(255, 255, 255, 0.95); border: 1px solid rgba(14, 165, 233, 0.3); box-shadow: 0 5px 15px rgba(0,0,0,0.05); color: #1e293b; }
-        body.light-mode .sci-fi-card:hover { border-color: rgba(14, 165, 233, 0.6); box-shadow: 0 10px 25px rgba(14, 165, 233, 0.15); }
-        body.light-mode .profile-box { background: #ffffff !important; border: 1px solid rgba(14, 165, 233, 0.3) !important; }
-        body.light-mode .light-shield-box { background-color: #ffffff !important; border: 1px solid rgba(14, 165, 233, 0.2) !important; }
-        body.light-mode .light-scanner { background-color: #f8fafc !important; border: 1px solid rgba(14, 165, 233, 0.2) !important; }
-        body.light-mode .light-inner-box { background-color: rgba(255, 255, 255, 0.95) !important; border: 1px solid rgba(14, 165, 233, 0.2) !important; color: #0f172a !important; }
-        body.light-mode .light-stat-box { background-color: #f1f5f9 !important; border: 1px solid rgba(14, 165, 233, 0.2) !important; }
-        body.light-mode .scanner-overlay { opacity: 0.1; }
-        body.light-mode .text-white { color: #0f172a !important; }
-        body.light-mode .text-slate-300, body.light-mode .text-slate-400 { color: #475569 !important; }
-        body.light-mode .text-slate-500 { color: #64748b !important; }
-        body.light-mode h1, body.light-mode h2, body.light-mode h3 { color: #020617 !important; }
-        body.light-mode .text-sky-400, body.light-mode .text-sky-500 { color: #0284c7 !important; }
-        body.light-mode .text-emerald-400, body.light-mode .text-emerald-500 { color: #059669 !important; }
-        body.light-mode .text-purple-400, body.light-mode .text-purple-500 { color: #7e22ce !important; }
-        body.light-mode .text-amber-400, body.light-mode .text-amber-500 { color: #b45309 !important; }
-        body.light-mode .text-rose-400, body.light-mode .text-rose-500 { color: #e11d48 !important; }
-        body.light-mode .glow-text { text-shadow: none !important; }
-        body.light-mode .glass-nav { background: rgba(255, 255, 255, 0.98); color: #0f172a; border-bottom: 1px solid rgba(0,0,0,0.1); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
-        body.light-mode .nav-link { color: #475569; }
-        body.light-mode .nav-link:hover { color: #0ea5e9 !important; }
-        body.light-mode input, body.light-mode textarea { background-color: #fff !important; color: #0f172a !important; border: 1px solid rgba(0, 0, 0, 0.2) !important; }
-        body.light-mode input:focus, body.light-mode textarea:focus { border-color: #0ea5e9 !important; box-shadow: 0 0 0 2px rgba(14,165,233,0.2); }
-        body.light-mode input::placeholder, body.light-mode textarea::placeholder { color: #94a3b8 !important; }
-        body.light-mode .bg-black\/40 { background-color: rgba(241, 245, 249, 0.8) !important; border-color: rgba(0, 0, 0, 0.1) !important; }
-        body.light-mode footer { background-color: #e2e8f0; border-top: 1px solid rgba(0,0,0,0.1); color: #475569; }
-        body.light-mode footer a { border-color: rgba(0,0,0,0.15); color: #475569; background-color: #fff; transition: all 0.3s ease; }
-        body.light-mode footer a:nth-child(1):hover { background-color: rgba(14, 165, 233, 0.1) !important; color: #0ea5e9 !important; border-color: rgba(14, 165, 233, 0.5) !important; }
-        body.light-mode footer a:nth-child(2):hover { background-color: rgba(16, 185, 129, 0.1) !important; color: #10b981 !important; border-color: rgba(16, 185, 129, 0.5) !important; }
-        body.light-mode footer a:nth-child(3):hover { background-color: rgba(37, 99, 235, 0.1) !important; color: #2563eb !important; border-color: rgba(37, 99, 235, 0.5) !important; }
-        body.light-mode footer a:nth-child(4):hover { background-color: rgba(236, 72, 153, 0.1) !important; color: #ec4899 !important; border-color: rgba(236, 72, 153, 0.5) !important; }
-        body.light-mode .modal-overlay .glass-panel { background: rgba(255, 255, 255, 0.98); color: #0f172a; } 
-        body.light-mode .light-mode-divider { background-color: rgba(14, 165, 233, 0.4) !important; }
-        body.light-mode .light-edu-card { background: rgba(255, 255, 255, 0.9); border: 1px solid rgba(0,0,0,0.1); box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
-        body.light-mode .light-edu-inner { background: rgba(241, 245, 249, 0.8); border: 1px solid rgba(0,0,0,0.05); }
-        body.light-mode .light-edu-inner:hover { border-color: rgba(16, 185, 129, 0.4); }
-        body.light-mode #terminal-box, body.light-mode #ids-box, body.light-mode #hex-box { background: #fff; border-color: rgba(0,0,0,0.2); box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
-        body.light-mode .terminal-header, body.light-mode .ids-header, body.light-mode .hex-header { background: #f1f5f9; border-color: rgba(0,0,0,0.1); }
-        body.light-mode .terminal-content { color: #334155; }
-        body.light-mode .ids-content { color: #059669; }
-        body.light-mode .hex-content { color: #8b5cf6; }
+        body.light-mode #terminal-box, body.light-mode #ids-box { background: #fff; border-color: rgba(0,0,0,0.2); box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        body.light-mode .terminal-header, body.light-mode .ids-header { background: #f1f5f9; border-color: rgba(0,0,0,0.1); }
+        body.light-mode .terminal-content { color: #334155; }
+        body.light-mode .ids-content { color: #059669; }
 
-        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.2); border-radius: 4px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(14, 165, 233, 0.5); border-radius: 4px; }
-    </style>
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.2); border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(14, 165, 233, 0.5); border-radius: 4px; }
+    </style>
 </head>
 <body>
 
-    <div id="panic-overlay">
-        <i data-lucide="alert-triangle" class="w-24 h-24 mb-4 animate-bounce"></i>
-        <h1 class="text-4xl md:text-6xl font-black mb-2 text-center">SYSTEM PURGE INITIATED</h1>
-        <p class="text-xl md:text-2xl opacity-80" id="panic-status">ERASING FOOTPRINTS...</p>
-    </div>
+    <div id="boot-screen">
+        <div class="boot-text-container" id="terminal-text"></div>
+        
+        <div id="hack-progress-container" class="w-full max-w-md px-6 hidden flex-col items-center mt-8">
+            <div class="w-full h-1.5 bg-black/50 rounded-full overflow-hidden border border-red-500/20 relative shadow-[0_0_15px_rgba(220,38,38,0.2)]">
+                <div id="hack-progress-bar" class="h-full bg-red-600 w-0 transition-all duration-[2000ms] ease-out shadow-[0_0_15px_#dc2626]"></div>
+            </div>
+            <div class="w-full flex justify-between text-[10px] mono text-red-500 mt-2 font-bold uppercase tracking-widest">
+                <span class="animate-pulse">Extracting Data...</span>
+                <span id="hack-progress-text">0%</span>
+            </div>
+        </div>
 
-    <div id="boot-screen">
-        <div class="boot-text-container" id="terminal-text"></div>
-        <div id="hack-progress-container" class="w-full max-w-md px-6 hidden flex-col items-center mt-8">
-            <div class="w-full h-1.5 bg-black/50 rounded-full overflow-hidden border border-red-500/20 relative shadow-[0_0_15px_rgba(220,38,38,0.2)]">
-                <div id="hack-progress-bar" class="h-full bg-red-600 w-0 transition-all duration-[2000ms] ease-out shadow-[0_0_15px_#dc2626]"></div>
-            </div>
-            <div class="w-full flex justify-between text-[10px] mono text-red-500 mt-2 font-bold uppercase tracking-widest">
-                <span class="animate-pulse">Extracting Data...</span>
-                <span id="hack-progress-text">0%</span>
-            </div>
-        </div>
-        <div id="hacked-text" class="hidden mt-8 text-center text-4xl md:text-6xl font-black text-red-600 tracking-tighter uppercase drop-shadow-[0_0_20px_rgba(220,38,38,0.8)] animate-pulse px-4">
-            SYSTEM COMPROMISED
-        </div>
-        <div id="joke-text" class="hidden mt-4 text-sky-400 font-bold text-sm md:text-lg mono text-center drop-shadow-[0_0_10px_rgba(14,165,233,0.5)]">
-            ...Just kidding! 😉<br>Welcome to Mahmudul's Secure Node.
-        </div>
-    </div>
+        <div id="hacked-text" class="hidden mt-8 text-center text-4xl md:text-6xl font-black text-red-600 tracking-tighter uppercase drop-shadow-[0_0_20px_rgba(220,38,38,0.8)] animate-pulse px-4">
+            SYSTEM COMPROMISED
+        </div>
 
-    <div id="main-content">
-        <div class="bg-cyber">
-            <div class="hacker-decals">
-                <div class="decal-1">&gt; INIT SECURE_BOOT...<br>&gt; LOAD KERNEL_MODULE_0x8F<br>&gt; BYPASSING FIREWALL... [OK]<br>&gt; MEM_ALLOC: 0x7FFE4000<br>&gt; THREAD_SYNC: IN_PROGRESS</div>
-                <div class="decal-2">SYS_OVERRIDE_ENABLED<br>--------------------<br>ROOT ACCESS GRANTED<br>UPLINK ESTABLISHED<br>PORT_8080 // LISTENING</div>
-                <div class="decal-3">0xMH</div>
-            </div>
-        </div>
+        <div id="joke-text" class="hidden mt-4 text-sky-400 font-bold text-sm md:text-lg mono text-center drop-shadow-[0_0_10px_rgba(14,165,233,0.5)]">
+            ...Just kidding! 😉<br>Welcome to Mahmudul's Secure Node.
+        </div>
+    </div>
 
-        <nav class="fixed top-0 w-full glass-nav" id="navbar">
-            <div class="w-full px-6 lg:px-12 h-16 flex items-center justify-between">
-                <div class="flex items-center gap-3">
-                    <div class="w-3 h-3 rounded-full bg-emerald-500 shadow-[0_0_10px_#10b981] animate-pulse"></div>
-                    <span class="text-[10px] font-bold uppercase tracking-[0.2em] mono text-emerald-500 hidden sm:inline">System_Online</span>
-                </div>
-                <div class="hidden lg:flex items-center space-x-6 text-[10px] font-bold uppercase tracking-widest">
-                    <a href="#about" class="nav-link desktop-link text-slate-300 hover:text-sky-400 transition">Profile</a>
-                    <a href="#recon" class="nav-link desktop-link text-slate-300 hover:text-sky-400 transition">Intel</a>
-                    <a href="#education" class="nav-link desktop-link text-slate-300 hover:text-sky-400 transition">Education</a>
-                    <a href="#arsenal" class="nav-link desktop-link text-slate-300 hover:text-sky-400 transition">Arsenal</a>
-                    <a href="#project" class="nav-link desktop-link text-slate-300 hover:text-sky-400 transition">Project</a>
-                    <a href="#achievements" class="nav-link desktop-link text-slate-300 hover:text-sky-400 transition">Certs</a>
-                    <a href="#terminal" class="nav-link desktop-link text-slate-300 hover:text-sky-400 transition">Terminal</a>
-                    <a href="#archive" class="nav-link desktop-link text-slate-300 hover:text-sky-400 transition">Archive</a>
-                </div>
-                <div class="flex items-center gap-3">
-                    <button onclick="triggerPanic()" class="panic-btn hidden sm:flex" title="Wipe Session Data"><i data-lucide="skull" class="w-3 h-3"></i> PANIC</button>
-                    <button id="themeToggle" class="p-2 rounded-full bg-black/20 hover:bg-black/40 transition border border-white/10 flex items-center justify-center w-8 h-8"><i data-lucide="sun" class="w-4 h-4 text-amber-400"></i></button>
-                    <a href="/admin.html" target="_blank" class="hidden sm:inline-block text-xs font-bold mono text-sky-500 bg-sky-500/10 px-3 py-1 rounded-full border border-sky-500/20 hover:bg-sky-500/20 transition">MH_ROOT</a>
-                    <button id="mobileMenuBtn" class="lg:hidden p-2 text-slate-400 hover:text-sky-500 transition"><i data-lucide="menu" class="w-6 h-6"></i></button>
-                </div>
-            </div>
-            <div id="mobileMenu" class="hidden absolute top-16 left-0 w-full glass-nav flex flex-col items-center py-6 space-y-6 text-[10px] font-bold uppercase tracking-widest shadow-2xl lg:hidden">
-                <a href="#about" class="nav-link mobile-link transition">Profile</a>
-                <a href="#recon" class="nav-link mobile-link transition">Intel</a>
-                <a href="#education" class="nav-link mobile-link transition">Education</a>
-                <a href="#arsenal" class="nav-link mobile-link transition">Arsenal</a>
-                <a href="#project" class="nav-link mobile-link transition">Project</a>
-                <a href="#achievements" class="nav-link mobile-link transition">Certs</a>
-                <a href="#terminal" class="nav-link mobile-link transition">Terminal</a>
-                <a href="#archive" class="nav-link mobile-link transition">Archive</a>
-                <a href="/admin.html" class="text-sky-500 mt-2 border border-sky-500/30 px-6 py-2 rounded-full hover:bg-sky-500/10 transition">Admin Login</a>
-                <button onclick="triggerPanic()" class="panic-btn mt-2"><i data-lucide="skull" class="w-3 h-3"></i> PANIC</button>
-            </div>
-        </nav>
+    <div id="main-content">
+        <div class="bg-cyber">
+            <div class="hacker-decals">
+                <div class="decal-1">
+                    &gt; INIT SECURE_BOOT...<br>
+                    &gt; LOAD KERNEL_MODULE_0x8F<br>
+                    &gt; BYPASSING FIREWALL... [OK]<br>
+                    &gt; MEM_ALLOC: 0x7FFE4000<br>
+                    &gt; THREAD_SYNC: IN_PROGRESS
+                </div>
+                <div class="decal-2">
+                    SYS_OVERRIDE_ENABLED<br>
+                    --------------------<br>
+                    ROOT ACCESS GRANTED<br>
+                    UPLINK ESTABLISHED<br>
+                    PORT_8080 // LISTENING
+                </div>
+                <div class="decal-3">0xMH</div>
+            </div>
+        </div>
 
-        <main class="max-w-5xl mx-auto px-6 pt-32 pb-20">
-            
-            <section id="about" class="flex flex-col md:flex-row items-center justify-between mb-32 gap-10 reveal pt-10">
-                <div class="flex-1 space-y-6 text-center md:text-left">
-                    <div class="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-sky-500/5 border border-sky-500/20 text-sky-500">
-                        <i data-lucide="shield-alert" class="w-4 h-4"></i>
-                        <span class="text-[10px] font-bold uppercase tracking-[0.25em] mono">Auth Granted // UID: 0x99A3</span>
-                    </div>
-                    
-                    <h1 class="text-5xl md:text-7xl font-black tracking-tighter leading-[0.95] text-white glow-text">
-                        Architecting <br>
-                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-blue-500 to-indigo-500">Secure AI</span><br>
-                        Futures.
-                    </h1>
-                    
-                    <p id="profile-bio" class="text-slate-400 text-lg font-medium max-w-xl leading-relaxed mx-auto md:mx-0">Loading biography...</p>
+        <nav class="fixed top-0 w-full glass-nav" id="navbar">
+            <div class="w-full px-6 lg:px-12 h-16 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-3 h-3 rounded-full bg-emerald-500 shadow-[0_0_10px_#10b981] animate-pulse"></div>
+                    <span class="text-[10px] font-bold uppercase tracking-[0.2em] mono text-emerald-500">System_Online</span>
+                </div>
+                <div class="hidden md:flex items-center space-x-6 text-[10px] font-bold uppercase tracking-widest">
+                    <a href="#about" class="nav-link desktop-link text-slate-300 hover:text-sky-400 transition">Profile</a>
+                    <a href="#recon" class="nav-link desktop-link text-slate-300 hover:text-sky-400 transition">Intel</a>
+                    <a href="#education" class="nav-link desktop-link text-slate-300 hover:text-sky-400 transition">Education</a>
+                    <a href="#arsenal" class="nav-link desktop-link text-slate-300 hover:text-sky-400 transition">Arsenal</a>
+                    <a href="#project" class="nav-link desktop-link text-slate-300 hover:text-sky-400 transition">Project</a>
+                    <a href="#achievements" class="nav-link desktop-link text-slate-300 hover:text-sky-400 transition">Certs</a>
+                    <a href="#terminal" class="nav-link desktop-link text-slate-300 hover:text-sky-400 transition">Terminal</a>
+                    <a href="#archive" class="nav-link desktop-link text-slate-300 hover:text-sky-400 transition">Archive</a>
+                </div>
+                <div class="flex items-center gap-4">
+                    <button id="themeToggle" class="p-2 rounded-full bg-black/20 hover:bg-black/40 transition border border-white/10 flex items-center justify-center w-9 h-9"><i data-lucide="sun" class="w-4 h-4 text-amber-400"></i></button>
+                    <a href="/admin.html" target="_blank" class="hidden sm:inline-block text-xs font-bold mono text-sky-500 bg-sky-500/10 px-3 py-1 rounded-full border border-sky-500/20 hover:bg-sky-500/20 transition">MH_ROOT</a>
+                    <button id="mobileMenuBtn" class="md:hidden p-2 text-slate-400 hover:text-sky-500 transition"><i data-lucide="menu" class="w-6 h-6"></i></button>
+                </div>
+            </div>
+            <div id="mobileMenu" class="hidden absolute top-16 left-0 w-full glass-nav flex flex-col items-center py-6 space-y-6 text-[10px] font-bold uppercase tracking-widest shadow-2xl md:hidden">
+                <a href="#about" class="nav-link mobile-link transition">Profile</a>
+                <a href="#recon" class="nav-link mobile-link transition">Intel</a>
+                <a href="#education" class="nav-link mobile-link transition">Education</a>
+                <a href="#arsenal" class="nav-link mobile-link transition">Arsenal</a>
+                <a href="#project" class="nav-link mobile-link transition">Project</a>
+                <a href="#achievements" class="nav-link mobile-link transition">Certs</a>
+                <a href="#terminal" class="nav-link mobile-link transition">Terminal</a>
+                <a href="#archive" class="nav-link mobile-link transition">Archive</a>
+                <a href="/admin.html" class="text-sky-500 mt-2 border border-sky-500/30 px-6 py-2 rounded-full hover:bg-sky-500/10 transition">Admin Login</a>
+            </div>
+        </nav>
 
-                    <div id="visitor-scanner" class="mt-8 bg-black/40 p-5 border border-white/10 rounded-2xl relative overflow-hidden max-w-md mx-auto md:mx-0 opacity-0 transform translate-y-4 transition-all duration-1000 delay-500 shadow-lg">
-                        <div class="flex items-center gap-3 mb-4 border-b border-white/5 pb-3">
-                            <i data-lucide="radar" class="w-5 h-5 text-red-500 animate-pulse"></i>
-                            <span class="text-[10px] font-bold text-red-500 uppercase tracking-widest mono">Connection Intercepted</span>
-                        </div>
-                        <div class="grid grid-cols-[100px_1fr] gap-y-3 text-[10px] mono uppercase text-slate-400 text-left">
-                            <div>IP Address:</div> <div id="vis-ip" class="text-white font-bold tracking-widest">Scanning...</div>
-                            <div>OS / Kernel:</div> <div id="vis-os" class="text-white font-bold tracking-widest">Identifying...</div>
-                            <div>User Agent:</div> <div id="vis-browser" class="text-white font-bold tracking-widest">Fingerprinting...</div>
-                            <div>Geo_Loc:</div> <div id="vis-loc" class="text-white font-bold tracking-widest">Tracing...</div>
-                            <div>Threat Lvl:</div> <div class="text-emerald-500 font-bold animate-pulse">Low (Monitoring Active)</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="relative w-full max-w-[360px] mx-auto md:mx-0 mt-10 md:mt-0">
-                    <div class="absolute -top-4 -left-4 w-16 h-16 border-t-[1.5px] border-l-[1.5px] border-[#0ea5e9]/40 rounded-tl-3xl pointer-events-none"></div>
-                    <div class="absolute -bottom-4 -right-4 w-16 h-16 border-b-[1.5px] border-r-[1.5px] border-[#0ea5e9]/40 rounded-br-3xl pointer-events-none"></div>
+        <main class="max-w-5xl mx-auto px-6 pt-32 pb-20">
+            
+            <section id="about" class="flex flex-col md:flex-row items-center justify-between mb-32 gap-10 reveal pt-10">
+                <div class="flex-1 space-y-6 text-center md:text-left">
+                    <div class="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-sky-500/5 border border-sky-500/20 text-sky-500">
+                        <i data-lucide="shield-alert" class="w-4 h-4"></i>
+                        <span class="text-[10px] font-bold uppercase tracking-[0.25em] mono">Auth Granted // UID: 0x99A3</span>
+                    </div>
+                    
+                    <h1 class="text-5xl md:text-7xl font-black tracking-tighter leading-[0.95] text-white glow-text">
+                        Architecting <br>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-blue-500 to-indigo-500">Secure AI</span><br>
+                        Futures.
+                    </h1>
+                    
+                    <p id="profile-bio" class="text-slate-400 text-lg font-medium max-w-xl leading-relaxed mx-auto md:mx-0">Loading biography...</p>
 
-                    <div class="absolute -top-8 -right-8 w-20 h-20 bg-[#050b14] border border-white/5 rounded-full flex items-center justify-center z-20 blink-shield light-shield-box">
-                        <i data-lucide="shield-check" class="w-8 h-8 text-[#0ea5e9]"></i>
-                    </div>
+                    <div id="visitor-scanner" class="mt-8 bg-black/40 p-5 border border-white/10 rounded-2xl relative overflow-hidden max-w-md mx-auto md:mx-0 opacity-0 transform translate-y-4 transition-all duration-1000 delay-500 shadow-lg">
+                        <div class="flex items-center gap-3 mb-4 border-b border-white/5 pb-3">
+                            <i data-lucide="radar" class="w-5 h-5 text-red-500 animate-pulse"></i>
+                            <span class="text-[10px] font-bold text-red-500 uppercase tracking-widest mono">Connection Intercepted</span>
+                        </div>
+                        <div class="grid grid-cols-[100px_1fr] gap-y-3 text-[10px] mono uppercase text-slate-400 text-left">
+                            <div>IP Address:</div> <div id="vis-ip" class="text-white font-bold tracking-widest">Scanning...</div>
+                            <div>OS / Kernel:</div> <div id="vis-os" class="text-white font-bold tracking-widest">Identifying...</div>
+                            <div>User Agent:</div> <div id="vis-browser" class="text-white font-bold tracking-widest">Fingerprinting...</div>
+                            <div>Geo_Loc:</div> <div id="vis-loc" class="text-white font-bold tracking-widest">Tracing...</div>
+                            <div>Threat Lvl:</div> <div class="text-emerald-500 font-bold animate-pulse">Low (Monitoring Active)</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="relative w-full max-w-[360px] mx-auto md:mx-0 mt-10 md:mt-0">
+                    <div class="absolute -top-4 -left-4 w-16 h-16 border-t-[1.5px] border-l-[1.5px] border-[#0ea5e9]/40 rounded-tl-3xl pointer-events-none"></div>
+                    <div class="absolute -bottom-4 -right-4 w-16 h-16 border-b-[1.5px] border-r-[1.5px] border-[#0ea5e9]/40 rounded-br-3xl pointer-events-none"></div>
 
-                    <div class="profile-box border border-white/5 rounded-[2rem] p-6 relative z-10 shadow-2xl">
-                        <div class="flex items-center justify-between mb-5 pl-1 pr-6">
-                            <div class="flex gap-1.5"><div class="w-2 h-2 rounded-full bg-[#0ea5e9]"></div><div class="w-2 h-2 rounded-full bg-[#0ea5e9]/60"></div><div class="w-2 h-2 rounded-full bg-[#0ea5e9]/30"></div></div>
-                            <div class="defcon-badge" onclick="alert('DEF CON 34 // BLACK BADGE VALIDATED.')"><i data-lucide="cpu"></i> OPERATOR</div>
-                        </div>
+                    <div class="absolute -top-8 -right-8 w-20 h-20 bg-[#050b14] border border-white/5 rounded-full flex items-center justify-center z-20 blink-shield light-shield-box">
+                        <i data-lucide="shield-check" class="w-8 h-8 text-[#0ea5e9]"></i>
+                    </div>
 
-                        <div class="scanner-container relative w-full h-[320px] mb-6 border border-white/5 rounded-2xl overflow-hidden shadow-inner light-scanner">
-                            <img src="./profile.jpg" class="w-full h-full object-cover opacity-80" onerror="this.src='https://via.placeholder.com/300x400/020617/0ea5e9?text=Profile+Image'">
-                            <div class="scanner-overlay"></div>
-                            <div class="scanner-line"></div>
-                            <div class="absolute top-4 left-4 bg-[#080d1a]/90 px-3 py-1.5 rounded-lg border border-white/10 backdrop-blur-sm light-inner-box">
-                                <p class="text-[6px] text-slate-400 font-bold font-mono tracking-wider mb-0.5">NEURAL PROFILE</p>
-                                <p class="text-[9px] text-[#0ea5e9] font-bold font-mono tracking-widest">ACTIVE_SYNC</p>
-                            </div>
-                            <div class="absolute top-4 right-4 border border-white/10 p-1.5 rounded-lg bg-[#080d1a]/80 backdrop-blur-sm light-inner-box">
-                                <i data-lucide="scan-line" class="w-4 h-4 text-slate-400"></i>
-                            </div>
-                            <div class="absolute bottom-4 left-4 w-full">
-                                <div class="w-8 h-[1px] bg-slate-500/50 mb-1.5"></div>
-                                <p class="text-[6px] text-slate-500/80 font-mono tracking-widest">COORD: 23.8103° N, 90.4125° E</p>
-                            </div>
-                        </div>
+                    <div class="profile-box border border-white/5 rounded-[2rem] p-6 relative z-10 shadow-2xl">
+                        <div class="flex items-center justify-between mb-5 pl-1 pr-6">
+                            <div class="flex gap-1.5">
+                                <div class="w-2 h-2 rounded-full bg-[#0ea5e9]"></div>
+                                <div class="w-2 h-2 rounded-full bg-[#0ea5e9]/60"></div>
+                                <div class="w-2 h-2 rounded-full bg-[#0ea5e9]/30"></div>
+                            </div>
+                            <span class="text-[9px] font-bold text-[#0ea5e9] uppercase tracking-widest mono">IDENTITY.V2.0_SECURE</span>
+                        </div>
 
-                        <div class="flex justify-between items-end mb-6">
-                            <div><h3 id="profile-name" class="text-[28px] font-extrabold text-white leading-none mb-1.5 tracking-tight">Mahmudul Hasan</h3><p id="profile-title" class="text-[9px] font-bold text-[#0ea5e9] uppercase tracking-[0.2em] mono">SECURITY RESEARCHER</p></div>
-                            <div class="text-right"><p class="text-[7px] text-slate-400 mono tracking-widest mb-1 uppercase">CLEARANCE</p><p class="text-[12px] font-bold text-[#10b981] mono uppercase">LVL_01</p></div>
-                        </div>
-                        <div class="grid grid-cols-2 gap-3">
-                            <div class="bg-[#0f172a]/60 p-4 rounded-xl border border-white/5 light-stat-box"><p class="text-[7px] text-slate-400 mono tracking-widest mb-1.5 uppercase">CORE_NODE</p><p class="text-[11px] font-bold text-white mono uppercase">CYBER_AI</p></div>
-                            <div class="bg-[#0f172a]/60 p-4 rounded-xl border border-white/5 light-stat-box"><p class="text-[7px] text-slate-400 mono tracking-widest mb-1.5 uppercase">PROTOCOL</p><p class="text-[11px] font-bold text-white mono uppercase">ADVERSARIAL</p></div>
-                        </div>
-                    </div>
-                </div>
-            </section>
+                        <div class="scanner-container relative w-full h-[320px] mb-6 border border-white/5 rounded-2xl overflow-hidden shadow-inner light-scanner">
+                            <img src="./profile.jpg" class="w-full h-full object-cover opacity-80" onerror="this.src='https://via.placeholder.com/300x400/020617/0ea5e9?text=Profile+Image'">
+                            <div class="scanner-overlay"></div>
+                            <div class="scanner-line"></div>
 
-            <section id="recon" class="mb-32 reveal pt-10">
-                <div class="text-center mb-16">
-                    <div class="inline-flex items-center justify-center p-3 bg-red-500/10 rounded-full border border-red-500/30 mb-4 shadow-[0_0_15px_rgba(239,68,68,0.2)]">
-                        <i data-lucide="radar" class="w-6 h-6 text-red-500"></i>
-                    </div>
-                    <h2 class="text-3xl md:text-4xl font-black mb-2 text-white mono lowercase tracking-tight"><span class="text-slate-500">~/root/</span><span class="text-red-500">recon_intel</span></h2>
-                    <p class="text-slate-300 text-sm font-bold uppercase tracking-[0.2em] mb-2">Active Intelligence</p>
-                </div>
+                            <div class="absolute top-4 left-4 bg-[#080d1a]/90 px-3 py-1.5 rounded-lg border border-white/10 backdrop-blur-sm light-inner-box">
+                                <p class="text-[6px] text-slate-400 font-bold font-mono tracking-wider mb-0.5">NEURAL PROFILE</p>
+                                <p class="text-[9px] text-[#0ea5e9] font-bold font-mono tracking-widest">ACTIVE_SYNC</p>
+                            </div>
 
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    <div class="bg-black/40 border border-white/10 rounded-3xl p-6 relative overflow-hidden shadow-xl flex flex-col h-[300px]">
-                        <div class="flex items-center gap-3 mb-4 border-b border-white/5 pb-3 shrink-0">
-                            <div class="bg-rose-500/20 p-2 rounded-full border border-rose-500/30"><i data-lucide="map-pin" class="w-5 h-5 text-rose-500"></i></div>
-                            <h3 class="text-lg font-bold text-white mono leading-tight">Target_Locator</h3>
-                        </div>
-                        <div class="flex flex-col sm:flex-row gap-3 mb-4 shrink-0">
-                            <input type="text" id="target-ip-input" placeholder="Enter IP (e.g. 8.8.8.8)" class="flex-1 bg-black/50 border border-white/10 rounded-xl px-4 py-2.5 text-xs outline-none focus:border-rose-500 mono text-white">
-                            <button onclick="scanTargetIP()" id="scan-ip-btn" class="bg-rose-600 hover:bg-rose-500 text-white font-bold px-5 py-2.5 rounded-xl transition mono uppercase tracking-widest text-[9px] flex items-center justify-center gap-2"><i data-lucide="search" class="w-3 h-3"></i> Scan</button>
-                        </div>
-                        <div id="ip-results" class="hidden flex-1 overflow-y-auto custom-scrollbar pr-1">
-                            <div class="scan-loader hidden mb-4" id="ip-loader"></div>
-                            <div id="ip-data-box" class="hidden grid grid-cols-2 gap-3 bg-[#0A101F] p-4 rounded-xl border border-white/5 shadow-inner">
-                                <div><p class="text-[8px] text-slate-500 font-bold uppercase tracking-widest mb-0.5 mono">ISP</p><p id="res-isp" class="text-[10px] text-white font-bold truncate">...</p></div>
-                                <div><p class="text-[8px] text-slate-500 font-bold uppercase tracking-widest mb-0.5 mono">COUNTRY</p><p id="res-country" class="text-[10px] text-white font-bold truncate">...</p></div>
-                                <div><p class="text-[8px] text-slate-500 font-bold uppercase tracking-widest mb-0.5 mono">CITY</p><p id="res-city" class="text-[10px] text-white font-bold truncate">...</p></div>
-                                <div><p class="text-[8px] text-slate-500 font-bold uppercase tracking-widest mb-0.5 mono">COORDS</p><p id="res-coord" class="text-[10px] text-rose-400 font-mono font-bold truncate">...</p></div>
-                            </div>
-                            <p id="ip-error" class="hidden text-rose-500 text-[10px] font-mono font-bold mt-2 p-2 bg-rose-500/10 rounded-lg border border-rose-500/20"></p>
-                        </div>
-                    </div>
-                    <div id="ids-box" class="h-[300px] flex flex-col">
-                        <div class="ids-header shrink-0"><div class="flex gap-2"><i data-lucide="activity" class="w-4 h-4 text-emerald-500 animate-pulse"></i><span class="text-[10px] mono text-emerald-500 font-bold tracking-widest uppercase">Live IDS Monitor</span></div><span class="text-[10px] mono text-slate-400">Node: Alpha-1</span></div>
-                        <div class="ids-content custom-scrollbar" id="ids-logs"></div>
-                    </div>
-                </div>
-            </section>
+                            <div class="absolute top-4 right-4 border border-white/10 p-1.5 rounded-lg bg-[#080d1a]/80 backdrop-blur-sm light-inner-box">
+                                <i data-lucide="scan-line" class="w-4 h-4 text-slate-400"></i>
+                            </div>
 
-            <section id="education" class="mb-32 reveal pt-10">
-                <div class="text-center mb-16">
-                    <div class="inline-flex items-center justify-center p-3 bg-emerald-500/10 rounded-full border border-emerald-500/30 mb-4 shadow-[0_0_15px_rgba(16,185,129,0.2)]"><i data-lucide="cpu" class="w-6 h-6 text-emerald-500"></i></div>
-                    <h2 class="text-3xl md:text-4xl font-black mb-2 text-white mono lowercase tracking-tight"><span class="text-slate-500">~/root/</span><span class="text-emerald-500">education</span></h2>
-                    <p class="text-slate-300 text-sm font-bold uppercase tracking-[0.2em] mb-2">Academic Records</p>
-                </div>
-                <div class="bg-[#0A101F]/90 backdrop-blur-xl border border-white/5 rounded-3xl p-6 md:p-10 lg:p-12 relative overflow-hidden shadow-2xl light-edu-card">
-                    <div class="flex flex-col lg:flex-row gap-8 lg:gap-12 relative z-10">
-                        <div class="flex-1 flex flex-col justify-center">
-                            <p id="edu-inst" class="text-[10px] font-bold text-emerald-500 uppercase tracking-widest mono mb-4">MAJOR_OPERATION.EDU</p>
-                            <h3 id="edu-degree" class="text-3xl md:text-5xl font-black text-white mb-6 leading-tight tracking-tight">Loading...</h3>
-                            <p id="edu-desc" class="text-slate-400 text-sm md:text-base leading-relaxed border-l-2 border-emerald-500/30 pl-4 md:pl-5 mb-8 md:mb-10 max-w-2xl">Loading details...</p>
-                            <div class="inline-flex items-center gap-4 bg-emerald-500/5 border border-emerald-500/20 px-6 py-3 rounded-xl shadow-inner w-fit light-edu-inner">
-                                <i data-lucide="calendar-check-2" class="w-8 h-8 text-emerald-500"></i>
-                                <div><p class="text-[9px] text-emerald-500/70 font-bold uppercase tracking-widest mb-1 mono">GRADUATION YEAR</p><p id="edu-year" class="text-white font-bold text-lg font-mono">Loading...</p></div>
-                            </div>
-                        </div>
-                        <div id="edu-right-side" class="w-full lg:w-80 shrink-0 flex flex-col gap-6 justify-center">
-                            <div id="thesis-card" class="bg-black/20 border border-white/5 p-6 rounded-2xl hidden light-edu-inner">
-                                <div class="flex items-center gap-3 mb-4"><i data-lucide="microscope" class="w-5 h-5 text-emerald-500"></i><span class="text-[10px] font-bold text-white uppercase tracking-widest mono">ACTIVE THESIS</span></div>
-                                <h4 id="thesis-desc" class="text-white font-bold italic mb-3 leading-tight"></h4>
-                            </div>
-                            <div id="core-focus-card" class="bg-black/20 border border-white/5 p-6 rounded-2xl hidden light-edu-inner">
-                                <div class="flex items-center gap-3 mb-4"><i data-lucide="book-open" class="w-5 h-5 text-sky-500"></i><span class="text-[10px] font-bold text-white uppercase tracking-widest mono">CORE FOCUS</span></div>
-                                <h4 id="focus-desc" class="text-white font-bold mb-3 leading-tight"></h4>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="olderEducationContainer" class="mt-8 pt-8 border-t border-white/5 grid sm:grid-cols-2 gap-4 hidden relative z-10"></div>
-                </div>
-            </section>
+                            <div class="absolute bottom-4 left-4 w-full">
+                                <div class="w-8 h-[1px] bg-slate-500/50 mb-1.5"></div>
+                                <p class="text-[6px] text-slate-500/80 font-mono tracking-widest">COORD: 23.8103° N, 90.4125° E</p>
+                            </div>
+                        </div>
 
-            <section id="arsenal" class="mb-32 reveal pt-10">
-                <div class="text-center mb-16"><h2 class="text-3xl md:text-4xl font-black text-white mono lowercase"><span class="text-slate-500">~/root/</span><span class="text-rose-500">arsenal</span></h2></div>
-                <div class="bg-[#0A101F]/90 border border-white/5 rounded-3xl p-6 md:p-10 lg:p-12 shadow-2xl light-edu-card">
-                    <div id="arsenalContainer" class="grid md:grid-cols-2 gap-6"></div>
-                    <div class="text-center mt-10"><button id="loadMoreArsBtn" class="hidden px-8 py-3 border border-rose-500/30 rounded-full text-rose-500 text-xs font-bold hover:bg-rose-500/20 transition mono bg-black/20">LOAD_MORE_ARSENAL //...</button></div>
-                </div>
-            </section>
+                        <div class="flex justify-between items-end mb-6">
+                            <div>
+                                <h3 id="profile-name" class="text-[28px] font-extrabold text-white leading-none mb-1.5 tracking-tight">Mahmudul Hasan</h3>
+                                <p id="profile-title" class="text-[9px] font-bold text-[#0ea5e9] uppercase tracking-[0.2em] mono">SECURITY RESEARCHER</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-[7px] text-slate-400 mono tracking-widest mb-1 uppercase">CLEARANCE</p>
+                                <p class="text-[12px] font-bold text-[#10b981] mono uppercase">LVL_01</p>
+                            </div>
+                        </div>
 
-            <section id="project" class="mb-32 reveal pt-10">
-                <div class="text-center mb-16"><h2 class="text-3xl md:text-4xl font-black text-white mono lowercase"><span class="text-slate-500">~/root/</span><span class="text-purple-500">projects</span></h2></div>
-                <div class="bg-[#0A101F]/90 border border-white/5 rounded-3xl p-6 md:p-10 lg:p-12 shadow-2xl light-edu-card">
-                    <div id="projectContainer" class="grid md:grid-cols-2 gap-8"></div>
-                    <div class="text-center mt-10"><button id="loadMoreProjBtn" class="hidden px-8 py-3 border border-purple-500/30 rounded-full text-purple-500 text-xs font-bold hover:bg-purple-500/20 transition mono bg-black/20">LOAD_MORE_PROJECTS //...</button></div>
-                </div>
-            </section>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div class="bg-[#0f172a]/60 p-4 rounded-xl border border-white/5 light-stat-box">
+                                <p class="text-[7px] text-slate-400 mono tracking-widest mb-1.5 uppercase">CORE_NODE</p>
+                                <p class="text-[11px] font-bold text-white mono uppercase">CYBER_AI</p>
+                            </div>
+                            <div class="bg-[#0f172a]/60 p-4 rounded-xl border border-white/5 light-stat-box">
+                                <p class="text-[7px] text-slate-400 mono tracking-widest mb-1.5 uppercase">PROTOCOL</p>
+                                <p class="text-[11px] font-bold text-white mono uppercase">ADVERSARIAL</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
-            <section id="achievements" class="mb-32 reveal pt-10">
-                <div class="text-center mb-16"><h2 class="text-3xl md:text-4xl font-black text-white mono lowercase"><span class="text-slate-500">~/root/</span><span class="text-amber-500">achievements</span></h2></div>
-                <div class="bg-[#0A101F]/90 border border-white/5 rounded-3xl p-6 md:p-10 lg:p-12 shadow-2xl light-edu-card">
-                    <div id="certContainer" class="grid md:grid-cols-2 gap-6"></div>
-                    <div class="text-center mt-10"><button id="loadMoreAchBtn" class="hidden px-8 py-3 border border-amber-500/30 rounded-full text-amber-500 text-xs font-bold hover:bg-amber-500/20 transition mono bg-black/20">LOAD_MORE_RECORDS //...</button></div>
-                </div>
-            </section>
+            <section id="recon" class="mb-32 reveal pt-10">
+                <div class="text-center mb-16">
+                    <div class="inline-flex items-center justify-center p-3 bg-red-500/10 rounded-full border border-red-500/30 mb-4 shadow-[0_0_15px_rgba(239,68,68,0.2)]">
+                        <i data-lucide="radar" class="w-6 h-6 text-red-500"></i>
+                    </div>
+                    <h2 class="text-3xl md:text-4xl font-black mb-2 text-white mono lowercase tracking-tight">
+                        <span class="text-slate-500">~/root/</span><span class="text-red-500">recon_intel</span>
+                    </h2>
+                    <p class="text-slate-300 text-sm font-bold uppercase tracking-[0.2em] mb-2">Active Intelligence</p>
+                    <p class="text-slate-500 text-[10px] mono uppercase tracking-widest">Network_Monitoring & Tools</p>
+                </div>
 
-            <section id="terminal" class="mb-32 reveal pt-10">
-                <div class="text-center mb-12"><h2 class="text-3xl md:text-4xl font-black text-white mono uppercase"><span class="text-slate-500">~/root/</span><span class="text-red-500">offensive_shell</span></h2></div>
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    <div id="terminal-box" class="w-full">
-                        <div class="terminal-header"><div class="flex gap-2"><div class="w-3 h-3 rounded-full bg-red-500"></div><div class="w-3 h-3 rounded-full bg-amber-500"></div><div class="w-3 h-3 rounded-full bg-emerald-500"></div></div><span class="text-[10px] mono text-slate-400">mh_root@offensive-node: ~</span></div>
-                        <div class="terminal-content custom-scrollbar" id="term-body" onclick="document.getElementById('term-input').focus()">
-                            <p class="mb-2">Secure Shell V3.0 (Red Team Ed.). Type 'help' to see commands.</p>
-                            <div id="term-outputs"></div>
-                            <div class="terminal-input-line mt-2 flex items-start gap-2">
-                                <span id="term-prompt" class="text-emerald-500 font-bold whitespace-nowrap shrink-0">mh_guest@offensive-node:~$</span>
-                                <input type="text" id="term-input" autocomplete="off" spellcheck="false" class="bg-transparent border-none outline-none text-white flex-1 min-w-0">
-                            </div>
-                        </div>
-                    </div>
-                    <div id="hex-box" class="w-full hidden lg:flex">
-                        <div class="hex-header"><div class="flex gap-2"><i data-lucide="radio" class="w-4 h-4 text-purple-500 animate-pulse"></i><span class="text-[10px] mono text-purple-500 font-bold tracking-widest uppercase">Packet Sniffer</span></div><span class="text-[10px] mono text-slate-400">eth0: promiscuous</span></div>
-                        <div class="hex-content custom-scrollbar flex flex-col justify-end" id="hex-logs"></div>
-                    </div>
-                </div>
-            </section>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    
+                    <div class="bg-black/40 border border-white/10 rounded-3xl p-6 md:p-8 relative overflow-hidden shadow-xl flex flex-col h-[348px]">
+                        <div class="flex items-center gap-3 mb-6 border-b border-white/5 pb-4 shrink-0">
+                            <div class="bg-rose-500/20 p-2 rounded-full border border-rose-500/30"><i data-lucide="map-pin" class="w-5 h-5 text-rose-500"></i></div>
+                            <div>
+                                <h3 class="text-xl font-bold text-white mono">Target_Locator</h3>
+                                <p class="text-[10px] text-slate-500 mono uppercase tracking-widest mt-1">Geo-IP Intelligence Tool</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex flex-col sm:flex-row gap-4 mb-6 shrink-0">
+                            <input type="text" id="target-ip-input" placeholder="Enter IP (e.g. 8.8.8.8)" class="flex-1 bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-sm outline-none focus:border-rose-500 mono text-white">
+                            <button onclick="scanTargetIP()" id="scan-ip-btn" class="bg-rose-600 hover:bg-rose-500 text-white font-bold px-6 py-3 rounded-xl transition shadow-[0_0_15px_rgba(244,63,94,0.3)] mono uppercase tracking-widest text-[10px] flex items-center justify-center gap-2">
+                                <i data-lucide="search" class="w-4 h-4"></i> Scan
+                            </button>
+                        </div>
 
-            <section id="archive" class="mb-32 reveal pt-10">
-                <div class="text-center mb-16"><h2 class="text-3xl md:text-4xl font-black text-white mono lowercase"><span class="text-slate-500">~/root/</span><span class="text-sky-500">archive</span></h2></div>
-                <div id="galleryContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"></div>
-                <div class="text-center mt-12"><button id="loadMoreBtn" class="hidden px-8 py-3 border border-sky-500/30 rounded-full text-sky-500 text-xs font-bold hover:bg-sky-500/20 transition mono bg-black/20">LOAD_MORE_ARCHIVES //...</button></div>
-            </section>
+                        <div id="ip-results" class="hidden flex-1 overflow-y-auto custom-scrollbar pr-2">
+                            <div class="scan-loader hidden mb-6" id="ip-loader"></div>
+                            <div id="ip-data-box" class="hidden grid grid-cols-2 gap-4 bg-[#0A101F] p-5 rounded-2xl border border-white/5 shadow-inner">
+                                <div>
+                                    <p class="text-[9px] text-slate-500 font-bold uppercase tracking-widest mb-1 mono">ISP / ORG</p>
+                                    <p id="res-isp" class="text-xs text-white font-bold truncate">...</p>
+                                </div>
+                                <div>
+                                    <p class="text-[9px] text-slate-500 font-bold uppercase tracking-widest mb-1 mono">COUNTRY</p>
+                                    <p id="res-country" class="text-xs text-white font-bold truncate">...</p>
+                                </div>
+                                <div>
+                                    <p class="text-[9px] text-slate-500 font-bold uppercase tracking-widest mb-1 mono">CITY</p>
+                                    <p id="res-city" class="text-xs text-white font-bold truncate">...</p>
+                                </div>
+                                <div>
+                                    <p class="text-[9px] text-slate-500 font-bold uppercase tracking-widest mb-1 mono">COORDINATES</p>
+                                    <p id="res-coord" class="text-xs text-rose-400 font-mono font-bold truncate">...</p>
+                                </div>
+                            </div>
+                            <p id="ip-error" class="hidden text-rose-500 text-xs font-mono font-bold mt-4 p-3 bg-rose-500/10 rounded-lg border border-rose-500/20"></p>
+                        </div>
+                    </div>
 
-            <section id="communication" class="reveal mb-10 pt-10">
-                <div class="glass-panel p-6 md:p-16 border-t-2 border-sky-500/80 relative overflow-hidden rounded-[2rem]">
-                    <div class="cyber-line"></div>
-                    <div class="relative z-10 max-w-5xl mx-auto">
-                        <div class="text-center mb-12"><h2 class="text-3xl md:text-4xl font-black text-white mono lowercase"><span class="text-slate-500">~/root/</span><span class="text-sky-500">comms</span></h2></div>
-                        
-                        <div class="grid grid-cols-1 lg:grid-cols-5 gap-12">
-                            <div class="lg:col-span-3">
-                                <form id="commForm" class="space-y-6">
-                                    <div class="grid md:grid-cols-2 gap-6">
-                                        <div class="group"><label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2 block mono">Identity_Name</label><div class="relative"><i data-lucide="user" class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500"></i><input type="text" id="i-name" required placeholder="GUEST_USER" class="w-full bg-black/40 border border-white/10 rounded-2xl pl-12 py-4 text-xs outline-none transition mono text-white"></div></div>
-                                        <div class="group"><label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2 block mono">Contact_Vector</label><div class="relative"><i data-lucide="mail" class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500"></i><input type="email" id="i-email" required placeholder="USER@DOMAIN.COM" class="w-full bg-black/40 border border-white/10 rounded-2xl pl-12 py-4 text-xs outline-none transition mono text-white"></div></div>
-                                    </div>
-                                    <div class="group"><label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2 block mono">Data_Payload</label><div class="relative"><i data-lucide="message-square" class="absolute left-4 top-6 w-4 h-4 text-slate-500"></i><textarea id="i-msg" required rows="4" placeholder="ENTER_MESSAGE_HERE..." class="w-full bg-black/40 border border-white/10 rounded-2xl pl-12 py-6 text-xs outline-none transition mono text-white"></textarea></div></div>
-                                    <button type="submit" id="submitBtn" class="w-full py-5 bg-sky-600 hover:bg-sky-500 text-white rounded-2xl font-bold text-[10px] uppercase tracking-[0.3em] flex items-center justify-center gap-3 transition"><i data-lucide="send" class="w-4 h-4"></i> Transmit Packet</button>
-                                </form>
-                                <p id="formSuccess" class="hidden text-emerald-500 text-xs font-bold mono text-center mt-4 bg-emerald-500/10 p-2 rounded-lg border border-emerald-500/20">✓ Payload Transmitted Securely.</p>
-                            </div>
+                    <div id="ids-box" class="transition-colors duration-500 h-[348px] flex flex-col">
+                        <div class="ids-header shrink-0">
+                            <div class="flex gap-2">
+                                <i data-lucide="activity" class="w-4 h-4 text-emerald-500 animate-pulse"></i>
+                                <span class="text-[10px] mono text-emerald-500 font-bold tracking-widest uppercase">Live IDS Monitor</span>
+                            </div>
+                            <span class="text-[10px] mono text-slate-400">Node: Alpha-1</span>
+                        </div>
+                        <div class="ids-content custom-scrollbar" id="ids-logs">
+                            </div>
+                    </div>
 
-                            <div class="lg:col-span-2 space-y-6">
-                                <div class="bg-black/50 border border-white/5 p-6 rounded-2xl">
-                                    <div class="flex items-center gap-3 mb-4 border-b border-white/5 pb-3">
-                                        <i data-lucide="key" class="w-5 h-5 text-amber-500"></i>
-                                        <span class="text-[10px] font-bold text-amber-500 uppercase tracking-widest mono">Secure PGP Channel</span>
-                                    </div>
-                                    <p class="text-[10px] text-slate-400 mono mb-3">For highly sensitive intel, encrypt your message using my public key before transmission.</p>
-                                    <div class="bg-[#050b14] p-4 rounded-xl border border-white/5 overflow-x-auto">
-                                        <pre class="text-[8px] text-slate-500 mono leading-tight">-----BEGIN PGP PUBLIC KEY BLOCK-----
-mQENBGE... [simulated block]
-x8R2kZ9... [copy full key]
-=yA9X
------END PGP PUBLIC KEY BLOCK-----</pre>
-                                    </div>
-                                </div>
-                                <div class="bg-black/50 border border-white/5 p-6 rounded-2xl flex items-center justify-between group cursor-not-allowed">
-                                    <div>
-                                        <p class="text-[10px] font-bold text-purple-500 uppercase tracking-widest mono mb-1">Onion Routing</p>
-                                        <p class="text-xs text-slate-400 mono">mh_rootx7f... .onion</p>
-                                    </div>
-                                    <i data-lucide="lock" class="w-5 h-5 text-slate-600 group-hover:text-purple-500 transition"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </main>
+                </div>
+            </section>
 
-        <footer class="pb-12 pt-10 text-center relative z-50">
-            <div class="flex justify-center gap-6 mb-12">
-                <a href="https://www.linkedin.com/in/mahmudul-hasan-0730a1211/" target="_blank" class="w-12 h-12 flex items-center justify-center rounded-full bg-black/40 border border-white/10 text-slate-400 hover:text-sky-500 transition"><i data-lucide="linkedin"></i></a>
-                <a href="https://github.com/mhshibli" target="_blank" class="w-12 h-12 flex items-center justify-center rounded-full bg-black/40 border border-white/10 text-slate-400 hover:text-emerald-500 transition"><i data-lucide="github"></i></a>
-            </div>
-            <p id="footer-text" class="text-[10px] text-slate-500 font-bold uppercase tracking-widest mono">© 2026 MAHMUDUL HASAN. DESIGN: HYPER-SECURITY OS V2</p>
-        </footer>
+            <section id="education" class="mb-32 reveal pt-10">
+                <div class="text-center mb-16">
+                    <div class="inline-flex items-center justify-center p-3 bg-emerald-500/10 rounded-full border border-emerald-500/30 mb-4 shadow-[0_0_15px_rgba(16,185,129,0.2)]">
+                        <i data-lucide="cpu" class="w-6 h-6 text-emerald-500"></i>
+                    </div>
+                    <h2 class="text-3xl md:text-4xl font-black mb-2 text-white mono lowercase tracking-tight">
+                        <span class="text-slate-500">~/root/</span><span class="text-emerald-500">education</span>
+                    </h2>
+                    <p class="text-slate-300 text-sm font-bold uppercase tracking-[0.2em] mb-2">Academic Records</p>
+                    <p class="text-slate-500 text-[10px] mono uppercase tracking-widest">Database_Query: Education_Node</p>
+                </div>
+                
+                <div class="bg-[#0A101F]/90 backdrop-blur-xl border border-white/5 rounded-3xl p-6 md:p-10 lg:p-12 relative overflow-hidden shadow-2xl light-edu-card">
+                    <div class="absolute -top-32 -left-32 w-64 h-64 bg-emerald-500/5 rounded-full blur-3xl pointer-events-none"></div>
+                    <div class="absolute -bottom-32 -right-32 w-64 h-64 bg-sky-500/5 rounded-full blur-3xl pointer-events-none"></div>
 
-        <a href="#communication" id="floatingMsg" class="fixed bottom-6 right-6 z-[100] glass-panel border-sky-500/50 p-4 rounded-full text-sky-500 transition-all"><i data-lucide="message-square"></i></a>
+                    <div class="flex flex-col lg:flex-row gap-8 lg:gap-12 relative z-10">
+                        
+                        <div class="flex-1 flex flex-col justify-center">
+                            <p id="edu-inst" class="text-[10px] font-bold text-emerald-500 uppercase tracking-widest mono mb-4">MAJOR_OPERATION.EDU</p>
+                            <h3 id="edu-degree" class="text-3xl md:text-5xl font-black text-white mb-6 leading-tight tracking-tight">Loading...</h3>
+                            
+                            <p id="edu-desc" class="text-slate-400 text-sm md:text-base leading-relaxed border-l-2 border-emerald-500/30 pl-4 md:pl-5 mb-8 md:mb-10 max-w-2xl">
+                                Loading academic details...
+                            </p>
+                            
+                            <div class="inline-flex items-center gap-4 bg-emerald-500/5 border border-emerald-500/20 px-5 md:px-6 py-3 md:py-4 rounded-xl shadow-inner w-fit light-edu-inner">
+                                <i data-lucide="calendar-check-2" class="w-6 h-6 md:w-8 md:h-8 text-emerald-500"></i>
+                                <div>
+                                    <p class="text-[8px] md:text-[9px] text-emerald-500/70 font-bold uppercase tracking-widest mb-1 mono">GRADUATION YEAR</p>
+                                    <p id="edu-year" class="text-white font-bold text-base md:text-lg font-mono">Loading...</p>
+                                </div>
+                            </div>
+                        </div>
 
-        <div id="galleryModal" class="fixed inset-0 modal-overlay z-[150] hidden flex items-center justify-center p-4 opacity-0 transition-all duration-300">
-            <div class="glass-panel w-full h-full max-h-[85vh] flex flex-col p-8 relative transform scale-95 transition-all duration-300" id="galleryModal-content">
-                <div class="flex justify-between items-center mb-6 border-b border-white/10 pb-4 shrink-0"><h2 class="text-2xl font-black text-white">Archives</h2><button onclick="closeGalleryModal()" class="text-slate-400 hover:text-red-500 transition"><i data-lucide="x" class="w-6 h-6"></i></button></div>
-                <div id="all-gallery-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 overflow-y-auto pr-2 custom-scrollbar"></div>
-            </div>
-        </div>
+                        <div id="edu-right-side" class="w-full lg:w-80 shrink-0 flex flex-col gap-4 md:gap-6 justify-center">
+                            
+                            <div id="thesis-card" class="bg-black/20 border border-white/5 p-5 md:p-6 rounded-2xl hover:border-emerald-500/40 transition duration-300 group shadow-lg light-edu-inner hidden">
+                                <div class="flex items-center gap-3 mb-4">
+                                    <div class="bg-emerald-500/20 p-2 rounded-full border border-emerald-500/20">
+                                        <i data-lucide="microscope" class="w-5 h-5 text-emerald-500"></i>
+                                    </div>
+                                    <span class="text-[10px] font-bold text-white uppercase tracking-widest mono">ACTIVE THESIS</span>
+                                </div>
+                                <h4 id="thesis-desc" class="text-white font-bold italic mb-3 leading-tight group-hover:text-emerald-400 transition"></h4>
+                            </div>
 
-        <div id="singleLightbox" class="fixed inset-0 modal-overlay z-[200] hidden flex items-center justify-center p-4 opacity-0 transition-all duration-300">
-            <div class="glass-panel max-w-3xl w-full p-8 relative transform scale-95 transition-all duration-300" id="singleLightbox-content">
-                <button onclick="closeSingleLightbox()" class="absolute top-4 right-4 text-slate-400 hover:text-red-500 transition"><i data-lucide="x" class="w-6 h-6"></i></button>
-                <div id="modal-body" class="mt-2 text-white text-center"></div>
-            </div>
-        </div>
+                            <div id="core-focus-card" class="bg-black/20 border border-white/5 p-5 md:p-6 rounded-2xl hover:border-sky-500/40 transition duration-300 group shadow-lg light-edu-inner hidden">
+                                <div class="flex items-center gap-3 mb-4">
+                                    <div class="bg-sky-500/20 p-2 rounded-full border border-sky-500/20">
+                                        <i data-lucide="book-open" class="w-5 h-5 text-sky-500"></i>
+                                    </div>
+                                    <span class="text-[10px] font-bold text-white uppercase tracking-widest mono">CORE FOCUS</span>
+                                </div>
+                                <h4 id="focus-desc" class="text-white font-bold mb-3 leading-tight group-hover:text-sky-400 transition"></h4>
+                            </div>
 
-        <div id="eduModal" class="fixed inset-0 modal-overlay z-[200] hidden flex items-center justify-center p-4 opacity-0 transition-all duration-300">
-            <div class="glass-panel max-w-4xl w-full p-8 relative transform scale-95 transition-all duration-300" id="eduModal-content">
-                <button onclick="closeEduModal()" class="absolute top-4 right-4 text-slate-400 hover:text-red-500 transition"><i data-lucide="x" class="w-6 h-6"></i></button>
-                <div class="flex flex-col lg:flex-row gap-6">
-                    <div class="flex-1"><h3 id="modal-edu-degree" class="text-3xl font-black text-white mb-2"></h3><p id="modal-edu-inst" class="text-emerald-500 font-mono text-sm mb-4 border-b border-white/10 pb-4"></p><p id="modal-edu-desc" class="text-slate-300 text-sm leading-relaxed"></p></div>
-                    <div id="modal-edu-right-side" class="w-full lg:w-72 shrink-0 flex flex-col gap-4">
-                        <div id="modal-thesis-card" class="bg-black/20 border border-white/5 p-5 rounded-xl hidden"><span class="text-[9px] font-bold text-white uppercase mono">THESIS</span><p id="modal-thesis-desc" class="text-xs text-emerald-400 font-bold italic"></p></div>
-                        <div id="modal-focus-card" class="bg-black/20 border border-white/5 p-5 rounded-xl hidden"><span class="text-[9px] font-bold text-white uppercase mono">FOCUS</span><p id="modal-focus-desc" class="text-xs text-sky-400 font-bold"></p></div>
-                    </div>
-                </div>
-            </div>
-        </div>
+                        </div>
+                    </div>
+                    
+                    <div id="olderEducationContainer" class="mt-8 pt-8 border-t border-white/5 grid sm:grid-cols-2 gap-4 hidden relative z-10"></div>
+                </div>
+            </section>
 
-        <div id="arsenalModal" class="fixed inset-0 modal-overlay z-[150] hidden flex items-center justify-center p-4 opacity-0 transition-all duration-300">
-            <div class="glass-panel w-full h-full max-h-[85vh] flex flex-col p-8 relative transform scale-95 transition-all duration-300" id="arsenalModal-content">
-                <div class="flex justify-between items-center mb-6 border-b border-white/10 pb-4 shrink-0"><h2 class="text-2xl font-black text-white">Full Arsenal</h2><button onclick="closeArsenalModal()" class="text-slate-400 hover:text-red-500 transition"><i data-lucide="x" class="w-6 h-6"></i></button></div>
-                <div id="all-arsenal-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 overflow-y-auto pr-2 custom-scrollbar"></div>
-            </div>
-        </div>
+            <section id="arsenal" class="mb-32 reveal pt-10">
+                <div class="text-center mb-16">
+                    <div class="inline-flex items-center justify-center p-3 bg-rose-500/10 rounded-full border border-rose-500/30 mb-4 shadow-[0_0_15px_rgba(244,63,94,0.2)]">
+                        <i data-lucide="crosshair" class="w-6 h-6 text-rose-500"></i>
+                    </div>
+                    <h2 class="text-3xl md:text-4xl font-black mb-2 text-white mono lowercase tracking-tight">
+                        <span class="text-slate-500">~/root/</span><span class="text-rose-500">arsenal</span>
+                    </h2>
+                    <p class="text-slate-300 text-sm font-bold uppercase tracking-[0.2em] mb-2">Cyber Arsenal</p>
+                    <p class="text-slate-500 text-[10px] mono uppercase tracking-widest">Tactical_Tools_&_Frameworks</p>
+                </div>
+                
+                <div class="bg-[#0A101F]/90 backdrop-blur-xl border border-white/5 rounded-3xl p-6 md:p-10 lg:p-12 relative overflow-hidden shadow-2xl light-edu-card">
+                    <div class="absolute -top-32 -left-32 w-64 h-64 bg-rose-500/5 rounded-full blur-3xl pointer-events-none"></div>
+                    <div class="absolute -bottom-32 -right-32 w-64 h-64 bg-rose-500/5 rounded-full blur-3xl pointer-events-none"></div>
+                    
+                    <div id="arsenalContainer" class="grid md:grid-cols-2 gap-6 relative z-10"></div>
+                    
+                    <div class="text-center mt-10 relative z-10">
+                        <button id="loadMoreArsBtn" class="hidden px-8 py-3 border border-rose-500/30 rounded-full text-rose-500 text-xs font-bold hover:bg-rose-500/20 transition mono shadow-[0_0_15px_rgba(244,63,94,0.2)] hover:shadow-[0_0_25px_rgba(244,63,94,0.4)] bg-black/20">LOAD_MORE_ARSENAL //...</button>
+                    </div>
+                </div>
+            </section>
 
-        <div id="projectModal" class="fixed inset-0 modal-overlay z-[150] hidden flex items-center justify-center p-4 opacity-0 transition-all duration-300">
-            <div class="glass-panel w-full h-full max-h-[85vh] flex flex-col p-8 relative transform scale-95 transition-all duration-300" id="projectModal-content">
-                <div class="flex justify-between items-center mb-6 border-b border-white/10 pb-4 shrink-0"><h2 class="text-2xl font-black text-white">Projects</h2><button onclick="closeProjectModal()" class="text-slate-400 hover:text-red-500 transition"><i data-lucide="x" class="w-6 h-6"></i></button></div>
-                <div id="all-project-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6 overflow-y-auto pr-2 custom-scrollbar"></div>
-            </div>
-        </div>
+            <section id="project" class="mb-32 reveal pt-10">
+                <div class="text-center mb-16">
+                    <div class="inline-flex items-center justify-center p-3 bg-purple-500/10 rounded-full border border-purple-500/30 mb-4 shadow-[0_0_15px_rgba(168,85,247,0.2)]">
+                        <i data-lucide="terminal-square" class="w-6 h-6 text-purple-500"></i>
+                    </div>
+                    <h2 class="text-3xl md:text-4xl font-black mb-2 text-white mono lowercase tracking-tight">
+                        <span class="text-slate-500">~/root/</span><span class="text-purple-500">projects</span>
+                    </h2>
+                    <p class="text-slate-300 text-sm font-bold uppercase tracking-[0.2em] mb-2">Active Deployments</p>
+                    <p class="text-slate-500 text-[10px] mono uppercase tracking-widest">Executing_Operations</p>
+                </div>
+                
+                <div class="bg-[#0A101F]/90 backdrop-blur-xl border border-white/5 rounded-3xl p-6 md:p-10 lg:p-12 relative overflow-hidden shadow-2xl light-edu-card">
+                    <div class="absolute -top-32 -left-32 w-64 h-64 bg-purple-500/5 rounded-full blur-3xl pointer-events-none"></div>
+                    <div class="absolute -bottom-32 -right-32 w-64 h-64 bg-purple-500/5 rounded-full blur-3xl pointer-events-none"></div>
+                    
+                    <div id="projectContainer" class="grid md:grid-cols-2 gap-8 relative z-10"></div>
 
-        <div id="achModal" class="fixed inset-0 modal-overlay z-[150] hidden flex items-center justify-center p-4 opacity-0 transition-all duration-300">
-            <div class="glass-panel w-full h-full max-h-[85vh] flex flex-col p-8 relative transform scale-95 transition-all duration-300" id="achModal-content">
-                <div class="flex justify-between items-center mb-6 border-b border-white/10 pb-4 shrink-0"><h2 class="text-2xl font-black text-white">Certs</h2><button onclick="closeAchModal()" class="text-slate-400 hover:text-red-500 transition"><i data-lucide="x" class="w-6 h-6"></i></button></div>
-                <div id="all-ach-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 overflow-y-auto pr-2 custom-scrollbar"></div>
-            </div>
-        </div>
+                    <div class="text-center mt-10 relative z-10">
+                        <button id="loadMoreProjBtn" class="hidden px-8 py-3 border border-purple-500/30 rounded-full text-purple-500 text-xs font-bold hover:bg-purple-500/20 transition mono shadow-[0_0_15px_rgba(168,85,247,0.2)] hover:shadow-[0_0_25px_rgba(168,85,247,0.4)] bg-black/20">LOAD_MORE_PROJECTS //...</button>
+                    </div>
+                </div>
+            </section>
 
-    </div> 
+            <section id="achievements" class="mb-32 reveal pt-10">
+                <div class="text-center mb-16">
+                    <div class="inline-flex items-center justify-center p-3 bg-amber-500/10 rounded-full border border-amber-500/30 mb-4 shadow-[0_0_15px_rgba(245,158,11,0.2)]">
+                        <i data-lucide="award" class="w-6 h-6 text-amber-500"></i>
+                    </div>
+                    <h2 class="text-3xl md:text-4xl font-black mb-2 text-white mono lowercase tracking-tight">
+                        <span class="text-slate-500">~/root/</span><span class="text-amber-500">achievements</span>
+                    </h2>
+                    <p class="text-slate-300 text-sm font-bold uppercase tracking-[0.2em] mb-2">Achievements & Certifications</p>
+                    <p class="text-slate-500 text-[10px] mono uppercase tracking-widest">Verified_Credentials</p>
+                </div>
+                
+                <div class="bg-[#0A101F]/90 backdrop-blur-xl border border-white/5 rounded-3xl p-6 md:p-10 lg:p-12 relative overflow-hidden shadow-2xl light-edu-card">
+                    <div class="absolute -top-32 -left-32 w-64 h-64 bg-amber-500/5 rounded-full blur-3xl pointer-events-none"></div>
+                    <div class="absolute -bottom-32 -right-32 w-64 h-64 bg-amber-500/5 rounded-full blur-3xl pointer-events-none"></div>
+                    
+                    <div id="certContainer" class="grid md:grid-cols-2 gap-6 relative z-10"></div>
 
-    <script>
-        lucide.createIcons();
-        const API_BASE = 'https://iammahmudul.onrender.com/api';
-        let globalEduData = [], allArsenalItems = [], allProjectItems = [], allAchItems = [], allGalleryItems = [];
+                    <div class="text-center mt-10 relative z-10">
+                        <button id="loadMoreAchBtn" class="hidden px-8 py-3 border border-amber-500/30 rounded-full text-amber-500 text-xs font-bold hover:bg-amber-500/20 transition mono shadow-[0_0_15px_rgba(245,158,11,0.2)] hover:shadow-[0_0_25px_rgba(245,158,11,0.4)] bg-black/20">LOAD_MORE_RECORDS //...</button>
+                    </div>
+                </div>
+            </section>
 
-        // ================= PANIC BUTTON LOGIC =================
-        function triggerPanic() {
-            const overlay = document.getElementById('panic-overlay');
-            const status = document.getElementById('panic-status');
-            overlay.style.display = 'flex';
-            overlay.classList.add('panic-active');
-            
-            setTimeout(() => { status.innerText = "OVERWRITING DISK SECTORS [██████    ]"; }, 1000);
-            setTimeout(() => { status.innerText = "PURGING MEMORY KERNEL [██████████]"; }, 2000);
-            setTimeout(() => { 
-                document.body.innerHTML = "<div style='background:black;height:100vh;width:100vw;color:#333;font-family:monospace;padding:20px;'>FATAL ERROR: OS NOT FOUND.<br>NO BOOTABLE DEVICE.</div>";
-            }, 3000);
-        }
+            <section id="terminal" class="mb-32 reveal pt-10">
+                <div class="text-center mb-12">
+                    <div class="inline-flex items-center justify-center p-3 bg-red-500/10 rounded-full border border-red-500/30 mb-4 shadow-[0_0_15px_rgba(239,68,68,0.2)]">
+                        <i data-lucide="terminal" class="w-6 h-6 text-red-500"></i>
+                    </div>
+                    <h2 class="text-3xl md:text-4xl font-black mb-2 text-white mono uppercase tracking-tight">
+                        <span class="text-slate-500">~/root/</span><span class="text-red-500">offensive_shell</span>
+                    </h2>
+                    <p class="text-slate-300 text-sm font-bold uppercase tracking-[0.2em] mb-2">Interactive Interface</p>
+                </div>
+                <div id="terminal-box" class="max-w-3xl mx-auto transition-colors duration-500">
+                    <div class="terminal-header">
+                        <div class="flex gap-2">
+                            <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                            <div class="w-3 h-3 rounded-full bg-amber-500"></div>
+                            <div class="w-3 h-3 rounded-full bg-emerald-500"></div>
+                        </div>
+                        <span class="text-[10px] mono text-slate-400">mh_root@offensive-node: ~</span>
+                    </div>
+                    <div class="terminal-content custom-scrollbar" id="term-body" onclick="document.getElementById('term-input').focus()">
+                        <p class="mb-2">Secure Shell V3.0 (Red Team Ed.). Type 'help' to see commands.</p>
+                        <p class="mb-4 text-[10px] text-slate-500">Hint: Explore the file system. Are you root?</p>
+                        <div id="term-outputs"></div>
+                        
+                        <div class="terminal-input-line mt-2 flex items-start gap-2">
+                            <span id="term-prompt" class="text-emerald-500 font-bold whitespace-nowrap shrink-0">mh_guest@offensive-node:~$</span>
+                            <input type="text" id="term-input" autocomplete="off" spellcheck="false" class="bg-transparent border-none outline-none text-white flex-1 min-w-0">
+                        </div>
+                    </div>
+                </div>
+            </section>
 
-        // ================= HEX DUMP SNIFFER LOGIC =================
-        function generateHex() {
-            const hexChars = "0123456789ABCDEF";
-            let line = "";
-            for(let i=0; i<8; i++) {
-                let block = "";
-                for(let j=0; j<4; j++) block += hexChars[Math.floor(Math.random() * 16)];
-                line += block + " ";
-            }
-            return line;
-        }
-        function startHexSniffer() {
-            const container = document.getElementById('hex-logs');
-            if(!container) return;
-            setInterval(() => {
-                const p = document.createElement('div');
-                p.innerHTML = generateHex();
-                container.appendChild(p);
-                if(container.childNodes.length > 25) container.removeChild(container.firstChild);
-            }, 100);
-        }
+            <section id="archive" class="mb-32 reveal pt-10">
+                <div class="text-center mb-16">
+                    <div class="inline-flex items-center justify-center p-3 bg-sky-500/10 rounded-full border border-sky-500/30 mb-4 shadow-[0_0_15px_rgba(14,165,233,0.2)]">
+                        <i data-lucide="database" class="w-6 h-6 text-sky-500"></i>
+                    </div>
+                    <h2 class="text-3xl md:text-4xl font-black mb-2 text-white mono lowercase tracking-tight">
+                        <span class="text-slate-500">~/root/</span><span class="text-sky-500">archive</span>
+                    </h2>
+                    <p class="text-slate-300 text-sm font-bold uppercase tracking-[0.2em] mb-2">Visual Archives</p>
+                    <p class="text-slate-500 text-[10px] mono uppercase tracking-widest">Secure_Gallery_Access</p>
+                </div>
+                <div id="galleryContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"></div>
+                <div class="text-center mt-12">
+                    <button id="loadMoreBtn" class="hidden px-8 py-3 border border-sky-500/30 rounded-full text-sky-500 text-xs font-bold hover:bg-sky-500/20 transition mono shadow-[0_0_15px_rgba(14,165,233,0.2)] hover:shadow-[0_0_25px_rgba(14,165,233,0.4)] bg-black/20">LOAD_MORE_ARCHIVES //...</button>
+                </div>
+            </section>
 
-        // ================= IDS MONITOR LOGIC =================
-        const idsLogs = ["<span class='text-emerald-500'>[OK]</span> Traffic normalized.", "<span class='text-amber-500'>[WARN]</span> Anomalous packet detected.", "<span class='text-red-500'>[ALERT]</span> Failed SSH login.", "<span class='text-sky-500'>[INFO]</span> DPI active.", "<span class='text-purple-500'>[IDS]</span> Signature match: CVE-Log4j dropped.", "<span class='text-red-500'>[ALERT]</span> SQLi blocked."];
-        function startIDS() {
-            const container = document.getElementById('ids-logs');
-            setInterval(() => {
-                const log = document.createElement('div');
-                log.className = "text-[10px] mono mb-1 border-b border-white/5 pb-1 opacity-80";
-                log.innerHTML = `<span class="text-slate-500">[${new Date().toLocaleTimeString()}]</span> ${idsLogs[Math.floor(Math.random() * idsLogs.length)]}`;
-                container.appendChild(log);
-                if(container.childNodes.length > 30) container.removeChild(container.firstChild);
-                container.scrollTop = container.scrollHeight;
-            }, Math.random() * 2500 + 1000);
-        }
+            <section id="communication" class="reveal mb-10 pt-10">
+                <div class="glass-panel p-6 md:p-16 border-t-2 border-sky-500/80 relative overflow-hidden rounded-[2rem]">
+                    <div class="cyber-line"></div>
+                    <div class="relative z-10 max-w-2xl mx-auto">
+                        <div class="text-center mb-12">
+                            <i data-lucide="radio-tower" class="w-10 h-10 text-sky-500 mx-auto mb-4 animate-pulse drop-shadow-[0_0_10px_rgba(14,165,233,0.8)]"></i>
+                            <h2 class="text-3xl md:text-4xl font-black mb-2 text-white mono lowercase tracking-tight">
+                                <span class="text-slate-500">~/root/</span><span class="text-sky-500">comms</span>
+                            </h2>
+                            <p class="text-slate-300 text-sm font-bold uppercase tracking-[0.2em] mb-4">Initialize Uplink</p>
+                            <p class="text-slate-400 text-sm leading-relaxed">Secure protocol established for recruitment and research collaboration.</p>
+                        </div>
+                        <form id="commForm" class="space-y-6">
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div class="group">
+                                    <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2 block mono">Identity_Name</label>
+                                    <div class="relative">
+                                        <i data-lucide="user" class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500"></i>
+                                        <input type="text" id="i-name" required placeholder="GUEST_USER" class="w-full bg-black/40 border border-white/10 focus:border-sky-500/80 rounded-2xl pl-12 pr-4 py-4 text-xs outline-none transition mono text-white">
+                                    </div>
+                                </div>
+                                <div class="group">
+                                    <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2 block mono">Contact_Vector</label>
+                                    <div class="relative">
+                                        <i data-lucide="mail" class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500"></i>
+                                        <input type="email" id="i-email" required placeholder="USER@DOMAIN.COM" class="w-full bg-black/40 border border-white/10 focus:border-sky-500/80 rounded-2xl pl-12 pr-4 py-4 text-xs outline-none transition mono text-white">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="group">
+                                <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2 block mono">Data_Payload</label>
+                                <div class="relative">
+                                    <i data-lucide="message-square" class="absolute left-4 top-6 w-4 h-4 text-slate-500"></i>
+                                    <textarea id="i-msg" required rows="4" placeholder="ENTER_MESSAGE_HERE..." class="w-full bg-black/40 border border-white/10 focus:border-sky-500/80 rounded-2xl pl-12 pr-4 py-6 text-xs outline-none transition mono text-white"></textarea>
+                                </div>
+                            </div>
+                            <button type="submit" id="submitBtn" class="w-full py-5 bg-sky-600 hover:bg-sky-500 text-white rounded-2xl font-bold text-[10px] uppercase tracking-[0.3em] shadow-[0_0_20px_rgba(14,165,233,0.3)] hover:shadow-[0_0_30px_rgba(14,165,233,0.5)] flex items-center justify-center gap-3 transition">
+                                <i data-lucide="send" class="w-4 h-4"></i> Transmit Packet
+                            </button>
+                        </form>
+                        <p id="formSuccess" class="hidden text-emerald-500 text-xs font-bold mono text-center mt-4 bg-emerald-500/10 p-2 rounded-lg border border-emerald-500/20">✓ Payload Transmitted Securely.</p>
+                    </div>
+                </div>
+            </section>
 
-        // ================= IP TRACKER LOGIC =================
-        async function scanTargetIP() {
-            const input = document.getElementById('target-ip-input').value.trim();
-            const btn = document.getElementById('scan-ip-btn');
-            const resBox = document.getElementById('ip-results');
-            const dataBox = document.getElementById('ip-data-box');
-            const loader = document.getElementById('ip-loader');
-            if(!input) return alert("Enter IP Address!");
-            btn.innerHTML = 'Scanning...'; btn.classList.add('opacity-50'); resBox.classList.remove('hidden'); dataBox.classList.add('hidden'); loader.classList.remove('hidden');
-            try {
-                const res = await fetch(`https://ipapi.co/${input}/json/`);
-                const data = await res.json();
-                if(data.error) throw new Error(data.reason);
-                document.getElementById('res-isp').innerText = data.org || "Unknown";
-                document.getElementById('res-country').innerText = data.country_name || "Unknown";
-                document.getElementById('res-city').innerText = data.city || "Unknown";
-                document.getElementById('res-coord').innerText = `${data.latitude}, ${data.longitude}`;
-                loader.classList.add('hidden'); dataBox.classList.remove('hidden');
-            } catch(e) { loader.classList.add('hidden'); document.getElementById('ip-error').classList.remove('hidden'); document.getElementById('ip-error').innerText = "[ERROR] Trace failed."; }
-            finally { btn.innerHTML = 'Scan'; btn.classList.remove('opacity-50'); lucide.createIcons(); }
-        }
+        </main>
 
-        // ================= BOOT & DYNAMIC DATA =================
-        const bootLines = ["<span class='text-red-500 font-bold'>[CRITICAL] KERNEL PANIC: ROOT ACCESS DETECTED!</span>", "OVERRIDING SYSTEM DEFENSES... <span class='text-emerald-500'>[OK]</span>", "INJECTING MALICIOUS PAYLOAD: <span class='text-purple-500'>0x89F3A1</span>...", "BYPASSING ENCRYPTION (AES-256)... <span class='text-emerald-500'>[OK]</span>", "ESTABLISHING BACKDOOR... <span class='text-emerald-500'>[CONNECTED]</span>"];
-        let lineIndex = 0;
-        function typeLine() {
-            const terminalText = document.getElementById('terminal-text');
-            if (lineIndex < bootLines.length) {
-                const p = document.createElement('p'); p.className = 'mb-1 text-slate-300'; p.innerHTML = `<span class="text-emerald-500">></span> ${bootLines[lineIndex]}`;
-                terminalText.appendChild(p); lineIndex++;
-                setTimeout(typeLine, Math.random() * 150 + 50);
-            } else {
-                document.getElementById('hack-progress-container').classList.remove('hidden'); document.getElementById('hack-progress-container').classList.add('flex');
-                setTimeout(() => {
-                    document.getElementById('hack-progress-bar').style.width = '100%';
-                    let count = 0; const counter = setInterval(() => { count += 2; if(count > 100) count = 100; document.getElementById('hack-progress-text').innerText = count + '%'; if(count === 100) { clearInterval(counter); finishBoot(); } }, 40);
-                }, 300);
-            }
-        }
-        function finishBoot() {
-            setTimeout(() => {
-                document.getElementById('hacked-text').classList.remove('hidden');
-                setTimeout(() => {
-                    document.getElementById('hacked-text').classList.add('hidden'); document.getElementById('joke-text').classList.remove('hidden');
-                    setTimeout(() => {
-                        document.getElementById('boot-screen').style.opacity = '0'; document.getElementById('main-content').style.opacity = '1';
-                        setTimeout(() => { 
-                            document.getElementById('boot-screen').style.display = 'none'; 
-                            initVisitorScanner(); 
-                            startIDS(); 
-                            startHexSniffer(); 
-                        }, 800);
-                    }, 2000);
-                }, 2000);
-            }, 500);
-        }
+        <footer class="pb-12 pt-10 text-center relative z-50 transition-colors duration-500">
+            <div class="flex justify-center gap-6 mb-12">
+                <a href="https://www.linkedin.com/in/mahmudul-hasan-0730a1211/" target="_blank" class="flex items-center justify-center w-12 h-12 rounded-full bg-black/40 hover:bg-sky-500/20 hover:text-sky-500 hover:border-sky-500/50 transition text-slate-400 border border-white/10"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg></a>
+                <a href="https://github.com/mhshibli" target="_blank" class="flex items-center justify-center w-12 h-12 rounded-full bg-black/40 hover:bg-emerald-500/20 hover:text-emerald-500 hover:border-emerald-500/50 transition text-slate-400 border border-white/10"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"></path><path d="M9 18c-4.51 2-5-2-7-2"></path></svg></a>
+                <a href="https://www.facebook.com/mahmudulhasan.shibli.5" target="_blank" class="flex items-center justify-center w-12 h-12 rounded-full bg-black/40 hover:bg-blue-600/20 hover:text-blue-600 hover:border-blue-600/50 transition text-slate-400 border border-white/10"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg></a>
+                <a href="https://www.instagram.com/shibli__mahmud/" target="_blank" class="flex items-center justify-center w-12 h-12 rounded-full bg-black/40 hover:bg-pink-500/20 hover:text-pink-500 hover:border-pink-500/50 transition text-slate-400 border border-white/10"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+            </div>
+            
+            <div class="flex flex-col items-center justify-center">
+                <p class="text-[8px] md:text-[9px] text-slate-500/70 font-bold uppercase tracking-[0.5em] mono ml-[0.5em] mb-6">
+                    BUILD_VERSION: 2.0.4 // REGION: BD-DHAKA // STATUS: SECURE
+                </p>
+                <div class="w-16 h-[2px] bg-[#0ea5e9]/50 rounded-full mb-6 light-mode-divider"></div>
+                <p id="footer-text" class="text-[10px] text-slate-500 font-bold uppercase tracking-widest mono">© 2026 MAHMUDUL HASAN. DESIGN: HYPER-SECURITY OS V2</p>
+            </div>
+        </footer>
 
-        async function initVisitorScanner() {
-            const scannerBox = document.getElementById('visitor-scanner'); scannerBox.classList.remove('opacity-0', 'translate-y-4');
-            document.getElementById('vis-os').innerText = navigator.platform;
-            const ua = navigator.userAgent;
-            document.getElementById('vis-browser').innerText = ua.includes("Firefox/") ? "Firefox" : ua.includes("Edg/") ? "Edge" : ua.includes("Chrome/") ? "Chrome" : "Safari";
-            try {
-                const res = await fetch('https://ipapi.co/json/'); const data = await res.json();
-                document.getElementById('vis-ip').innerText = data.ip || "127.0.0.1";
-                document.getElementById('vis-loc').innerText = `${data.city || 'N/A'}, ${data.country_code || ''}`;
-            } catch(e) { document.getElementById('vis-ip').innerText = "PROTECTED"; document.getElementById('vis-loc').innerText = "ENCRYPTED NODE"; }
-        }
+        <a href="#communication" id="floatingMsg" class="fixed bottom-6 right-6 md:bottom-10 md:right-10 z-[100] glass-panel border-sky-500/50 p-4 rounded-full text-sky-500 hover:text-sky-400 hover:bg-sky-500/10 shadow-[0_0_15px_rgba(14,165,233,0.3)] hover:shadow-[0_0_25px_rgba(14,165,233,0.5)] transition-all duration-300 transform hover:-translate-y-1 flex items-center justify-center group bg-black/60 backdrop-blur-xl">
+            <i data-lucide="message-square" class="w-6 h-6 group-hover:scale-110 transition-transform"></i>
+        </a>
 
-        async function fetchAllDynamicData() {
-            try {
-                const profRes = await fetch(`${API_BASE}/profile`); const profData = await profRes.json();
-                const actualProf = Array.isArray(profData) ? profData[0] : profData;
-                if(actualProf) {
-                    document.getElementById('profile-name').innerText = actualProf.full_name; document.getElementById('profile-title').innerText = actualProf.job_title;
-                    document.getElementById('profile-bio').innerHTML = actualProf.bio.replace(/\*\*(.*?)\*\*/g, '<span class="text-white font-bold">$1</span>').replace(/\*(.*?)\*/g, '<span class="text-sky-400 font-bold">$1</span>');
-                }
-                const eduRes = await fetch(`${API_BASE}/education`); globalEduData = await eduRes.json();
-                if(globalEduData[0]) {
-                    document.getElementById('edu-degree').innerText = globalEduData[0].degree; document.getElementById('edu-inst').innerText = globalEduData[0].institution; document.getElementById('edu-desc').innerText = globalEduData[0].details; document.getElementById('edu-year').innerText = globalEduData[0].pass_year;
-                    if(globalEduData[0].active_thesis) { document.getElementById('thesis-desc').innerText = globalEduData[0].active_thesis; document.getElementById('thesis-card').classList.remove('hidden'); }
-                    if(globalEduData[0].core_focus) { document.getElementById('focus-desc').innerText = globalEduData[0].core_focus; document.getElementById('core-focus-card').classList.remove('hidden'); }
-                    if(globalEduData.length > 1) {
-                        const olderCont = document.getElementById('olderEducationContainer'); olderCont.classList.remove('hidden'); olderCont.innerHTML = '';
-                        globalEduData.slice(1).forEach(e => olderCont.innerHTML += `<div onclick="openEduModal(${e.id})" class="bg-black/20 border border-white/5 p-4 rounded-xl flex items-center justify-between cursor-pointer hover:border-emerald-500/50 transition"><div><h5 class="text-sm font-bold text-white">${e.degree}</h5><p class="text-[10px] text-slate-500 mono">${e.institution}</p></div><span class="text-xs text-emerald-500 font-bold">${e.pass_year}</span></div>`);
-                    }
-                }
-                const arsRes = await fetch(`${API_BASE}/arsenal`); allArsenalItems = await arsRes.json();
-                const arsCont = document.getElementById('arsenalContainer'); arsCont.innerHTML = '';
-                allArsenalItems.slice(0,2).forEach(i => { arsCont.innerHTML += `<div class="bg-black/20 border border-white/5 p-6 rounded-2xl flex flex-col h-full"><h3 class="text-xl font-bold text-white mb-3">${i.title}</h3><p class="text-xs text-slate-400 leading-relaxed">${i.details}</p></div>`; });
-                if(allArsenalItems.length > 2) document.getElementById('loadMoreArsBtn').classList.remove('hidden');
-                
-                const projRes = await fetch(`${API_BASE}/projects`); allProjectItems = await projRes.json();
-                const projCont = document.getElementById('projectContainer'); projCont.innerHTML = '';
-                allProjectItems.slice(0,2).forEach(i => { projCont.innerHTML += `<div class="bg-black/20 border border-white/5 p-6 rounded-2xl flex flex-col h-full"><h3 class="text-xl font-bold text-purple-400 mb-3">${i.title}</h3><p class="text-xs text-slate-400 leading-relaxed">${i.description}</p></div>`; });
-                if(allProjectItems.length > 2) document.getElementById('loadMoreProjBtn').classList.remove('hidden');
+        <div id="galleryModal" class="fixed inset-0 modal-overlay z-[150] hidden flex items-center justify-center p-4 md:p-10 opacity-0 transition-opacity duration-300">
+            <div class="glass-panel w-full h-full max-h-[85vh] flex flex-col p-6 md:p-8 relative transform scale-95 transition-transform duration-300" id="galleryModal-content">
+                <div class="flex justify-between items-center mb-6 border-b border-white/10 pb-4 shrink-0">
+                    <div><h2 class="text-2xl font-black text-white">Complete <span class="text-sky-500">Archives</span></h2></div>
+                    <button onclick="closeGalleryModal()" class="text-slate-400 hover:text-red-500 bg-black/40 p-2 rounded-full border border-white/5 transition"><i data-lucide="x" class="w-6 h-6"></i></button>
+                </div>
+                <div id="all-gallery-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 overflow-y-auto pr-2 pb-4 flex-1 custom-scrollbar content-start auto-rows-max"></div>
+            </div>
+        </div>
+        
+        <div id="singleLightbox" class="fixed inset-0 modal-overlay z-[200] hidden flex items-center justify-center p-4 opacity-0 transition-opacity duration-300">
+            <div class="glass-panel max-w-3xl w-full p-6 md:p-8 relative transform scale-95 transition-transform duration-300 border-sky-500/50 shadow-[0_0_30px_rgba(14,165,233,0.15)]" id="singleLightbox-content">
+                <button onclick="closeSingleLightbox()" class="absolute top-4 right-4 text-slate-400 hover:text-red-500 bg-black/40 p-2 rounded-full border border-white/5 z-10 transition"><i data-lucide="x" class="w-6 h-6"></i></button>
+                <div id="modal-body" class="mt-2 text-white text-center"></div>
+            </div>
+        </div>
 
-                const achRes = await fetch(`${API_BASE}/achievements`); allAchItems = await achRes.json();
-                const achCont = document.getElementById('certContainer'); achCont.innerHTML = '';
-                allAchItems.slice(0,2).forEach(i => { achCont.innerHTML += `<div class="bg-black/20 border border-white/5 p-6 rounded-2xl flex flex-col h-full"><h3 class="text-lg font-bold text-amber-500 mb-2">${i.title}</h3><p class="text-xs text-slate-400 leading-relaxed">${i.organization}</p></div>`; });
-                if(allAchItems.length > 2) document.getElementById('loadMoreAchBtn').classList.remove('hidden');
+        <div id="eduModal" class="fixed inset-0 modal-overlay z-[200] hidden flex items-center justify-center p-4 opacity-0 transition-opacity duration-300">
+            <div class="glass-panel max-w-4xl w-full p-6 md:p-8 relative transform scale-95 transition-transform duration-300 border-emerald-500/50 shadow-[0_0_30px_rgba(16,185,129,0.15)]" id="eduModal-content">
+                <button onclick="closeEduModal()" class="absolute top-4 right-4 text-slate-400 hover:text-red-500 bg-black/40 p-2 rounded-full border border-white/5 z-20 transition"><i data-lucide="x" class="w-6 h-6"></i></button>
+                <div class="flex flex-col lg:flex-row gap-6 relative z-10">
+                    <div class="flex-1">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="bg-emerald-500/20 p-2 rounded-full border border-emerald-500/30">
+                                <i data-lucide="cpu" class="w-5 h-5 text-emerald-500"></i>
+                            </div>
+                            <span class="text-[10px] font-bold text-emerald-500 uppercase tracking-[0.3em] mono">DATA_NODE_EXPANDED</span>
+                        </div>
+                        <h3 id="modal-edu-degree" class="text-2xl md:text-3xl font-black text-white mb-2 leading-tight">Degree Name</h3>
+                        <p id="modal-edu-inst" class="text-emerald-500 font-mono text-sm mb-4 border-b border-white/10 pb-4">Institution Name</p>
+                        <div class="bg-black/30 border border-white/5 p-5 rounded-xl mb-4 shadow-inner">
+                            <p id="modal-edu-desc" class="text-slate-300 text-sm leading-relaxed">Description goes here.</p>
+                        </div>
+                        <div class="inline-flex items-center gap-3 bg-emerald-500/10 border border-emerald-500/20 px-4 py-2 rounded-lg">
+                            <i data-lucide="calendar" class="w-4 h-4 text-emerald-500"></i>
+                            <span class="text-xs text-emerald-500 font-mono font-bold" id="modal-edu-year">Year</span>
+                        </div>
+                    </div>
+                    <div id="modal-edu-right-side" class="w-full lg:w-72 shrink-0 flex flex-col gap-4 justify-center">
+                        <div id="modal-thesis-card" class="bg-black/20 border border-white/5 p-5 rounded-xl hover:border-emerald-500/40 transition duration-300 shadow-lg light-edu-inner hidden">
+                            <div class="flex items-center gap-2 mb-3">
+                                <div class="bg-emerald-500/20 p-1.5 rounded-full border border-emerald-500/20">
+                                    <i data-lucide="microscope" class="w-4 h-4 text-emerald-500"></i>
+                                </div>
+                                <span class="text-[9px] font-bold text-white uppercase tracking-widest mono">ACTIVE THESIS</span>
+                            </div>
+                            <p id="modal-thesis-desc" class="text-xs text-emerald-400 font-bold italic leading-relaxed"></p>
+                        </div>
+                        <div id="modal-focus-card" class="bg-black/20 border border-white/5 p-5 rounded-xl hover:border-sky-500/40 transition duration-300 shadow-lg light-edu-inner hidden">
+                            <div class="flex items-center gap-2 mb-3">
+                                <div class="bg-sky-500/20 p-1.5 rounded-full border border-sky-500/20">
+                                    <i data-lucide="book-open" class="w-4 h-4 text-sky-500"></i>
+                                </div>
+                                <span class="text-[9px] font-bold text-white uppercase tracking-widest mono">CORE FOCUS</span>
+                            </div>
+                            <p id="modal-focus-desc" class="text-xs text-sky-400 font-bold leading-relaxed"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-                const galRes = await fetch(`${API_BASE}/gallery`); allGalleryItems = await galRes.json();
-                const galCont = document.getElementById('galleryContainer'); galCont.innerHTML = '';
-                allGalleryItems.slice(0,4).forEach(i => { galCont.innerHTML += `<div class="glass-panel p-2 rounded-2xl cursor-pointer hover:border-sky-500/80 transition" onclick="openSingleLightbox('${i.image_url}', '${i.title}', '${i.details}')"><img src="${i.image_url}" class="h-48 w-full object-cover rounded-xl mb-3"><p class="text-xs font-bold text-sky-500 px-2 truncate">${i.title}</p></div>`; });
-                if(allGalleryItems.length > 4) document.getElementById('loadMoreBtn').classList.remove('hidden');
-                lucide.createIcons();
-            } catch(e) {}
-        }
+        <div id="arsenalModal" class="fixed inset-0 modal-overlay z-[150] hidden flex items-center justify-center p-4 md:p-10 opacity-0 transition-opacity duration-300">
+            <div class="glass-panel w-full h-full max-h-[85vh] flex flex-col p-6 md:p-8 relative transform scale-95 transition-transform duration-300 border-rose-500/30" id="arsenalModal-content">
+                <div class="flex justify-between items-center mb-6 border-b border-white/10 pb-4 shrink-0">
+                    <div><h2 class="text-2xl font-black text-white">Complete <span class="text-rose-500">Arsenal</span></h2></div>
+                    <button onclick="closeArsenalModal()" class="text-slate-400 hover:text-red-500 bg-black/40 p-2 rounded-full border border-white/5 transition"><i data-lucide="x" class="w-6 h-6"></i></button>
+                </div>
+                <div id="all-arsenal-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 overflow-y-auto pr-2 pb-4 flex-1 custom-scrollbar content-start auto-rows-max"></div>
+            </div>
+        </div>
 
-        // ================= TERMINAL LOGIC =================
-        const termInput = document.getElementById('term-input');
-        const termOutputs = document.getElementById('term-outputs');
-        let isTermRoot = false;
-        termInput.addEventListener('keydown', async (e) => {
-            if (e.key === 'Enter') {
-                const val = termInput.value.trim();
-                const user = isTermRoot ? 'root' : 'mh_guest';
-                const symbol = isTermRoot ? '#' : '$';
-                const line = document.createElement('div');
-                line.className = "flex items-start gap-2 mb-1";
-                line.innerHTML = `<span class="${isTermRoot ? 'text-red-500' : 'text-emerald-500'} font-bold whitespace-nowrap">${user}@offensive-node:~${symbol}</span> <span class="text-white">${val}</span>`;
-                termOutputs.appendChild(line); termInput.value = "";
-                const cmd = val.toLowerCase();
-                const out = (t) => { const d = document.createElement('div'); d.className = "text-slate-300 mb-2 whitespace-pre-wrap"; d.innerHTML = t; termOutputs.appendChild(d); };
-                if(cmd === "help") out("whoami, ls, pwd, cat, clear, hack, date, uname, ifconfig, uptime, exit");
-                else if(cmd === "whoami") out(isTermRoot ? "root" : "mh_guest");
-                else if(cmd === "ls") out("<span class='text-sky-400'>target_ips.txt    payload.sh    notes.md    secret_flag.txt</span>");
-                else if(cmd === "pwd") out(isTermRoot ? "/root" : "/home/mh_guest");
-                else if(cmd === "clear") termOutputs.innerHTML = "";
-                else if(cmd === "date") out(new Date().toUTCString());
-                else if(cmd === "uname") out("Linux offensive-node 6.1.0-kali-amd64 x86_64 GNU/Linux");
-                else if(cmd === "hack" || cmd === "sudo su") { isTermRoot = true; out("<span class='text-red-500 font-bold'>SYSTEM OVERRIDE: Root privileges granted.</span>"); }
-                else if(cmd.startsWith("cat ")) {
-                    const f = cmd.split(' ')[1];
-                    if(f === "secret_flag.txt") out(isTermRoot ? "<span class='text-emerald-500 font-bold'>flag{R3D_T34M_M4ST3R}</span>" : "<span class='text-red-500'>Permission denied.</span>");
-                    else out("File content simulated.");
-                }
-                else if(cmd === "exit") out("Session terminated.");
-                else if(cmd !== "") out(`bash: ${cmd}: command not found`);
-                document.getElementById('term-body').scrollTop = document.getElementById('term-body').scrollHeight;
-            }
-        });
+        <div id="projectModal" class="fixed inset-0 modal-overlay z-[150] hidden flex items-center justify-center p-4 md:p-10 opacity-0 transition-opacity duration-300">
+            <div class="glass-panel w-full h-full max-h-[85vh] flex flex-col p-6 md:p-8 relative transform scale-95 transition-transform duration-300 border-purple-500/30" id="projectModal-content">
+                <div class="flex justify-between items-center mb-6 border-b border-white/10 pb-4 shrink-0">
+                    <div><h2 class="text-2xl font-black text-white">All <span class="text-purple-500">Deployments</span></h2></div>
+                    <button onclick="closeProjectModal()" class="text-slate-400 hover:text-red-500 bg-black/40 p-2 rounded-full border border-white/5 transition"><i data-lucide="x" class="w-6 h-6"></i></button>
+                </div>
+                <div id="all-project-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6 overflow-y-auto pr-2 pb-4 flex-1 custom-scrollbar content-start auto-rows-max"></div>
+            </div>
+        </div>
 
-        // ================= MODAL HELPERS =================
-        function openGalleryModal() { 
-            const grid = document.getElementById('all-gallery-grid'); grid.innerHTML = '';
-            allGalleryItems.forEach(i => grid.innerHTML += `<div class="glass-panel p-2 rounded-xl cursor-pointer" onclick="openSingleLightbox('${i.image_url}', '${i.title}', '${i.details}')"><img src="${i.image_url}" class="h-40 w-full object-cover rounded-lg mb-2"><p class="text-xs font-bold text-sky-500">${i.title}</p></div>`);
-            document.getElementById('galleryModal').classList.remove('hidden'); setTimeout(() => document.getElementById('galleryModal').classList.remove('opacity-0'), 10); 
-        }
-        function closeGalleryModal() { document.getElementById('galleryModal').classList.add('opacity-0'); setTimeout(() => document.getElementById('galleryModal').classList.add('hidden'), 300); }
-        
-        function openSingleLightbox(img, title, details) {
-            document.getElementById('modal-body').innerHTML = `<img src="${img}" class="max-h-[50vh] mx-auto rounded-xl mb-4"><h3 class="text-xl font-bold text-sky-500">${title}</h3><p class="text-sm text-slate-300 mt-2">${details}</p>`;
-            document.getElementById('singleLightbox').classList.remove('hidden'); setTimeout(() => document.getElementById('singleLightbox').classList.remove('opacity-0'), 10);
-        }
-        function closeSingleLightbox() { document.getElementById('singleLightbox').classList.add('opacity-0'); setTimeout(() => document.getElementById('singleLightbox').classList.add('hidden'), 300); }
+        <div id="achModal" class="fixed inset-0 modal-overlay z-[150] hidden flex items-center justify-center p-4 md:p-10 opacity-0 transition-opacity duration-300">
+            <div class="glass-panel w-full h-full max-h-[85vh] flex flex-col p-6 md:p-8 relative transform scale-95 transition-transform duration-300 border-amber-500/30" id="achModal-content">
+                <div class="flex justify-between items-center mb-6 border-b border-white/10 pb-4 shrink-0">
+                    <div><h2 class="text-2xl font-black text-white">All <span class="text-amber-500">Achievements</span></h2></div>
+                    <button onclick="closeAchModal()" class="text-slate-400 hover:text-red-500 bg-black/40 p-2 rounded-full border border-white/5 transition"><i data-lucide="x" class="w-6 h-6"></i></button>
+                </div>
+                <div id="all-ach-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 overflow-y-auto pr-2 pb-4 flex-1 custom-scrollbar content-start auto-rows-max"></div>
+            </div>
+        </div>
 
-        function openEduModal(id) {
-            const edu = globalEduData.find(e => e.id === id); if(!edu) return;
-            document.getElementById('modal-edu-degree').innerText = edu.degree; document.getElementById('modal-edu-inst').innerText = edu.institution; document.getElementById('modal-edu-desc').innerText = edu.details;
-            document.getElementById('eduModal').classList.remove('hidden'); setTimeout(() => document.getElementById('eduModal').classList.remove('opacity-0'), 10);
-        }
-        function closeEduModal() { document.getElementById('eduModal').classList.add('opacity-0'); setTimeout(() => document.getElementById('eduModal').classList.add('hidden'), 300); }
+    </div> 
 
-        function openArsenalModal() {
-            const grid = document.getElementById('all-arsenal-grid'); grid.innerHTML = '';
-            allArsenalItems.forEach(i => grid.innerHTML += `<div class="bg-black/20 border border-white/5 p-6 rounded-2xl"><h3 class="text-lg font-bold text-white mb-2">${i.title}</h3><p class="text-xs text-slate-400">${i.details}</p></div>`);
-            document.getElementById('arsenalModal').classList.remove('hidden'); setTimeout(() => document.getElementById('arsenalModal').classList.remove('opacity-0'), 10);
-        }
-        function closeArsenalModal() { document.getElementById('arsenalModal').classList.add('opacity-0'); setTimeout(() => document.getElementById('arsenalModal').classList.add('hidden'), 300); }
+    <script>
+        lucide.createIcons();
+        const API_BASE = 'https://iammahmudul.onrender.com/api';
 
-        function openProjectModal() {
-            const grid = document.getElementById('all-project-grid'); grid.innerHTML = '';
-            allProjectItems.forEach(i => grid.innerHTML += `<div class="bg-black/20 border border-white/5 p-6 rounded-2xl"><h3 class="text-lg font-bold text-purple-400 mb-2">${i.title}</h3><p class="text-xs text-slate-400">${i.description}</p></div>`);
-            document.getElementById('projectModal').classList.remove('hidden'); setTimeout(() => document.getElementById('projectModal').classList.remove('opacity-0'), 10);
-        }
-        function closeProjectModal() { document.getElementById('projectModal').classList.add('opacity-0'); setTimeout(() => document.getElementById('projectModal').classList.add('hidden'), 300); }
+        // ================= 1. LIVE IDS MONITOR LOGIC =================
+        const idsLogs = [
+            "<span class='text-emerald-500'>[OK]</span> Traffic normalized on port 443.",
+            "<span class='text-amber-500'>[WARN]</span> Anomalous packet size detected from 104.28.x.x.",
+            "<span class='text-red-500'>[ALERT]</span> Multiple failed SSH logins from 192.168.1.45.",
+            "<span class='text-sky-500'>[INFO]</span> Deep packet inspection active.",
+            "<span class='text-purple-500'>[IDS]</span> Signature match: CVE-2021-44228 attempt dropped.",
+            "<span class='text-amber-500'>[WARN]</span> High volume of ICMP echo requests.",
+            "<span class='text-emerald-500'>[OK]</span> Firewall rules updated successfully.",
+            "<span class='text-red-500'>[ALERT]</span> SQL injection payload blocked in HTTP GET."
+        ];
+        function startIDS() {
+            const container = document.getElementById('ids-logs');
+            setInterval(() => {
+                const log = document.createElement('div');
+                const time = new Date().toLocaleTimeString();
+                log.className = "text-[10px] mono mb-1 border-b border-white/5 pb-1 opacity-80 hover:opacity-100 transition-opacity";
+                log.innerHTML = `<span class="text-slate-500">[${time}]</span> ${idsLogs[Math.floor(Math.random() * idsLogs.length)]}`;
+                container.appendChild(log);
+                if(container.childNodes.length > 30) container.removeChild(container.firstChild);
+                container.scrollTop = container.scrollHeight;
+            }, Math.random() * 2500 + 1000);
+        }
 
-        function openAchModal() {
-            const grid = document.getElementById('all-ach-grid'); grid.innerHTML = '';
-            allAchItems.forEach(i => grid.innerHTML += `<div class="bg-black/20 border border-white/5 p-6 rounded-2xl"><h3 class="text-lg font-bold text-amber-500 mb-2">${i.title}</h3><p class="text-xs text-slate-400">${i.organization}</p></div>`);
-            document.getElementById('achModal').classList.remove('hidden'); setTimeout(() => document.getElementById('achModal').classList.remove('opacity-0'), 10);
-        }
-        function closeAchModal() { document.getElementById('achModal').classList.add('opacity-0'); setTimeout(() => document.getElementById('achModal').classList.add('hidden'), 300); }
+        // ================= 2. CYBER TOOL: IP TRACKER LOGIC =================
+        async function scanTargetIP() {
+            const input = document.getElementById('target-ip-input').value.trim();
+            const btn = document.getElementById('scan-ip-btn');
+            const resultsBox = document.getElementById('ip-results');
+            const dataBox = document.getElementById('ip-data-box');
+            const errorBox = document.getElementById('ip-error');
+            const loader = document.getElementById('ip-loader');
 
-        // Core Listeners
-        window.addEventListener('load', () => { setTimeout(typeLine, 500); fetchAllDynamicData(); });
-        document.getElementById('themeToggle').onclick = () => { document.body.classList.toggle('light-mode'); document.getElementById('themeToggle').innerHTML = document.body.classList.contains('light-mode') ? '<i data-lucide="moon" class="w-4 h-4 text-slate-600"></i>' : '<i data-lucide="sun" class="w-4 h-4 text-amber-400"></i>'; lucide.createIcons(); };
-        document.getElementById('mobileMenuBtn').onclick = () => document.getElementById('mobileMenu').classList.toggle('hidden');
-        window.addEventListener("scroll", () => { document.querySelectorAll(".reveal").forEach(el => { if (el.getBoundingClientRect().top < window.innerHeight - 100) el.classList.add("active"); }); });
+            if(!input) return alert("Please enter a valid IP Address!");
 
-        // Comm Form
-        document.getElementById('commForm').onsubmit = async (e) => {
-            e.preventDefault();
-            await fetch(`${API_BASE}/messages`, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({identity_name: document.getElementById('i-name').value, contact_vector: document.getElementById('i-email').value, data_payload: document.getElementById('i-msg').value}) });
-            e.target.reset(); document.getElementById('formSuccess').classList.remove('hidden'); setTimeout(() => document.getElementById('formSuccess').classList.add('hidden'), 5000);
-        };
-    </script>
+            btn.innerHTML = '<i data-lucide="loader" class="w-4 h-4 animate-spin"></i> SCANNING...';
+            btn.classList.add('opacity-50', 'cursor-not-allowed');
+            lucide.createIcons();
+            
+            resultsBox.classList.remove('hidden');
+            dataBox.classList.add('hidden');
+            errorBox.classList.add('hidden');
+            loader.classList.remove('hidden');
+
+            try {
+                const res = await fetch(`https://ipapi.co/${input}/json/`);
+                const data = await res.json();
+
+                if(data.error) throw new Error(data.reason || "Invalid IP or Rate Limited");
+
+                document.getElementById('res-isp').innerText = data.org || data.asn || "Unknown ISP";
+                document.getElementById('res-country').innerText = data.country_name || "Unknown";
+                document.getElementById('res-city').innerText = data.city || "Unknown";
+                document.getElementById('res-coord').innerText = `${data.latitude || '0.00'}, ${data.longitude || '0.00'}`;
+
+                loader.classList.add('hidden');
+                dataBox.classList.remove('hidden');
+            } catch(e) {
+                loader.classList.add('hidden');
+                errorBox.classList.remove('hidden');
+                errorBox.innerText = `[ERROR] Failed to trace IP: ${e.message}`;
+            } finally {
+                btn.innerHTML = '<i data-lucide="search" class="w-4 h-4"></i> Scan';
+                btn.classList.remove('opacity-50', 'cursor-not-allowed');
+                lucide.createIcons();
+            }
+        }
+
+        // ================= SCARY BOOT SEQUENCE LOGIC =================
+        const bootLines = [
+            "<span class='text-red-500 font-bold'>[CRITICAL] KERNEL PANIC: UNAUTHORIZED ROOT ACCESS DETECTED!</span>",
+            "OVERRIDING SYSTEM DEFENSES... <span class='text-emerald-500'>[BYPASSED]</span>",
+            "INJECTING MALICIOUS PAYLOAD: <span class='text-purple-500'>0x89F3A1</span>...",
+            "<span class='text-red-500'>[!] DOWNLOADING SYSTEM REGISTRY AND SAVED CREDENTIALS...</span>",
+            "BYPASSING ENCRYPTION (AES-256)... <span class='text-emerald-500'>[OK]</span>",
+            "ESTABLISHING BACKDOOR CONNECTION... <span class='text-emerald-500'>[CONNECTED]</span>"
+        ];
+        
+        const terminalText = document.getElementById('terminal-text');
+        let lineIndex = 0;
+        
+        function typeLine() {
+            if (lineIndex < bootLines.length) {
+                const p = document.createElement('p');
+                p.className = 'mb-1 text-slate-300';
+                p.innerHTML = `<span class="text-emerald-500">></span> ${bootLines[lineIndex]}`;
+                terminalText.appendChild(p);
+                lineIndex++;
+                
+                let delay = Math.random() * 150 + 50; 
+                if (lineIndex === 4) delay = 800; 
+                
+                setTimeout(typeLine, delay);
+            } else {
+                const progContainer = document.getElementById('hack-progress-container');
+                const progBar = document.getElementById('hack-progress-bar');
+                const progText = document.getElementById('hack-progress-text');
+                
+                progContainer.classList.remove('hidden');
+                progContainer.classList.add('flex');
+                
+                setTimeout(() => {
+                    progBar.style.width = '100%';
+                    let count = 0;
+                    const counter = setInterval(() => {
+                        count += 2;
+                        if(count > 100) count = 100;
+                        progText.innerText = count + '%';
+                        if(count === 100) {
+                            clearInterval(counter);
+                            finishBoot();
+                        }
+                    }, 40);
+                }, 300);
+            }
+        }
+        
+        // ================= VISITOR FOOTPRINT SCANNER =================
+        async function initVisitorScanner() {
+            const scannerBox = document.getElementById('visitor-scanner');
+            scannerBox.classList.remove('opacity-0', 'translate-y-4');
+            
+            const os = navigator.platform || "Unknown OS";
+            document.getElementById('vis-os').innerText = os;
+            
+            const ua = navigator.userAgent;
+            let browser = "Unknown Browser";
+            if(ua.includes("Firefox/")) browser = "Mozilla Firefox";
+            else if(ua.includes("Edg/")) browser = "Microsoft Edge";
+            else if(ua.includes("Chrome/")) browser = "Google Chrome";
+            else if(ua.includes("Safari/")) browser = "Apple Safari";
+            document.getElementById('vis-browser').innerText = browser;
+
+            try {
+                const res = await fetch('https://ipapi.co/json/');
+                const data = await res.json();
+                document.getElementById('vis-ip').innerText = data.ip || "127.0.0.1 (PROXY)";
+                document.getElementById('vis-loc').innerText = `${data.city || 'Unknown'}, ${data.country_name || 'N/A'}`;
+            } catch(e) {
+                document.getElementById('vis-ip').innerText = `192.168.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}`;
+                document.getElementById('vis-loc').innerText = "ENCRYPTED NODE / PROXY";
+            }
+        }
+        
+        function finishBoot() {
+            setTimeout(() => {
+                document.getElementById('hack-progress-container').classList.add('hidden');
+                document.getElementById('terminal-text').classList.add('hidden');
+                
+                const hackedText = document.getElementById('hacked-text');
+                const jokeText = document.getElementById('joke-text');
+                
+                hackedText.classList.remove('hidden');
+                
+                setTimeout(() => {
+                    hackedText.classList.add('hidden');
+                    jokeText.classList.remove('hidden');
+                    
+                    setTimeout(() => {
+                        document.getElementById('boot-screen').style.opacity = '0';
+                        document.getElementById('boot-screen').style.transform = 'scale(1.1)';
+                        document.getElementById('main-content').style.opacity = '1';
+                        setTimeout(() => { 
+                            document.getElementById('boot-screen').style.display = 'none';
+                            initVisitorScanner(); 
+                            startIDS(); // START IDS MONITOR HERE
+                        }, 800);
+                    }, 2000);
+                }, 2000);
+            }, 500);
+        }
+
+        window.addEventListener('load', () => {
+            setTimeout(typeLine, 500);
+            fetchAllDynamicData(); 
+        });
+
+        // ================= 4. ADVANCED TERMINAL (INTERACTIVE CTF + 24 COMMANDS) =================
+        const termInput = document.getElementById('term-input');
+        const termOutputs = document.getElementById('term-outputs');
+        const termPrompt = document.getElementById('term-prompt');
+        const termBody = document.getElementById('term-body');
+        
+        let isRoot = false;
+        let currentDir = "~";
+        let cmdHistory = [];
+        let historyIndex = -1;
+
+        const fileSystem = {
+            "target_ips.txt": "192.168.1.44\n10.0.0.5\n172.16.254.1",
+            "payload.sh": "#!/bin/bash\necho 'Executing reverse shell...'\nnc -e /bin/sh 10.0.0.1 4444",
+            "notes.md": "- Bypass WAF before SQLi.\n- Check SMB port 445 on 10.0.0.5.\n- Escalate privileges using CVE-2021-4034.",
+            "shadow.bak": "root:$6$xyz$abc...123:19000:0:99999:7:::\nmh_guest:$6$def$456...789:19000:0:99999:7:::",
+            "secret_flag.txt": "Access Denied. Root privileges required to read this file."
+        };
+
+        const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+        function updatePrompt() {
+            const user = isRoot ? 'root' : 'mh_guest';
+            const symbol = isRoot ? '#' : '$';
+            const color = isRoot ? 'text-red-500 animate-pulse' : 'text-emerald-500';
+            
+            termPrompt.className = `${color} font-bold mr-2 whitespace-nowrap shrink-0`;
+            termPrompt.innerHTML = `${user}@offensive-node:<span class="text-sky-400">${currentDir}</span>${symbol}`;
+        }
+        updatePrompt();
+
+        termInput.addEventListener('keydown', (e) => {
+            if(e.key === 'ArrowUp') {
+                if(historyIndex < cmdHistory.length - 1) {
+                    historyIndex++;
+                    termInput.value = cmdHistory[cmdHistory.length - 1 - historyIndex];
+                }
+            } else if(e.key === 'ArrowDown') {
+                if(historyIndex > 0) {
+                    historyIndex--;
+                    termInput.value = cmdHistory[cmdHistory.length - 1 - historyIndex];
+                } else if (historyIndex === 0) {
+                    historyIndex = -1;
+                    termInput.value = "";
+                }
+            }
+        });
+
+        termInput.addEventListener('keydown', async (e) => {
+            if (e.key === 'Enter') {
+                const val = termInput.value.trim();
+                if(val) {
+                    cmdHistory.push(val);
+                    historyIndex = -1;
+                }
+                
+                const user = isRoot ? 'root' : 'mh_guest';
+                const symbol = isRoot ? '#' : '$';
+                const color = isRoot ? 'text-red-500' : 'text-emerald-500';
+                const line = document.createElement('div');
+                
+                line.className = "flex items-start gap-2 mb-1";
+                line.innerHTML = `<span class="${color} font-bold whitespace-nowrap shrink-0">${user}@offensive-node:<span class="text-sky-400">${currentDir}</span>${symbol}</span> <span class="text-white break-all">${val}</span>`;
+                termOutputs.appendChild(line);
+                termInput.value = "";
+                termBody.scrollTop = termBody.scrollHeight;
+
+                if (!val) return;
+
+                const args = val.split(' ').filter(Boolean);
+                const cmd = args[0].toLowerCase();
+                
+                termInput.disabled = true; 
+
+                const appendOut = (text, className="text-slate-300 mb-2 whitespace-pre-wrap leading-tight") => {
+                    const div = document.createElement('div');
+                    div.className = className;
+                    div.innerHTML = text;
+                    termOutputs.appendChild(div);
+                    termBody.scrollTop = termBody.scrollHeight;
+                    return div;
+                };
+
+                try {
+                    switch(cmd) {
+                        case "help":
+                            appendOut("Available Commands:<br>" + 
+                                      "  <b>whoami</b>    : Print current user<br>" +
+                                      "  <b>pwd</b>       : Print working directory<br>" +
+                                      "  <b>cd</b>        : Change directory<br>" +
+                                      "  <b>ls</b>        : List directory contents<br>" +
+                                      "  <b>cat</b>       : Read file content<br>" +
+                                      "  <b>uname</b>     : Print system information<br>" +
+                                      "  <b>ifconfig</b>  : View network interfaces<br>" +
+                                      "  <b>netstat</b>   : Print network connections<br>" +
+                                      "  <b>ps</b>        : Report current processes<br>" +
+                                      "  <b>top</b>       : Display system tasks<br>" +
+                                      "  <b>uptime</b>    : System uptime<br>" +
+                                      "  <b>history</b>   : Command history<br>" +
+                                      "  <b>date</b>      : System date and time<br>" +
+                                      "  <b>echo</b>      : Print text to terminal<br>" +
+                                      "  <b>ping</b>      : Send ICMP ECHO_REQUEST<br>" +
+                                      "  <b>nmap</b>      : Network exploration and security scanner<br>" +
+                                      "  <b>sqlmap</b>    : Automatic SQL injection tool<br>" +
+                                      "  <b>hydra</b>     : Network logon cracker<br>" +
+                                      "  <b>skills</b>    : View operator skill matrix<br>" +
+                                      "  <b>target</b>    : View current operation focus<br>" +
+                                      "  <b>clear</b>     : Clear terminal output<br>" +
+                                      "  <b>exit</b>      : Terminate session");
+                            break;
+                        case "whoami":
+                            appendOut(isRoot ? "root" : "mh_guest");
+                            break;
+                        case "pwd":
+                            appendOut(isRoot ? (currentDir === "~" ? "/root" : `/root/${currentDir.replace('~/','')}`) : (currentDir === "~" ? "/home/mh_guest" : `/home/mh_guest/${currentDir.replace('~/','')}`));
+                            break;
+                        case "cd":
+                            if(!args[1] || args[1] === "~") currentDir = "~";
+                            else if(args[1] === "..") {
+                                const parts = currentDir.split('/');
+                                if(parts.length > 1) { parts.pop(); currentDir = parts.join('/') || "/"; }
+                            } else currentDir = currentDir === "~" ? `~/${args[1]}` : currentDir === "/" ? `/${args[1]}` : `${currentDir}/${args[1]}`;
+                            updatePrompt();
+                            break;
+                        case "ls":
+                            if(currentDir === "~") appendOut(Object.keys(fileSystem).map(f => `<span class="text-sky-400">${f}</span>`).join('&nbsp;&nbsp;&nbsp;&nbsp;'));
+                            else appendOut("");
+                            break;
+                        case "cat":
+                            if(!args[1]) appendOut("cat: missing file operand", "text-red-500 mb-2");
+                            else if(fileSystem[args[1]] && currentDir === "~") {
+                                if(args[1] === "secret_flag.txt" || args[1] === "shadow.bak") {
+                                    if(isRoot) {
+                                        if(args[1] === "secret_flag.txt") appendOut("flag{R3D_T34M_M4ST3R_H4CK3R_UNL0CK3D}", "text-emerald-500 font-bold mb-2");
+                                        else appendOut(fileSystem[args[1]]);
+                                    } else appendOut("cat: Permission denied. Root privileges required.", "text-red-500 mb-2 font-bold");
+                                } else appendOut(fileSystem[args[1]]);
+                            } else appendOut(`cat: ${args[1]}: No such file or directory`, "text-red-500 mb-2");
+                            break;
+                        case "uname":
+                            appendOut(`Linux offensive-node 6.1.0-kali-amd64 #1 SMP PREEMPT_DYNAMIC Kali 6.1.27-1 x86_64 GNU/Linux`);
+                            break;
+                        case "ifconfig":
+                        case "ip":
+                            appendOut(`eth0: flags=4163&lt;UP,BROADCAST,RUNNING,MULTICAST&gt;  mtu 1500<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;inet 10.0.2.15  netmask 255.255.255.0  broadcast 10.0.2.255<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ether 08:00:27:11:22:33  txqueuelen 1000  (Ethernet)<br><br>lo:&nbsp;&nbsp; flags=73&lt;UP,LOOPBACK,RUNNING&gt;  mtu 65536<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;inet 127.0.0.1  netmask 255.0.0.0`);
+                            break;
+                        case "netstat":
+                            appendOut(`Active Internet connections (only servers)<br>Proto Recv-Q Send-Q Local Address           Foreign Address         State<br>tcp        0      0 0.0.0.0:22              0.0.0.0:* LISTEN<br>tcp        0      0 127.0.0.1:3306          0.0.0.0:* LISTEN<br>tcp6       0      0 :::80                   :::* LISTEN`);
+                            break;
+                        case "ps":
+                            appendOut(`PID   USER     TIME  COMMAND<br>  1   root     0:03  /sbin/init<br> 42   root     0:00  /usr/sbin/sshd -D<br> 88   www-data 0:01  nginx: worker process<br>104   ${isRoot?'root':'mh_guest'} 0:00  -bash`);
+                            break;
+                        case "top":
+                            appendOut(`top - ${new Date().toLocaleTimeString()} up 14 days,  2:32,  1 user,  load average: 0.12, 0.08, 0.05<br>Tasks: 104 total,   1 running, 103 sleeping<br>%Cpu(s):  2.5 us,  1.2 sy,  0.0 ni, 96.0 id,  0.2 wa<br>MiB Mem :   7954.2 total,   2145.6 free,   3450.1 used,   2358.5 buff/cache`);
+                            break;
+                        case "uptime":
+                            appendOut(`${new Date().toLocaleTimeString()} up 14 days,  2:32,  1 user,  load average: 0.12, 0.08, 0.05`);
+                            break;
+                        case "history":
+                            appendOut(cmdHistory.map((c, i) => `&nbsp;&nbsp;${i+1}&nbsp;&nbsp;${c}`).join('<br>'));
+                            break;
+                        case "date":
+                            appendOut(new Date().toUTCString());
+                            break;
+                        case "echo":
+                            appendOut(args.slice(1).join(" "));
+                            break;
+                        case "ping":
+                            const targetIp = args[1] || "8.8.8.8";
+                            const outPing = appendOut(`PING ${targetIp} 56(84) bytes of data.<br>`);
+                            for(let i=1; i<=3; i++) {
+                                await sleep(800);
+                                outPing.innerHTML += `64 bytes from ${targetIp}: icmp_seq=${i} ttl=54 time=${(Math.random()*20+10).toFixed(1)} ms<br>`;
+                                termBody.scrollTop = termBody.scrollHeight;
+                            }
+                            await sleep(500);
+                            outPing.innerHTML += `--- ${targetIp} ping statistics ---<br>3 packets transmitted, 3 received, 0% packet loss`;
+                            termBody.scrollTop = termBody.scrollHeight;
+                            break;
+                        case "nmap":
+                            const nIp = args[1] || "127.0.0.1";
+                            const outNmap = appendOut(`Starting Nmap 7.93 ( https://nmap.org ) at ${new Date().toUTCString()}<br>Nmap scan report for ${nIp}<br>Host is up (0.00013s latency).<br><br>`);
+                            await sleep(1500);
+                            outNmap.innerHTML += `PORT&nbsp;&nbsp;&nbsp;&nbsp;STATE SERVICE<br>22/tcp&nbsp;&nbsp;open&nbsp;&nbsp;ssh<br>80/tcp&nbsp;&nbsp;open&nbsp;&nbsp;http<br>${isRoot ? '443/tcp&nbsp;open&nbsp;&nbsp;https<br>3306/tcp open&nbsp;&nbsp;mysql<br>' : ''}<br>Nmap done: 1 IP address (1 host up) scanned in 1.34 seconds`;
+                            termBody.scrollTop = termBody.scrollHeight;
+                            break;
+                        case "sqlmap":
+                            const outSql = appendOut(`___<br>__H__<br>___ ___[']_____ ___ ___  {1.6.8#stable}<br>|_ -| . [']     | .'| . |<br>|___|_  ["]_|_|_|__,|  _|<br>      |_|V...       |_|   https://sqlmap.org<br><br>[*] starting @ ${new Date().toLocaleTimeString()}<br>`);
+                            await sleep(800); outSql.innerHTML += `[INFO] testing connection to the target URL<br>`; termBody.scrollTop = termBody.scrollHeight;
+                            await sleep(1000); outSql.innerHTML += `[INFO] checking if the parameter 'id' is dynamic<br>`; termBody.scrollTop = termBody.scrollHeight;
+                            await sleep(1200); outSql.innerHTML += `<span class="text-emerald-500">[INFO] parameter 'id' appears to be dynamic</span><br>`; termBody.scrollTop = termBody.scrollHeight;
+                            await sleep(1000);
+                            if(isRoot) {
+                                outSql.innerHTML += `<span class="text-red-500">[SUCCESS] Database dumped! Extracted 13 tables, 400 records.</span>`;
+                            } else {
+                                outSql.innerHTML += `<span class="text-rose-500">[ERROR] Insufficient local privileges to write dump file. Switch to root.</span>`;
+                            }
+                            termBody.scrollTop = termBody.scrollHeight;
+                            break;
+                        case "hydra":
+                            const hTarget = args[1] || "ssh://10.0.0.5";
+                            const outHydra = appendOut(`Hydra v9.3 (c) 2022 by van Hauser/THC<br>[INFO] Starting brute force against ${hTarget}<br>`);
+                            await sleep(800); outHydra.innerHTML += `[DATA] max 16 tasks per 1 server, overall 16 tasks, 25000 login tries<br>`; termBody.scrollTop = termBody.scrollHeight;
+                            await sleep(1500);
+                            outHydra.innerHTML += `<span class="text-emerald-500">[80] [ssh] host: ${hTarget.replace('ssh://','')}   login: admin   password: password123</span><br>`;
+                            await sleep(500); outHydra.innerHTML += `[INFO] 1 valid password found`;
+                            termBody.scrollTop = termBody.scrollHeight;
+                            break;
+                        case "skills":
+                            appendOut(isRoot ? "Red Teaming, Exploit Dev, AI Security, Reverse Engineering, Cryptography." : "Access Denied. Root privileges required.", isRoot ? "text-slate-300" : "text-red-500 font-bold");
+                            break;
+                        case "target":
+                            appendOut("Current objective: Evaluate CSE-CIC-IDS2018 Dataset using XAI GANs.");
+                            break;
+                        case "clear":
+                            termOutputs.innerHTML = "";
+                            break;
+                        case "sudo":
+                        case "su":
+                        case "hack":
+                            if(args[0] === "hack" || args[1] === "su" || args[1] === "root" || args[0] === "su") {
+                                isRoot = true;
+                                updatePrompt();
+                                appendOut("SYSTEM OVERRIDE DETECTED... ACCESS GRANTED.<br>Welcome to the shadows.<br><span class='text-white bg-red-600 px-2 py-1 mt-2 inline-block rounded'>Root Privileges Elevated. Try 'cat secret_flag.txt'</span>", "text-red-500 font-bold mb-2 p-3 bg-red-500/10 border border-red-500/30 mt-2 shadow-[0_0_15px_rgba(239,68,68,0.2)]");
+                                document.getElementById('terminal-box').style.borderColor = "#ef4444";
+                                document.getElementById('terminal-box').style.boxShadow = "0 0 50px rgba(239,68,68,0.4)";
+                            } else {
+                                appendOut(`sudo: ${args[1] || ''}: command not found`, "text-red-500 mb-2");
+                            }
+                            break;
+                        case "exit":
+                            appendOut("Connection closed by foreign host.<br>Just kidding! Refresh the page to actually leave.");
+                            break;
+                        default:
+                            appendOut(`bash: ${cmd}: command not found. Type 'help' for a list of commands.`, "text-red-500 mb-2");
+                    }
+                } catch(err) {
+                    appendOut("bash: internal execution error.", "text-red-500 mb-2");
+                } finally {
+                    termInput.disabled = false;
+                    termInput.focus();
+                }
+            }
+        });
+
+        // Global variables to store data for modals
+        let globalEduData = [];
+        let allArsenalItems = [];
+        let allProjectItems = [];
+        let allAchItems = [];
+        let allGalleryItems = [];
+
+        // Fetch Dynamic Data from Backend
+        async function fetchAllDynamicData() {
+            try {
+                // 1. Profile 
+                const profRes = await fetch(`${API_BASE}/profile`);
+                const rawProfData = await profRes.json();
+                const profData = Array.isArray(rawProfData) ? rawProfData[0] : rawProfData;
+                
+                if(profData && profData.full_name) {
+                    document.getElementById('profile-name').innerText = profData.full_name;
+                    document.getElementById('profile-title').innerText = profData.job_title;
+                    
+                    // --- Custom Bio Color Formatter ---
+                    let formattedBio = profData.bio
+                        .replace(/\*\*(.*?)\*\*/g, '<span class="text-white font-bold">$1</span>') // **Text** will be White
+                        .replace(/\*(.*?)\*/g, '<span class="text-sky-400 font-bold drop-shadow-[0_0_8px_rgba(56,189,248,0.5)]">$1</span>'); // *Text* will be Glowing Blue
+                    document.getElementById('profile-bio').innerHTML = formattedBio;
+                    // ----------------------------------
+
+                    document.getElementById('footer-text').innerText = `© 2026 ${profData.full_name.toUpperCase()}. DESIGN: HYPER-SECURITY OS V2`;
+                }
+
+                // 2. Education
+                const eduRes = await fetch(`${API_BASE}/education`);
+                const eduData = await eduRes.json();
+                globalEduData = eduData; 
+
+                if(eduData.length > 0) {
+                    const latestEdu = eduData[0]; 
+                    document.getElementById('edu-degree').innerText = latestEdu.degree;
+                    document.getElementById('edu-inst').innerText = latestEdu.institution;
+                    document.getElementById('edu-desc').innerText = latestEdu.details;
+                    document.getElementById('edu-year').innerText = latestEdu.pass_year;
+                    
+                    const thesisCard = document.getElementById('thesis-card');
+                    const focusCard = document.getElementById('core-focus-card');
+                    const rightSideContainer = document.getElementById('edu-right-side');
+                    
+                    if (latestEdu.active_thesis) {
+                        document.getElementById('thesis-desc').innerText = latestEdu.active_thesis;
+                        thesisCard.classList.remove('hidden');
+                    } else { thesisCard.classList.add('hidden'); }
+
+                    if (latestEdu.core_focus) {
+                        document.getElementById('focus-desc').innerText = latestEdu.core_focus;
+                        focusCard.classList.remove('hidden');
+                    } else { focusCard.classList.add('hidden'); }
+
+                    if (!latestEdu.active_thesis && !latestEdu.core_focus) {
+                        rightSideContainer.classList.add('hidden');
+                    } else { rightSideContainer.classList.remove('hidden'); }
+
+                    const olderContainer = document.getElementById('olderEducationContainer');
+                    if (eduData.length > 1) {
+                        olderContainer.classList.remove('hidden');
+                        olderContainer.innerHTML = '';
+                        for(let i = 1; i < eduData.length; i++) {
+                            const item = eduData[i];
+                            olderContainer.innerHTML += `
+                                <div onclick="openEduModal(${item.id})" class="bg-black/20 border border-white/5 p-4 rounded-xl flex items-center justify-between shadow-inner light-edu-inner cursor-pointer hover:border-emerald-500/50 hover:bg-emerald-500/5 transition duration-300 group">
+                                    <div>
+                                        <h5 class="text-sm font-bold text-white group-hover:text-emerald-400 transition">${item.degree}</h5>
+                                        <p class="text-[10px] text-slate-500 mono uppercase tracking-wider">${item.institution}</p>
+                                    </div>
+                                    <div class="flex items-center gap-3">
+                                        <span class="text-xs text-emerald-500 font-mono font-bold bg-emerald-500/10 border border-emerald-500/20 px-2 py-1 rounded">${item.pass_year}</span>
+                                        <i data-lucide="external-link" class="w-4 h-4 text-emerald-500/50 group-hover:text-emerald-500 transition"></i>
+                                    </div>
+                                </div>
+                            `;
+                        }
+                    }
+                } else {
+                    document.getElementById('edu-desc').innerText = 'No academic records found.';
+                }
+
+                // 3. Arsenal (Limit 2)
+                const arsRes = await fetch(`${API_BASE}/arsenal`);
+                const arsData = await arsRes.json();
+                allArsenalItems = arsData;
+                const arsContainer = document.getElementById('arsenalContainer');
+                arsContainer.innerHTML = '';
+                
+                if(arsData.length > 0) {
+                    arsData.slice(0, 2).forEach((item) => {
+                        arsContainer.innerHTML += `
+                            <div class="bg-black/20 border border-white/5 p-6 rounded-2xl hover:border-rose-500/40 hover:bg-rose-500/5 transition duration-300 group shadow-lg light-edu-inner relative z-10 flex flex-col h-full">
+                                <div class="flex justify-between items-start mb-4">
+                                    <div class="bg-rose-500/20 p-2.5 rounded-full border border-rose-500/20"><i data-lucide="crosshair" class="w-5 h-5 text-rose-500"></i></div>
+                                    <span class="text-[9px] mono text-rose-500 uppercase font-bold tracking-widest bg-rose-500/10 px-3 py-1 rounded-full border border-rose-500/20">${item.category}</span>
+                                </div>
+                                <h3 class="text-xl font-bold text-white mb-3 group-hover:text-rose-400 transition">${item.title}</h3>
+                                <p class="text-xs text-slate-400 leading-relaxed flex-1">${item.details}</p>
+                            </div>
+                        `;
+                    });
+                } else { arsContainer.innerHTML = '<p class="text-xs text-slate-500 col-span-full text-center mono">No arsenal inventory found.</p>'; }
+                
+                const arsBtn = document.getElementById('loadMoreArsBtn');
+                if (arsData.length > 2) { arsBtn.classList.remove('hidden'); arsBtn.onclick = () => openArsenalModal(); } 
+                else { arsBtn.classList.add('hidden'); }
+
+                // 4. Projects (Limit 2)
+                const projRes = await fetch(`${API_BASE}/projects`);
+                const projData = await projRes.json();
+                allProjectItems = projData;
+                const projContainer = document.getElementById('projectContainer');
+                projContainer.innerHTML = '';
+
+                if(projData.length > 0) {
+                    projData.slice(0, 2).forEach(item => {
+                        const tagsHtml = item.tags.split(',').map(tag => `<span class="text-[9px] font-bold text-purple-400 bg-purple-500/10 px-3 py-1 rounded-full border border-purple-500/20 uppercase tracking-wider mono">${tag.trim()}</span>`).join('');
+                        const linkHtml = item.link && item.link.trim() !== '' ? `<a href="${item.link}" target="_blank" class="inline-flex items-center gap-2 text-[10px] font-bold text-purple-500 hover:text-purple-400 mono tracking-widest mt-auto group/link bg-purple-500/10 hover:bg-purple-500/20 px-4 py-2 rounded-lg border border-purple-500/20 transition w-fit"><i data-lucide="external-link" class="w-4 h-4 group-hover/link:scale-110 transition"></i> VIEW_DEPLOYMENT</a>` : '';
+                        
+                        projContainer.innerHTML += `
+                            <div class="bg-black/20 border border-white/5 p-6 md:p-8 rounded-2xl hover:border-purple-500/40 hover:bg-purple-500/5 transition duration-300 group shadow-lg light-edu-inner relative z-10 flex flex-col h-full">
+                                <div class="flex justify-between items-start mb-6">
+                                    <h3 class="text-2xl font-black text-white group-hover:text-purple-400 transition tracking-tight">${item.title}</h3>
+                                    <div class="bg-purple-500/20 p-3 rounded-full border border-purple-500/20 shrink-0 ml-4"><i data-lucide="terminal-square" class="w-5 h-5 text-purple-500"></i></div>
+                                </div>
+                                <p class="text-sm text-slate-400 leading-relaxed mb-6 flex-1">${item.description}</p>
+                                <div class="flex flex-wrap gap-2 mb-6">${tagsHtml}</div>
+                                ${linkHtml}
+                            </div>
+                        `;
+                    });
+                } else { projContainer.innerHTML = '<p class="text-xs text-slate-500 col-span-full text-center mono">No active projects found.</p>'; }
+
+                const projBtn = document.getElementById('loadMoreProjBtn');
+                if (projData.length > 2) { projBtn.classList.remove('hidden'); projBtn.onclick = () => openProjectModal(); } 
+                else { projBtn.classList.add('hidden'); }
+
+                // 5. Achievements (Limit 2)
+                const achRes = await fetch(`${API_BASE}/achievements`);
+                const achData = await achRes.json();
+                allAchItems = achData;
+                const certContainer = document.getElementById('certContainer');
+                certContainer.innerHTML = '';
+
+                if(achData.length > 0) {
+                    achData.slice(0, 2).forEach((item) => {
+                        certContainer.innerHTML += `
+                            <div class="bg-black/20 border border-white/5 p-6 rounded-2xl hover:border-amber-500/40 hover:bg-amber-500/5 transition duration-300 group shadow-lg light-edu-inner relative z-10 flex flex-col h-full">
+                                <div class="flex justify-between items-start mb-5">
+                                    <div class="bg-amber-500/20 p-2.5 rounded-full border border-amber-500/20"><i data-lucide="award" class="w-5 h-5 text-amber-500"></i></div>
+                                    <span class="text-[9px] mono text-amber-500 uppercase font-bold tracking-widest bg-amber-500/10 px-3 py-1 rounded-full border border-amber-500/20">YEAR: ${item.year}</span>
+                                </div>
+                                <h3 class="text-lg font-black text-white mb-2 group-hover:text-amber-400 transition leading-tight">${item.title}</h3>
+                                <p class="text-[10px] text-amber-500/80 font-mono tracking-widest uppercase mb-4">${item.organization}</p>
+                                <p class="text-xs text-slate-400 leading-relaxed flex-1">${item.details}</p>
+                            </div>
+                        `;
+                    });
+                } else { certContainer.innerHTML = '<p class="text-xs text-slate-500 col-span-full text-center mono">No achievements found.</p>'; }
+
+                const achBtn = document.getElementById('loadMoreAchBtn');
+                if (achData.length > 2) { achBtn.classList.remove('hidden'); achBtn.onclick = () => openAchModal(); } 
+                else { achBtn.classList.add('hidden'); }
+                
+                lucide.createIcons();
+                
+                // 6. Archives
+                loadMainGallery();
+            } catch (e) {
+                console.error("Data fetching error", e);
+            }
+        }
+
+        // --- Core UI Logic ---
+        window.addEventListener("scroll", () => {
+            document.querySelectorAll(".reveal").forEach(el => {
+                if (el.getBoundingClientRect().top < window.innerHeight - 100) el.classList.add("active");
+            });
+            let current = "";
+            document.querySelectorAll("section").forEach((section) => {
+                const sectionTop = section.offsetTop;
+                if (window.scrollY >= sectionTop - 200) { current = section.getAttribute("id"); }
+            });
+            
+            document.querySelectorAll(".nav-link").forEach((link) => {
+                link.classList.remove("text-sky-500", "text-slate-300", "text-slate-400");
+                if (current && link.getAttribute("href") === `#${current}`) { link.classList.add("text-sky-500"); } 
+                else {
+                    if (link.classList.contains("mobile-link")) { link.classList.add("text-slate-400"); } 
+                    else if (link.classList.contains("desktop-link")) { link.classList.add("text-slate-300"); }
+                }
+            });
+        });
+        window.dispatchEvent(new Event("scroll"));
+
+        document.querySelectorAll(".nav-link, #floatingMsg").forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if(target) window.scrollTo({ top: target.offsetTop - 80, behavior: 'smooth' });
+                document.getElementById('mobileMenu').classList.add('hidden');
+            });
+        });
+
+        const themeToggle = document.getElementById('themeToggle');
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('light-mode');
+            themeToggle.innerHTML = document.body.classList.contains('light-mode') ? '<i data-lucide="moon" class="w-4 h-4 text-slate-600"></i>' : '<i data-lucide="sun" class="w-4 h-4 text-amber-400"></i>';
+            lucide.createIcons();
+        });
+
+        document.getElementById('mobileMenuBtn').addEventListener('click', () => document.getElementById('mobileMenu').classList.toggle('hidden'));
+
+        // ================= GALLERY LOGIC =================
+        async function loadMainGallery() {
+            try {
+                const res = await fetch(`${API_BASE}/gallery`);
+                allGalleryItems = await res.json();
+                const container = document.getElementById('galleryContainer'); container.innerHTML = '';
+                if(!allGalleryItems || allGalleryItems.length === 0) { container.innerHTML = '<p class="text-xs text-slate-500 col-span-full text-center mono">No archives found.</p>'; return; }
+
+                allGalleryItems.slice(0, 4).forEach(item => {
+                    const safeDetails = (item.details || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
+                    container.innerHTML += `
+                        <div class="glass-panel p-2 rounded-2xl overflow-hidden cursor-pointer hover:border-sky-500/80 hover:shadow-[0_0_20px_rgba(14,165,233,0.2)] hover:-translate-y-2 transition duration-300 group bg-black/20" onclick="openSingleLightbox('${item.image_url}', '${item.title}', '${safeDetails}')">
+                            <div class="relative h-48 w-full mb-3 rounded-xl overflow-hidden"><img src="${item.image_url}" class="absolute inset-0 w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" onerror="this.src='https://via.placeholder.com/400x300'"></div>
+                            <p class="text-[10px] font-bold text-sky-500 mb-1 mono px-2">${item.title}</p>
+                            <p class="text-xs font-bold text-slate-400 px-2 pb-2 truncate">${item.subtitle || ''}</p>
+                        </div>
+                    `;
+                });
+                const btn = document.getElementById('loadMoreBtn');
+                if (allGalleryItems.length > 4) { btn.classList.remove('hidden'); btn.onclick = () => openGalleryModal(); } 
+                else btn.classList.add('hidden');
+            } catch(e){}
+        }
+
+        // ================= ALL LIGHTBOX/MODAL LOGIC =================
+        
+        const galleryModal = document.getElementById('galleryModal');
+        const galleryContent = document.getElementById('galleryModal-content');
+        function openGalleryModal() {
+            const grid = document.getElementById('all-gallery-grid'); grid.innerHTML = '';
+            allGalleryItems.forEach(item => {
+                const safeDetails = (item.details || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
+                grid.innerHTML += `
+                    <div class="glass-panel p-3 rounded-xl overflow-hidden cursor-pointer hover:border-sky-500/80 transition group bg-black/20 hover:shadow-[0_0_15px_rgba(14,165,233,0.2)]" onclick="openSingleLightbox('${item.image_url}', '${item.title}', '${safeDetails}')">
+                        <div class="relative h-40 md:h-48 w-full mb-3 rounded-lg overflow-hidden border border-white/5 group-hover:border-sky-500/50 transition"><img src="${item.image_url}" class="absolute inset-0 w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500"></div>
+                        <p class="text-xs font-bold text-sky-500 mb-1 mono px-1 truncate">${item.title}</p>
+                    </div>`;
+            });
+            galleryModal.classList.remove('hidden'); setTimeout(() => { galleryModal.classList.remove('opacity-0'); galleryContent.classList.remove('scale-95'); }, 10);
+        }
+        function closeGalleryModal() { galleryModal.classList.add('opacity-0'); galleryContent.classList.add('scale-95'); setTimeout(() => galleryModal.classList.add('hidden'), 300); }
+
+        const singleLightbox = document.getElementById('singleLightbox');
+        const singleContent = document.getElementById('singleLightbox-content');
+        function openSingleLightbox(img, title, details) {
+            document.getElementById('modal-body').innerHTML = `<img src="${img}" class="w-full max-h-[50vh] object-contain rounded-xl mb-6 mx-auto bg-black/20 border border-white/10"><h3 class="text-2xl font-black text-sky-500 mb-3">${title}</h3><p class="text-sm text-slate-300 leading-relaxed">${details}</p>`;
+            singleLightbox.classList.remove('hidden'); setTimeout(() => { singleLightbox.classList.remove('opacity-0'); singleContent.classList.remove('scale-95'); }, 10);
+        }
+        function closeSingleLightbox() { singleLightbox.classList.add('opacity-0'); singleContent.classList.add('scale-95'); setTimeout(() => singleLightbox.classList.add('hidden'), 300); }
+
+        const eduModal = document.getElementById('eduModal');
+        const eduModalContent = document.getElementById('eduModal-content');
+        function openEduModal(id) {
+            const edu = globalEduData.find(e => e.id === id);
+            if(!edu) return;
+            document.getElementById('modal-edu-degree').innerText = edu.degree;
+            document.getElementById('modal-edu-inst').innerText = edu.institution;
+            document.getElementById('modal-edu-year').innerText = edu.pass_year;
+            document.getElementById('modal-edu-desc').innerText = edu.details;
+            
+            const thesisCard = document.getElementById('modal-thesis-card');
+            const focusCard = document.getElementById('modal-focus-card');
+            const rightSide = document.getElementById('modal-edu-right-side');
+            
+            if (edu.active_thesis && edu.active_thesis.trim() !== '') { document.getElementById('modal-thesis-desc').innerText = edu.active_thesis; thesisCard.classList.remove('hidden'); } else { thesisCard.classList.add('hidden'); }
+            if (edu.core_focus && edu.core_focus.trim() !== '') { document.getElementById('modal-focus-desc').innerText = edu.core_focus; focusCard.classList.remove('hidden'); } else { focusCard.classList.add('hidden'); }
+            if ((!edu.active_thesis || edu.active_thesis.trim() === '') && (!edu.core_focus || edu.core_focus.trim() === '')) { rightSide.classList.add('hidden'); } else { rightSide.classList.remove('hidden'); }
+
+            eduModal.classList.remove('hidden'); setTimeout(() => { eduModal.classList.remove('opacity-0'); eduModalContent.classList.remove('scale-95'); }, 10);
+        }
+        function closeEduModal() { eduModal.classList.add('opacity-0'); eduModalContent.classList.add('scale-95'); setTimeout(() => eduModal.classList.add('hidden'), 300); }
+
+        const arsenalModal = document.getElementById('arsenalModal');
+        const arsenalModalContent = document.getElementById('arsenalModal-content');
+        function openArsenalModal() {
+            const grid = document.getElementById('all-arsenal-grid'); grid.innerHTML = '';
+            allArsenalItems.forEach(item => {
+                grid.innerHTML += `
+                    <div class="bg-black/20 border border-white/5 p-6 rounded-2xl hover:border-rose-500/40 hover:bg-rose-500/5 transition duration-300 group shadow-lg light-edu-inner relative z-10 flex flex-col h-full">
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="bg-rose-500/20 p-2.5 rounded-full border border-rose-500/20"><i data-lucide="crosshair" class="w-5 h-5 text-rose-500"></i></div>
+                            <span class="text-[9px] mono text-rose-500 uppercase font-bold tracking-widest bg-rose-500/10 px-3 py-1 rounded-full border border-rose-500/20">${item.category}</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-3 group-hover:text-rose-400 transition">${item.title}</h3>
+                        <p class="text-xs text-slate-400 leading-relaxed flex-1">${item.details}</p>
+                    </div>`;
+            });
+            arsenalModal.classList.remove('hidden'); setTimeout(() => { arsenalModal.classList.remove('opacity-0'); arsenalModalContent.classList.remove('scale-95'); lucide.createIcons(); }, 10);
+        }
+        function closeArsenalModal() { arsenalModal.classList.add('opacity-0'); arsenalModalContent.classList.add('scale-95'); setTimeout(() => arsenalModal.classList.add('hidden'), 300); }
+
+        const projectModal = document.getElementById('projectModal');
+        const projectModalContent = document.getElementById('projectModal-content');
+        function openProjectModal() {
+            const grid = document.getElementById('all-project-grid'); grid.innerHTML = '';
+            allProjectItems.forEach(item => {
+                const tagsHtml = item.tags.split(',').map(tag => `<span class="text-[9px] font-bold text-purple-400 bg-purple-500/10 px-3 py-1 rounded-full border border-purple-500/20 uppercase tracking-wider mono">${tag.trim()}</span>`).join('');
+                const linkHtml = item.link && item.link.trim() !== '' ? `<a href="${item.link}" target="_blank" class="inline-flex items-center gap-2 text-[10px] font-bold text-purple-500 hover:text-purple-400 mono tracking-widest mt-auto group/link bg-purple-500/10 hover:bg-purple-500/20 px-4 py-2 rounded-lg border border-purple-500/20 transition w-fit"><i data-lucide="external-link" class="w-4 h-4 group-hover/link:scale-110 transition"></i> VIEW_DEPLOYMENT</a>` : '';
+                grid.innerHTML += `
+                    <div class="bg-black/20 border border-white/5 p-6 md:p-8 rounded-2xl hover:border-purple-500/40 hover:bg-purple-500/5 transition duration-300 group shadow-lg light-edu-inner relative z-10 flex flex-col h-full">
+                        <div class="flex justify-between items-start mb-6">
+                            <h3 class="text-2xl font-black text-white group-hover:text-purple-400 transition tracking-tight">${item.title}</h3>
+                            <div class="bg-purple-500/20 p-3 rounded-full border border-purple-500/20 shrink-0 ml-4"><i data-lucide="terminal-square" class="w-5 h-5 text-purple-500"></i></div>
+                        </div>
+                        <p class="text-sm text-slate-400 leading-relaxed mb-6 flex-1">${item.description}</p>
+                        <div class="flex flex-wrap gap-2 mb-6">${tagsHtml}</div>
+                        ${linkHtml}
+                    </div>`;
+            });
+            projectModal.classList.remove('hidden'); setTimeout(() => { projectModal.classList.remove('opacity-0'); projectModalContent.classList.remove('scale-95'); lucide.createIcons(); }, 10);
+        }
+        function closeProjectModal() { projectModal.classList.add('opacity-0'); projectModalContent.classList.add('scale-95'); setTimeout(() => projectModal.classList.add('hidden'), 300); }
+
+        const achModal = document.getElementById('achModal');
+        const achModalContent = document.getElementById('achModal-content');
+        function openAchModal() {
+            const grid = document.getElementById('all-ach-grid'); grid.innerHTML = '';
+            allAchItems.forEach(item => {
+                grid.innerHTML += `
+                    <div class="bg-black/20 border border-white/5 p-6 rounded-2xl hover:border-amber-500/40 hover:bg-amber-500/5 transition duration-300 group shadow-lg light-edu-inner relative z-10 flex flex-col h-full">
+                        <div class="flex justify-between items-start mb-5">
+                            <div class="bg-amber-500/20 p-2.5 rounded-full border border-amber-500/20"><i data-lucide="award" class="w-5 h-5 text-amber-500"></i></div>
+                            <span class="text-[9px] mono text-amber-500 uppercase font-bold tracking-widest bg-amber-500/10 px-3 py-1 rounded-full border border-amber-500/20">YEAR: ${item.year}</span>
+                        </div>
+                        <h3 class="text-lg font-black text-white mb-2 group-hover:text-amber-400 transition leading-tight">${item.title}</h3>
+                        <p class="text-[10px] text-amber-500/80 font-mono tracking-widest uppercase mb-4">${item.organization}</p>
+                        <p class="text-xs text-slate-400 leading-relaxed flex-1">${item.details}</p>
+                    </div>`;
+            });
+            achModal.classList.remove('hidden'); setTimeout(() => { achModal.classList.remove('opacity-0'); achModalContent.classList.remove('scale-95'); lucide.createIcons(); }, 10);
+        }
+        function closeAchModal() { achModal.classList.add('opacity-0'); achModalContent.classList.add('scale-95'); setTimeout(() => achModal.classList.add('hidden'), 300); }
+
+        // Form Submit
+        document.getElementById('commForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('submitBtn'); const orgText = btn.innerHTML;
+            btn.innerHTML = '<i data-lucide="loader" class="w-4 h-4 animate-spin"></i> Transmitting...'; lucide.createIcons();
+            try {
+                await fetch(`${API_BASE}/messages`, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({identity_name: document.getElementById('i-name').value, contact_vector: document.getElementById('i-email').value, data_payload: document.getElementById('i-msg').value}) });
+                e.target.reset(); document.getElementById('formSuccess').classList.remove('hidden'); setTimeout(() => document.getElementById('formSuccess').classList.add('hidden'), 5000);
+            } catch(err){ alert("Failed!"); }
+            btn.innerHTML = orgText; lucide.createIcons();
+        });
+    </script>
 </body>
 </html>
