@@ -457,9 +457,10 @@
                         <p class="mb-2">Secure Shell V3.0 (Red Team Ed.). Type 'help' to see commands.</p>
                         <p class="mb-4 text-[10px] text-slate-500">Hint: Explore the file system. Are you root?</p>
                         <div id="term-outputs"></div>
-                        <div class="terminal-input-line mt-2">
-                            <span id="term-prompt" class="text-emerald-500 font-bold mr-2">mh_guest@offensive-node:~$</span>
-                            <input type="text" id="term-input" autocomplete="off" spellcheck="false" class="bg-transparent border-none outline-none text-white w-full">
+                        
+                        <div class="terminal-input-line mt-2 flex items-center">
+                            <span id="term-prompt" class="text-emerald-500 font-bold mr-2 whitespace-nowrap shrink-0">mh_guest@offensive-node:~$</span>
+                            <input type="text" id="term-input" autocomplete="off" spellcheck="false" class="bg-transparent border-none outline-none text-white flex-1 min-w-0">
                         </div>
                     </div>
                 </div>
@@ -753,7 +754,9 @@
             const user = isRoot ? 'root' : 'mh_guest';
             const symbol = isRoot ? '#' : '$';
             const color = isRoot ? 'text-red-500 animate-pulse' : 'text-emerald-500';
-            termPrompt.className = `${color} font-bold mr-2`;
+            
+            // FIXED: Ensured prompt text doesn't wrap or get squished
+            termPrompt.className = `${color} font-bold mr-2 whitespace-nowrap shrink-0`;
             termPrompt.innerHTML = `${user}@offensive-node:<span class="text-sky-400">${currentDir}</span>${symbol}`;
         }
         updatePrompt();
@@ -787,7 +790,10 @@
                 const symbol = isRoot ? '#' : '$';
                 const color = isRoot ? 'text-red-500' : 'text-emerald-500';
                 const line = document.createElement('div');
-                line.innerHTML = `<span class="${color} font-bold">${user}@offensive-node:<span class="text-sky-400">${currentDir}</span>${symbol}</span> <span class="text-white">${val}</span>`;
+                
+                // FIXED: Displaying typed command cleanly alongside prompt
+                line.className = "flex items-start gap-2 mb-1";
+                line.innerHTML = `<span class="${color} font-bold whitespace-nowrap shrink-0">${user}@offensive-node:<span class="text-sky-400">${currentDir}</span>${symbol}</span> <span class="text-white break-all">${val}</span>`;
                 termOutputs.appendChild(line);
                 termInput.value = "";
                 termBody.scrollTop = termBody.scrollHeight;
