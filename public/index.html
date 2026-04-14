@@ -13,6 +13,14 @@
         body { font-family: 'Inter', sans-serif; background-color: #020617; color: #f8fafc; overflow-x: hidden; transition: background-color 0.5s, color 0.5s; margin: 0; }
         .mono { font-family: 'JetBrains Mono', monospace; }
         
+        /* ================= 1. LIVE ATTACK MAP ================= */
+        #attack-map { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -3; opacity: 0.3; pointer-events: none; }
+        body.light-mode #attack-map { opacity: 0.1; filter: invert(1); }
+
+        /* ================= 5. TICKER ANIMATION ================= */
+        @keyframes ticker { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+        .ticker-track { display: inline-block; white-space: nowrap; animation: ticker 30s linear infinite; }
+
         /* ================= AGGRESSIVE FAKE EXPLOIT BOOT SEQUENCE ================= */
         #boot-screen {
             position: fixed; inset: 0; z-index: 9999; background: #050000; 
@@ -34,16 +42,13 @@
         .bg-cyber::before { content: ''; position: absolute; top: -20%; left: -10%; width: 50%; height: 50%; background: radial-gradient(circle, rgba(14, 165, 233, 0.1) 0%, transparent 70%); border-radius: 50%; filter: blur(60px); pointer-events: none; }
         .bg-cyber::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2) 1px, transparent 1px, transparent 3px); z-index: 1; pointer-events: none; opacity: 0.5; }
         
-        /* Hacker Decals */
         .hacker-decals { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: bold; opacity: 0.8; animation: backgroundGlitch 4s infinite; }
-        
         @keyframes backgroundGlitch {
             0%, 90%, 100% { transform: translate(0, 0); opacity: 0.8; filter: none; }
             92% { transform: translate(-4px, 2px); opacity: 1; filter: drop-shadow(4px 0 0 rgba(239, 68, 68, 0.7)) drop-shadow(-4px 0 0 rgba(14, 165, 233, 0.7)); }
             94% { transform: translate(4px, -2px); opacity: 0.5; filter: drop-shadow(-4px 0 0 rgba(239, 68, 68, 0.7)) drop-shadow(4px 0 0 rgba(14, 165, 233, 0.7)); }
             96% { transform: translate(-1px, 1px); opacity: 0.9; filter: none; }
         }
-
         .decal-1 { position: absolute; top: 15%; left: 2%; line-height: 1.6; letter-spacing: 0.1em; color: rgba(14, 165, 233, 0.15); }
         .decal-2 { position: absolute; bottom: 20%; right: 2%; line-height: 1.6; text-align: right; letter-spacing: 0.1em; color: rgba(16, 185, 129, 0.15); }
         .decal-3 { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: rgba(255, 255, 255, 0.02); font-size: clamp(80px, 15vw, 200px); font-weight: 900; letter-spacing: -15px; user-select: none; }
@@ -57,6 +62,16 @@
         .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s ease-out; }
         .reveal.active { opacity: 1; transform: translateY(0); }
         .modal-overlay { background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(8px); }
+
+        /* 3. KILL CHAIN STYLES */
+        .kill-chain-step:hover .kill-chain-desc { display: block; opacity: 1; transform: translateY(0); }
+        .kill-chain-desc { display: none; opacity: 0; transform: translateY(10px); transition: all 0.3s ease; }
+
+        /* 4. TERMINAL STYLES */
+        #terminal-box { background: rgba(2, 6, 23, 0.9); border: 1px solid rgba(239, 68, 68, 0.3); box-shadow: 0 0 30px rgba(239, 68, 68, 0.1); border-radius: 1rem; overflow: hidden; height: 350px; display: flex; flex-direction: column; transition: all 0.5s;}
+        .terminal-header { background: rgba(239, 68, 68, 0.1); padding: 8px 15px; border-bottom: 1px solid rgba(239, 68, 68, 0.2); display: flex; justify-content: space-between; }
+        .terminal-content { flex: 1; overflow-y: auto; padding: 15px; font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #f87171; }
+        .terminal-input-line { display: flex; align-items: center; gap: 8px; color: #10b981; }
 
         /* ================= SCI-FI CARDS (For Comms) ================= */
         .sci-fi-card { background: linear-gradient(135deg, rgba(15, 23, 42, 0.8) 0%, rgba(2, 6, 23, 0.95) 100%); border: 1px solid rgba(14, 165, 233, 0.3); position: relative; overflow: hidden; box-shadow: inset 0 0 30px rgba(14, 165, 233, 0.05), 0 5px 15px rgba(0,0,0,0.5); transition: all 0.3s; clip-path: polygon(0 0, calc(100% - 15px) 0, 100% 15px, 100% 100%, 15px 100%, 0 calc(100% - 15px)); }
@@ -123,10 +138,13 @@
         body.light-mode .modal-overlay .glass-panel { background: rgba(255, 255, 255, 0.98); color: #0f172a; } 
         body.light-mode .light-mode-divider { background-color: rgba(14, 165, 233, 0.4) !important; }
 
-        /* Unified Light Mode overrides for inner cards */
         body.light-mode .light-edu-card { background: rgba(255, 255, 255, 0.9); border: 1px solid rgba(0,0,0,0.1); box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
         body.light-mode .light-edu-inner { background: rgba(241, 245, 249, 0.8); border: 1px solid rgba(0,0,0,0.05); }
         body.light-mode .light-edu-inner:hover { border-color: rgba(16, 185, 129, 0.4); }
+
+        body.light-mode #terminal-box { background: #fff; border-color: rgba(0,0,0,0.2); box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        body.light-mode .terminal-header { background: #f1f5f9; border-color: rgba(0,0,0,0.1); }
+        body.light-mode .terminal-content { color: #334155; }
 
         .custom-scrollbar::-webkit-scrollbar { width: 6px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.2); border-radius: 4px; }
@@ -134,6 +152,17 @@
     </style>
 </head>
 <body>
+
+    <canvas id="attack-map"></canvas>
+
+    <div class="fixed top-0 w-full bg-red-600/90 text-white text-[10px] font-bold mono uppercase tracking-widest overflow-hidden h-6 flex items-center z-[101]">
+        <div class="ticker-track">
+            <span class="mx-8">⚠️ [ALERT] Brute-force attempt detected on port 22 from IP 192.168.1.45</span>
+            <span class="mx-8">🟢 [INFO] CVE-2026-0092 Exploit script successfully compiled.</span>
+            <span class="mx-8">⚡ [INTEL] Null Script Infiltrators secured rank #1 in recent CTF.</span>
+            <span class="mx-8">⚠️ [ALERT] Unauthorized payload execution blocked in Sandbox-Beta.</span>
+            <span class="mx-8">⚠️ [ALERT] Brute-force attempt detected on port 22 from IP 192.168.1.45</span> </div>
+    </div>
 
     <div id="boot-screen">
         <div class="boot-text-container" id="terminal-text"></div>
@@ -178,18 +207,20 @@
             </div>
         </div>
 
-        <nav class="fixed top-0 w-full glass-nav" id="navbar">
+        <nav class="fixed top-6 w-full glass-nav" id="navbar">
             <div class="w-full px-6 lg:px-12 h-16 flex items-center justify-between">
                 <div class="flex items-center gap-3">
                     <div class="w-3 h-3 rounded-full bg-emerald-500 shadow-[0_0_10px_#10b981] animate-pulse"></div>
                     <span class="text-[10px] font-bold uppercase tracking-[0.2em] mono text-emerald-500">System_Online</span>
                 </div>
-                <div class="hidden md:flex items-center space-x-8 text-[10px] font-bold uppercase tracking-widest">
+                <div class="hidden md:flex items-center space-x-6 text-[10px] font-bold uppercase tracking-widest">
                     <a href="#about" class="nav-link desktop-link text-slate-300 hover:text-sky-400 transition">Profile</a>
+                    <a href="#killchain" class="nav-link desktop-link text-slate-300 hover:text-sky-400 transition">Kill_Chain</a>
                     <a href="#education" class="nav-link desktop-link text-slate-300 hover:text-sky-400 transition">Education</a>
                     <a href="#arsenal" class="nav-link desktop-link text-slate-300 hover:text-sky-400 transition">Arsenal</a>
                     <a href="#project" class="nav-link desktop-link text-slate-300 hover:text-sky-400 transition">Project</a>
-                    <a href="#achievements" class="nav-link desktop-link text-slate-300 hover:text-sky-400 transition">Achievements</a>
+                    <a href="#achievements" class="nav-link desktop-link text-slate-300 hover:text-sky-400 transition">Certs</a>
+                    <a href="#terminal" class="nav-link desktop-link text-slate-300 hover:text-sky-400 transition">Terminal</a>
                     <a href="#archive" class="nav-link desktop-link text-slate-300 hover:text-sky-400 transition">Archive</a>
                 </div>
                 <div class="flex items-center gap-4">
@@ -200,16 +231,18 @@
             </div>
             <div id="mobileMenu" class="hidden absolute top-16 left-0 w-full glass-nav flex flex-col items-center py-6 space-y-6 text-[10px] font-bold uppercase tracking-widest shadow-2xl md:hidden">
                 <a href="#about" class="nav-link mobile-link transition">Profile</a>
+                <a href="#killchain" class="nav-link mobile-link transition">Kill_Chain</a>
                 <a href="#education" class="nav-link mobile-link transition">Education</a>
                 <a href="#arsenal" class="nav-link mobile-link transition">Arsenal</a>
                 <a href="#project" class="nav-link mobile-link transition">Project</a>
-                <a href="#achievements" class="nav-link mobile-link transition">Achievements</a>
+                <a href="#achievements" class="nav-link mobile-link transition">Certs</a>
+                <a href="#terminal" class="nav-link mobile-link transition">Terminal</a>
                 <a href="#archive" class="nav-link mobile-link transition">Archive</a>
                 <a href="/admin.html" class="text-sky-500 mt-2 border border-sky-500/30 px-6 py-2 rounded-full hover:bg-sky-500/10 transition">Admin Login</a>
             </div>
         </nav>
 
-        <main class="max-w-5xl mx-auto px-6 pt-24 pb-20">
+        <main class="max-w-5xl mx-auto px-6 pt-32 pb-20">
             
             <section id="about" class="flex flex-col md:flex-row items-center justify-between mb-24 gap-10 reveal pt-10">
                 <div class="flex-1 space-y-6 text-center md:text-left">
@@ -217,10 +250,8 @@
                         <i data-lucide="shield-alert" class="w-4 h-4"></i>
                         <span class="text-[10px] font-bold uppercase tracking-[0.25em] mono">Auth Granted // UID: 0x99A3</span>
                     </div>
-                    <h1 class="text-5xl md:text-7xl font-black tracking-tighter leading-[0.95] text-white glow-text">
-                        Architecting <br>
-                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-blue-500 to-indigo-500">Secure AI</span><br>
-                        Futures.
+                    <h1 id="decrypt-heading" class="text-5xl md:text-7xl font-black tracking-tighter leading-[0.95] text-white glow-text">
+                        01010100 01101000 01101001 01101110 01101011
                     </h1>
                     <p id="profile-bio" class="text-slate-400 text-lg font-medium max-w-xl leading-relaxed mx-auto md:mx-0">Loading biography...</p>
                 </div>
@@ -283,6 +314,46 @@
                                 <p class="text-[7px] text-slate-400 mono tracking-widest mb-1.5 uppercase">PROTOCOL</p>
                                 <p class="text-[11px] font-bold text-white mono uppercase">ADVERSARIAL</p>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="killchain" class="mb-32 reveal">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl md:text-4xl font-black mb-2 text-white mono uppercase tracking-tight">
+                        <span class="text-slate-500">ATT&CK</span> <span class="text-red-500">Matrix</span>
+                    </h2>
+                    <p class="text-slate-400 text-xs font-bold uppercase tracking-[0.3em] mt-2">Operational Methodology</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="kill-chain-step bg-black/40 border border-white/5 p-6 rounded-2xl hover:border-red-500/50 hover:bg-red-500/5 transition cursor-crosshair relative">
+                        <h3 class="text-red-500 font-black text-xl mb-1 mono">01. RECON</h3>
+                        <p class="text-slate-300 text-sm font-bold">Information Gathering</p>
+                        <div class="kill-chain-desc absolute top-full left-0 w-full mt-2 bg-black/90 border border-red-500/30 p-4 rounded-xl z-50 shadow-xl backdrop-blur-md">
+                            <p class="text-xs text-slate-300 font-mono">Tools: Nmap, Shodan, OSINT. Active and passive reconnaissance to map external attack surface.</p>
+                        </div>
+                    </div>
+                    <div class="kill-chain-step bg-black/40 border border-white/5 p-6 rounded-2xl hover:border-amber-500/50 hover:bg-amber-500/5 transition cursor-crosshair relative">
+                        <h3 class="text-amber-500 font-black text-xl mb-1 mono">02. WEAPONIZE</h3>
+                        <p class="text-slate-300 text-sm font-bold">Payload Generation</p>
+                        <div class="kill-chain-desc absolute top-full left-0 w-full mt-2 bg-black/90 border border-amber-500/30 p-4 rounded-xl z-50 shadow-xl backdrop-blur-md">
+                            <p class="text-xs text-slate-300 font-mono">Tools: Metasploit, Python. Crafting specific exploits tailored to discovered vulnerabilities.</p>
+                        </div>
+                    </div>
+                    <div class="kill-chain-step bg-black/40 border border-white/5 p-6 rounded-2xl hover:border-purple-500/50 hover:bg-purple-500/5 transition cursor-crosshair relative">
+                        <h3 class="text-purple-500 font-black text-xl mb-1 mono">03. EXPLOIT</h3>
+                        <p class="text-slate-300 text-sm font-bold">System Compromise</p>
+                        <div class="kill-chain-desc absolute top-full left-0 w-full mt-2 bg-black/90 border border-purple-500/30 p-4 rounded-xl z-50 shadow-xl backdrop-blur-md">
+                            <p class="text-xs text-slate-300 font-mono">Techniques: SQLi, RCE, Phishing. Bypassing defenses to execute unauthorized code on the target.</p>
+                        </div>
+                    </div>
+                    <div class="kill-chain-step bg-black/40 border border-white/5 p-6 rounded-2xl hover:border-emerald-500/50 hover:bg-emerald-500/5 transition cursor-crosshair relative">
+                        <h3 class="text-emerald-500 font-black text-xl mb-1 mono">04. ACTION</h3>
+                        <p class="text-slate-300 text-sm font-bold">Objective Completion</p>
+                        <div class="kill-chain-desc absolute top-full left-0 w-full mt-2 bg-black/90 border border-emerald-500/30 p-4 rounded-xl z-50 shadow-xl backdrop-blur-md">
+                            <p class="text-xs text-slate-300 font-mono">Focus: Exfiltration, PrivEsc. Demonstrating impact by securing target data or access.</p>
                         </div>
                     </div>
                 </div>
@@ -420,6 +491,37 @@
 
                     <div class="text-center mt-10 relative z-10">
                         <button id="loadMoreAchBtn" class="hidden px-8 py-3 border border-amber-500/30 rounded-full text-amber-500 text-xs font-bold hover:bg-amber-500/20 transition mono shadow-[0_0_15px_rgba(245,158,11,0.2)] hover:shadow-[0_0_25px_rgba(245,158,11,0.4)] bg-black/20">LOAD_MORE_RECORDS //...</button>
+                    </div>
+                </div>
+            </section>
+
+            <section id="terminal" class="mb-32 reveal pt-10">
+                <div class="text-center mb-12">
+                    <div class="inline-flex items-center justify-center p-3 bg-red-500/10 rounded-full border border-red-500/30 mb-4 shadow-[0_0_15px_rgba(239,68,68,0.2)]">
+                        <i data-lucide="terminal" class="w-6 h-6 text-red-500"></i>
+                    </div>
+                    <h2 class="text-3xl md:text-4xl font-black mb-2 text-white mono uppercase tracking-tight">
+                        <span class="text-slate-500">~/root/</span><span class="text-red-500">offensive_shell</span>
+                    </h2>
+                    <p class="text-slate-300 text-sm font-bold uppercase tracking-[0.2em] mb-2">Interactive Interface</p>
+                </div>
+                <div id="terminal-box" class="max-w-3xl mx-auto transition-colors duration-500">
+                    <div class="terminal-header">
+                        <div class="flex gap-2">
+                            <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                            <div class="w-3 h-3 rounded-full bg-amber-500"></div>
+                            <div class="w-3 h-3 rounded-full bg-emerald-500"></div>
+                        </div>
+                        <span class="text-[10px] mono text-slate-400">mh_root@offensive-node: ~</span>
+                    </div>
+                    <div class="terminal-content custom-scrollbar" id="term-body">
+                        <p class="mb-2">Secure Shell V3.0 (Red Team Ed.). Type 'help' to see commands.</p>
+                        <p class="mb-4 text-[10px] text-slate-500">Hint: Are you root?</p>
+                        <div id="term-outputs"></div>
+                        <div class="terminal-input-line mt-2">
+                            <span id="term-prompt" class="text-emerald-500 font-bold">$</span>
+                            <input type="text" id="term-input" autocomplete="off" class="bg-transparent border-none outline-none text-white w-full">
+                        </div>
                     </div>
                 </div>
             </section>
@@ -601,9 +703,80 @@
             </div>
         </div>
 
-    </div> <script>
+    </div> 
+
+    <script>
         lucide.createIcons();
         const API_BASE = 'https://iammahmudul.onrender.com/api';
+
+        // ================= 1. LIVE ATTACK MAP LOGIC =================
+        const mapCanvas = document.getElementById('attack-map');
+        const mapCtx = mapCanvas.getContext('2d');
+        function resizeCanvas() { mapCanvas.width = window.innerWidth; mapCanvas.height = window.innerHeight; }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        const mapParticles = [];
+        function createAttack() {
+            const startX = Math.random() * mapCanvas.width;
+            const startY = Math.random() * mapCanvas.height;
+            const endX = mapCanvas.width / 2 + (Math.random() - 0.5) * 400; 
+            const endY = mapCanvas.height / 2 + (Math.random() - 0.5) * 400;
+            mapParticles.push({ x: startX, y: startY, targetX: endX, targetY: endY, progress: 0, speed: Math.random() * 0.015 + 0.01 });
+        }
+
+        function drawMap() {
+            mapCtx.clearRect(0, 0, mapCanvas.width, mapCanvas.height);
+            if(Math.random() < 0.05) createAttack(); 
+
+            for(let i = mapParticles.length - 1; i >= 0; i--) {
+                let p = mapParticles[i];
+                p.progress += p.speed;
+                if(p.progress >= 1) { mapParticles.splice(i, 1); continue; }
+
+                const currentX = p.x + (p.targetX - p.x) * p.progress;
+                const currentY = p.y + (p.targetY - p.y) * p.progress;
+
+                mapCtx.beginPath();
+                mapCtx.moveTo(p.x, p.y);
+                mapCtx.lineTo(currentX, currentY);
+                mapCtx.strokeStyle = `rgba(239, 68, 68, ${1 - p.progress})`; 
+                mapCtx.lineWidth = 1.5;
+                mapCtx.stroke();
+
+                if(p.progress > 0.9) {
+                    mapCtx.beginPath();
+                    mapCtx.arc(p.targetX, p.targetY, (p.progress - 0.9) * 40, 0, Math.PI * 2);
+                    mapCtx.fillStyle = `rgba(239, 68, 68, ${1 - p.progress})`;
+                    mapCtx.fill();
+                }
+            }
+            requestAnimationFrame(drawMap);
+        }
+        drawMap();
+
+        // ================= 2. DECRYPT HEADING LOGIC =================
+        function decryptHeading() {
+            const heading = document.getElementById('decrypt-heading');
+            const finalHTML = `Architecting <br><span class="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-blue-500 to-indigo-500">Secure AI</span><br>Futures.`;
+            const plainText = "Architecting Secure AI Futures.";
+            const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&*";
+            let iteration = 0;
+            
+            const interval = setInterval(() => {
+                heading.innerText = plainText.split("")
+                    .map((letter, index) => {
+                        if(index < iteration) return plainText[index];
+                        return chars[Math.floor(Math.random() * chars.length)];
+                    }).join("");
+                
+                if(iteration >= plainText.length) {
+                    clearInterval(interval);
+                    heading.innerHTML = finalHTML; 
+                }
+                iteration += 1 / 3; 
+            }, 30);
+        }
 
         // ================= SCARY BOOT SEQUENCE LOGIC =================
         const bootLines = [
@@ -631,7 +804,6 @@
                 
                 setTimeout(typeLine, delay);
             } else {
-                // Show Progress Bar
                 const progContainer = document.getElementById('hack-progress-container');
                 const progBar = document.getElementById('hack-progress-bar');
                 const progText = document.getElementById('hack-progress-text');
@@ -650,7 +822,7 @@
                             clearInterval(counter);
                             finishBoot();
                         }
-                    }, 40); // 40 * 50 = 2000ms duration
+                    }, 40);
                 }, 300);
             }
         }
@@ -673,7 +845,10 @@
                         document.getElementById('boot-screen').style.opacity = '0';
                         document.getElementById('boot-screen').style.transform = 'scale(1.1)';
                         document.getElementById('main-content').style.opacity = '1';
-                        setTimeout(() => { document.getElementById('boot-screen').style.display = 'none'; }, 800);
+                        setTimeout(() => { 
+                            document.getElementById('boot-screen').style.display = 'none'; 
+                            decryptHeading(); // Trigger decrypt effect here!
+                        }, 800);
                     }, 2000);
                 }, 2000);
             }, 500);
@@ -683,6 +858,63 @@
             setTimeout(typeLine, 500);
             fetchAllDynamicData(); 
         });
+
+        // ================= 4. TERMINAL (INTERACTIVE CTF) LOGIC =================
+        const termInput = document.getElementById('term-input');
+        const termOutputs = document.getElementById('term-outputs');
+        const termPrompt = document.getElementById('term-prompt');
+        let isRoot = false;
+
+        const termCommands = {
+            help: "Available: whoami, skills, clear, target",
+            whoami: "mh_guest - Unprivileged user.",
+            skills: "Access Denied. Root privileges required.",
+            target: "Researching on CSE-CIC-IDS2018 Dataset.",
+            clear: "clear"
+        };
+
+        if(termInput) {
+            termInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    const val = termInput.value.trim();
+                    const lowerVal = val.toLowerCase();
+                    const line = document.createElement('div');
+                    line.innerHTML = `<span class="${isRoot ? 'text-red-500' : 'text-emerald-500'} font-bold">${isRoot ? '#' : '$'} ${val}</span>`;
+                    termOutputs.appendChild(line);
+
+                    if (lowerVal === "sudo su" || lowerVal === "su root" || lowerVal === "hack") {
+                        isRoot = true;
+                        termPrompt.innerText = "#";
+                        termPrompt.className = "text-red-500 font-black animate-pulse";
+                        termCommands.whoami = "root (Mahmudul Hasan) - Red Team Operator.";
+                        termCommands.skills = "Red Teaming, Exploit Dev, AI Security, Reverse Engineering.";
+                        
+                        const rootMsg = document.createElement('p');
+                        rootMsg.className = "text-red-500 font-bold mb-2 p-3 bg-red-500/10 border border-red-500/30 mt-2 shadow-[0_0_15px_rgba(239,68,68,0.2)]";
+                        rootMsg.innerHTML = "SYSTEM OVERRIDE DETECTED... ACCESS GRANTED.<br>Welcome to the shadows.<br><span class='text-white bg-red-600 px-2 py-1 mt-2 inline-block rounded'>Flag: flag{R3D_T34M_4CC3SS_UNL0CK3D}</span>";
+                        termOutputs.appendChild(rootMsg);
+                        
+                        document.getElementById('terminal-box').style.borderColor = "#ef4444";
+                        document.getElementById('terminal-box').style.boxShadow = "0 0 50px rgba(239,68,68,0.4)";
+                    } 
+                    else if (termCommands[lowerVal]) {
+                        if (termCommands[lowerVal] === "clear") termOutputs.innerHTML = "";
+                        else {
+                            const res = document.createElement('p');
+                            res.className = "text-slate-300 mb-2"; res.innerHTML = termCommands[lowerVal];
+                            termOutputs.appendChild(res);
+                        }
+                    } else if(val !== "") {
+                        const error = document.createElement('p');
+                        error.className = "text-red-500 mb-2"; error.innerText = `bash: ${val}: command not found`;
+                        termOutputs.appendChild(error);
+                    }
+                    termInput.value = "";
+                    document.getElementById('term-body').scrollTop = document.getElementById('term-body').scrollHeight;
+                }
+            });
+        }
+
 
         // Global variables to store data for modals
         let globalEduData = [];
