@@ -55,10 +55,10 @@
         .reveal.active { opacity: 1; transform: translateY(0); }
         .modal-overlay { background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(8px); }
 
-        /* TERMINAL STYLES */
+        /* TERMINAL & IDS STYLES */
         #terminal-box, #ids-box { background: rgba(2, 6, 23, 0.9); border: 1px solid rgba(239, 68, 68, 0.3); box-shadow: 0 0 30px rgba(239, 68, 68, 0.1); border-radius: 1rem; overflow: hidden; display: flex; flex-direction: column; transition: all 0.5s;}
         #terminal-box { height: 350px; }
-        #ids-box { height: 100%; min-height: 280px; border-color: rgba(16, 185, 129, 0.3); box-shadow: 0 0 30px rgba(16, 185, 129, 0.1); }
+        #ids-box { border-color: rgba(16, 185, 129, 0.3); box-shadow: 0 0 30px rgba(16, 185, 129, 0.1); }
         
         .terminal-header { background: rgba(239, 68, 68, 0.1); padding: 8px 15px; border-bottom: 1px solid rgba(239, 68, 68, 0.2); display: flex; justify-content: space-between; }
         .ids-header { background: rgba(16, 185, 129, 0.1); padding: 8px 15px; border-bottom: 1px solid rgba(16, 185, 129, 0.2); display: flex; justify-content: space-between; }
@@ -211,7 +211,6 @@
                 </div>
                 <div class="hidden md:flex items-center space-x-6 text-[10px] font-bold uppercase tracking-widest">
                     <a href="#about" class="nav-link desktop-link text-slate-300 hover:text-sky-400 transition">Profile</a>
-                    <a href="#recon" class="nav-link desktop-link text-slate-300 hover:text-sky-400 transition">Intel</a>
                     <a href="#education" class="nav-link desktop-link text-slate-300 hover:text-sky-400 transition">Education</a>
                     <a href="#arsenal" class="nav-link desktop-link text-slate-300 hover:text-sky-400 transition">Arsenal</a>
                     <a href="#project" class="nav-link desktop-link text-slate-300 hover:text-sky-400 transition">Project</a>
@@ -227,7 +226,6 @@
             </div>
             <div id="mobileMenu" class="hidden absolute top-16 left-0 w-full glass-nav flex flex-col items-center py-6 space-y-6 text-[10px] font-bold uppercase tracking-widest shadow-2xl md:hidden">
                 <a href="#about" class="nav-link mobile-link transition">Profile</a>
-                <a href="#recon" class="nav-link mobile-link transition">Intel</a>
                 <a href="#education" class="nav-link mobile-link transition">Education</a>
                 <a href="#arsenal" class="nav-link mobile-link transition">Arsenal</a>
                 <a href="#project" class="nav-link mobile-link transition">Project</a>
@@ -347,8 +345,8 @@
 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     
-                    <div class="bg-black/40 border border-white/10 rounded-3xl p-6 md:p-8 relative overflow-hidden shadow-xl flex flex-col">
-                        <div class="flex items-center gap-3 mb-6 border-b border-white/5 pb-4">
+                    <div class="bg-black/40 border border-white/10 rounded-3xl p-6 md:p-8 relative overflow-hidden shadow-xl flex flex-col h-[450px]">
+                        <div class="flex items-center gap-3 mb-6 border-b border-white/5 pb-4 shrink-0">
                             <div class="bg-rose-500/20 p-2 rounded-full border border-rose-500/30"><i data-lucide="map-pin" class="w-5 h-5 text-rose-500"></i></div>
                             <div>
                                 <h3 class="text-xl font-bold text-white mono">Target_Locator</h3>
@@ -356,14 +354,14 @@
                             </div>
                         </div>
                         
-                        <div class="flex flex-col sm:flex-row gap-4 mb-6 mt-auto">
+                        <div class="flex flex-col sm:flex-row gap-4 mb-6 shrink-0">
                             <input type="text" id="target-ip-input" placeholder="Enter IP (e.g. 8.8.8.8)" class="flex-1 bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-sm outline-none focus:border-rose-500 mono text-white">
                             <button onclick="scanTargetIP()" id="scan-ip-btn" class="bg-rose-600 hover:bg-rose-500 text-white font-bold px-6 py-3 rounded-xl transition shadow-[0_0_15px_rgba(244,63,94,0.3)] mono uppercase tracking-widest text-[10px] flex items-center justify-center gap-2">
                                 <i data-lucide="search" class="w-4 h-4"></i> Scan
                             </button>
                         </div>
 
-                        <div id="ip-results" class="hidden">
+                        <div id="ip-results" class="hidden flex-1 overflow-y-auto custom-scrollbar pr-2">
                             <div class="scan-loader hidden mb-6" id="ip-loader"></div>
                             <div id="ip-data-box" class="hidden grid grid-cols-2 gap-4 bg-[#0A101F] p-5 rounded-2xl border border-white/5 shadow-inner">
                                 <div>
@@ -387,8 +385,8 @@
                         </div>
                     </div>
 
-                    <div id="ids-box" class="transition-colors duration-500">
-                        <div class="ids-header">
+                    <div id="ids-box" class="transition-colors duration-500 h-[450px] flex flex-col">
+                        <div class="ids-header shrink-0">
                             <div class="flex gap-2">
                                 <i data-lucide="activity" class="w-4 h-4 text-emerald-500 animate-pulse"></i>
                                 <span class="text-[10px] mono text-emerald-500 font-bold tracking-widest uppercase">Live IDS Monitor</span>
