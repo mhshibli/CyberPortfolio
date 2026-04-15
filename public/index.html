@@ -187,7 +187,7 @@
         .admin-input { background: transparent; border: none; color: #fff; font-family: 'JetBrains Mono', monospace; font-size: 14px; outline: none; flex: 1; }
 
         /* ================= SEIZURE OVERLAY ================= */
-        #seizure-overlay { position: fixed; inset: 0; z-index: 10005; background: #000; display: none; flex-direction: column; align-items: center; justify-content: center; color: white; font-family: 'Courier New', monospace; padding: 20px; text-align: center; }
+        #seizure-overlay { position: fixed !important; top: 0 !important; left: 0 !important; width: 100vw !important; height: 100vh !important; z-index: 999999 !important; background: #000 !important; display: none; flex-direction: column; align-items: center; justify-content: center; color: white; font-family: 'Courier New', monospace; padding: 20px; text-align: center; }
         .police-strobe { position: absolute; inset: 0; z-index: -1; opacity: 0.3; animation: pStrobe 0.5s infinite; }
         @keyframes pStrobe { 0% { background: red; } 50% { background: blue; } 100% { background: red; } }
         .glitch-text-scary { font-size: 3rem; font-weight: bold; color: red; text-shadow: 0 0 10px red; margin-bottom: 10px; animation: textGlitch 0.2s infinite; }
@@ -712,7 +712,7 @@
                         <p class="text-xs text-slate-400 mb-4">Undetected Windows 11 Local Privilege Escalation exploit. FUD 35/35.</p>
                         <div class="flex justify-between items-center mt-auto">
                             <span class="text-white font-mono font-bold text-sm">2.5 BTC</span>
-                            <button onclick="buyMarketItem()" class="bg-red-500/20 hover:bg-red-500 text-red-500 hover:text-white border border-red-500/50 px-4 py-1.5 rounded font-mono text-xs transition">PURCHASE</button>
+                            <button onclick="window.buyMarketItem()" class="bg-red-500/20 hover:bg-red-500 text-red-500 hover:text-white border border-red-500/50 px-4 py-1.5 rounded font-mono text-xs transition">PURCHASE</button>
                         </div>
                     </div>
                     <div class="bg-black/60 border border-red-500/20 p-5 rounded-xl hover:border-red-500/60 transition group relative overflow-hidden">
@@ -721,7 +721,7 @@
                         <p class="text-xs text-slate-400 mb-4">Access to 50k+ IoT botnet for stress testing. 500Gbps capacity.</p>
                         <div class="flex justify-between items-center mt-auto">
                             <span class="text-white font-mono font-bold text-sm">150 XMR</span>
-                            <button onclick="buyMarketItem()" class="bg-red-500/20 hover:bg-red-500 text-red-500 hover:text-white border border-red-500/50 px-4 py-1.5 rounded font-mono text-xs transition">PURCHASE</button>
+                            <button onclick="window.buyMarketItem()" class="bg-red-500/20 hover:bg-red-500 text-red-500 hover:text-white border border-red-500/50 px-4 py-1.5 rounded font-mono text-xs transition">PURCHASE</button>
                         </div>
                     </div>
                     <div class="bg-black/60 border border-red-500/20 p-5 rounded-xl hover:border-red-500/60 transition group relative overflow-hidden">
@@ -730,7 +730,7 @@
                         <p class="text-xs text-slate-400 mb-4">Unreleased database dump. 5M+ records including hashed passwords.</p>
                         <div class="flex justify-between items-center mt-auto">
                             <span class="text-white font-mono font-bold text-sm">0.8 BTC</span>
-                            <button onclick="buyMarketItem()" class="bg-red-500/20 hover:bg-red-500 text-red-500 hover:text-white border border-red-500/50 px-4 py-1.5 rounded font-mono text-xs transition">PURCHASE</button>
+                            <button onclick="window.buyMarketItem()" class="bg-red-500/20 hover:bg-red-500 text-red-500 hover:text-white border border-red-500/50 px-4 py-1.5 rounded font-mono text-xs transition">PURCHASE</button>
                         </div>
                     </div>
                 </div>
@@ -1836,14 +1836,35 @@
             setTimeout(() => blackMarketModal.classList.add('hidden'), 300); 
         }
 
-        function buyMarketItem() {
-            closeBlackMarket();
-            const overlay = document.getElementById('seizure-overlay');
-            const userIp = document.getElementById('vis-ip').innerText || "UNKNOWN IP";
-            document.getElementById('seizure-ip').innerText = `YOUR IP ADDRESS (${userIp}) HAS BEEN LOGGED AND REPORTED.`;
-            overlay.style.display = 'flex';
+        window.buyMarketItem = function() {
+            // Force close modal
+            try {
+                const modal = document.getElementById('blackMarketModal');
+                if(modal) {
+                    modal.classList.add('opacity-0');
+                    setTimeout(() => modal.classList.add('hidden'), 300);
+                }
+            } catch(e) {}
             
-            // Play Siren
+            // Show Overlay
+            try {
+                const overlay = document.getElementById('seizure-overlay');
+                if (overlay) {
+                    overlay.style.setProperty('display', 'flex', 'important');
+                    overlay.style.setProperty('z-index', '999999', 'important');
+                }
+                
+                const userIpEl = document.getElementById('vis-ip');
+                const userIp = userIpEl ? userIpEl.innerText : "UNKNOWN IP";
+                const sIp = document.getElementById('seizure-ip');
+                if(sIp) {
+                    sIp.innerText = "YOUR IP ADDRESS (" + userIp + ") HAS BEEN LOGGED AND REPORTED.";
+                }
+            } catch(err) {
+                console.error(err);
+            }
+            
+            // Play Audio
             try {
                 const Ctx = window.AudioContext || window.webkitAudioContext;
                 if (Ctx) {
@@ -1863,12 +1884,14 @@
                     osc.start(now);
                     osc.stop(now + 5);
                 }
-            } catch(e) {}
+            } catch(e) {
+                console.error("Audio error", e);
+            }
 
             setTimeout(() => {
-                location.reload();
+                window.location.reload();
             }, 5000);
-        }
+        };
     </script>
 </body>
 </html>
