@@ -177,12 +177,39 @@
         body.secret-mode .light-shield-box i { color: #ef4444; }
         body.secret-mode .scanner-line { background: #ef4444; box-shadow: 0 0 15px #ef4444, 0 0 30px #ef4444; }
 
+        /* ================= ADMIN BYPASS MODAL ================= */
+        #adminLoginModal { position: fixed; inset: 0; z-index: 10005; background: rgba(0,0,0,0.9); display: none; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
+        .admin-terminal { width: 100%; max-width: 500px; background: #050505; border: 1px solid #333; border-radius: 8px; overflow: hidden; font-family: 'JetBrains Mono', monospace; box-shadow: 0 0 50px rgba(0,0,0,0.8); }
+        .admin-term-header { background: #111; padding: 8px 15px; border-bottom: 1px solid #333; display: flex; justify-content: space-between; color: #666; font-size: 12px; }
+        .admin-term-body { padding: 20px; color: #fff; font-size: 14px; min-height: 250px; }
+        .admin-input-row { display: flex; margin-top: 10px; }
+        .admin-prompt { color: #ef4444; margin-right: 10px; }
+        .admin-input { background: transparent; border: none; color: #fff; font-family: 'JetBrains Mono', monospace; font-size: 14px; outline: none; flex: 1; }
+
         .custom-scrollbar::-webkit-scrollbar { width: 6px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.2); border-radius: 4px; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(14, 165, 233, 0.5); border-radius: 4px; }
     </style>
 </head>
 <body>
+
+    <div id="adminLoginModal">
+        <div class="admin-terminal">
+            <div class="admin-term-header">
+                <span>SECURE_AUTH_NODE_v4.2</span>
+                <button onclick="closeAdminModal()" class="hover:text-red-500 transition">[X]</button>
+            </div>
+            <div class="admin-term-body" id="admin-term-content">
+                <p class="text-slate-400 mb-4">RESTRICTED AREA. PLEASE IDENTIFY.</p>
+                <div id="admin-login-flow">
+                    <div class="admin-input-row">
+                        <span class="admin-prompt">Username:</span>
+                        <input type="text" id="admin-user" class="admin-input" autocomplete="off" spellcheck="false" autofocus>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div id="fbi-warning">
         <h1>WARNING!</h1>
@@ -260,7 +287,7 @@
                 </div>
                 <div class="flex items-center gap-4">
                     <button id="themeToggle" class="p-2 rounded-full bg-black/20 hover:bg-black/40 transition border border-white/10 flex items-center justify-center w-8 h-8"><i data-lucide="sun" class="w-4 h-4 text-amber-400"></i></button>
-                    <a href="/admin.html" target="_blank" class="hidden sm:inline-block text-xs font-bold mono text-sky-500 bg-sky-500/10 px-3 py-1 rounded-full border border-sky-500/20 hover:bg-sky-500/20 transition">MH_ROOT</a>
+                    <button onclick="openAdminModal()" class="hidden sm:inline-block text-xs font-bold mono text-sky-500 bg-sky-500/10 px-3 py-1 rounded-full border border-sky-500/20 hover:bg-sky-500/20 transition">MH_ROOT</button>
                     <button id="mobileMenuBtn" class="lg:hidden p-2 text-slate-400 hover:text-sky-500 transition"><i data-lucide="menu" class="w-6 h-6"></i></button>
                 </div>
             </div>
@@ -272,7 +299,7 @@
                 <a href="#achievements" class="nav-link mobile-link transition">Certs</a>
                 <a href="#terminal" class="nav-link mobile-link transition">Terminal</a>
                 <a href="#archive" class="nav-link mobile-link transition">Archive</a>
-                <a href="/admin.html" class="text-sky-500 mt-2 border border-sky-500/30 px-6 py-2 rounded-full hover:bg-sky-500/10 transition">Admin Login</a>
+                <button onclick="openAdminModal()" class="text-sky-500 mt-2 border border-sky-500/30 px-6 py-2 rounded-full hover:bg-sky-500/10 transition">Admin Login</button>
             </div>
         </nav>
 
@@ -653,47 +680,6 @@
             </div>
         </footer>
 
-        <div id="blackMarketModal" class="fixed inset-0 modal-overlay z-[300] hidden flex items-center justify-center p-4 md:p-10 opacity-0 transition-opacity duration-300">
-            <div class="glass-panel w-full h-full max-h-[85vh] flex flex-col p-6 md:p-8 relative transform scale-95 transition-transform duration-300 border-red-500/50 shadow-[0_0_30px_rgba(239,68,68,0.2)] bg-[#050000]" id="blackMarketModal-content">
-                <div class="flex justify-between items-center mb-6 border-b border-red-500/30 pb-4 shrink-0">
-                    <div class="flex items-center gap-3">
-                        <i data-lucide="skull" class="w-8 h-8 text-red-500 animate-pulse"></i>
-                        <h2 class="text-2xl font-black text-white">THE <span class="text-red-500">BLACK MARKET</span></h2>
-                    </div>
-                    <button onclick="closeBlackMarket()" class="text-slate-400 hover:text-red-500 bg-black/40 p-2 rounded-full border border-red-500/30 transition"><i data-lucide="x" class="w-6 h-6"></i></button>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 overflow-y-auto pr-2 pb-4 flex-1 custom-scrollbar content-start auto-rows-max">
-                    <div class="bg-black/60 border border-red-500/20 p-5 rounded-xl hover:border-red-500/60 transition group relative overflow-hidden">
-                        <div class="absolute top-0 right-0 bg-red-600 text-white text-[8px] font-bold px-2 py-1 rounded-bl-lg">0-DAY</div>
-                        <h3 class="text-red-400 font-mono font-bold text-lg mb-2">Win_11_PrivEsc.exe</h3>
-                        <p class="text-xs text-slate-400 mb-4">Undetected Windows 11 Local Privilege Escalation exploit. FUD 35/35.</p>
-                        <div class="flex justify-between items-center mt-auto">
-                            <span class="text-white font-mono font-bold text-sm">2.5 BTC</span>
-                            <button onclick="buyMarketItem()" class="bg-red-500/20 hover:bg-red-500 text-red-500 hover:text-white border border-red-500/50 px-4 py-1.5 rounded font-mono text-xs transition">PURCHASE</button>
-                        </div>
-                    </div>
-                    <div class="bg-black/60 border border-red-500/20 p-5 rounded-xl hover:border-red-500/60 transition group relative overflow-hidden">
-                        <div class="absolute top-0 right-0 bg-amber-500 text-black text-[8px] font-bold px-2 py-1 rounded-bl-lg">BOTNET</div>
-                        <h3 class="text-red-400 font-mono font-bold text-lg mb-2">Mirai_Variant_X</h3>
-                        <p class="text-xs text-slate-400 mb-4">Access to 50k+ IoT botnet for stress testing. 500Gbps capacity.</p>
-                        <div class="flex justify-between items-center mt-auto">
-                            <span class="text-white font-mono font-bold text-sm">150 XMR</span>
-                            <button onclick="buyMarketItem()" class="bg-red-500/20 hover:bg-red-500 text-red-500 hover:text-white border border-red-500/50 px-4 py-1.5 rounded font-mono text-xs transition">PURCHASE</button>
-                        </div>
-                    </div>
-                    <div class="bg-black/60 border border-red-500/20 p-5 rounded-xl hover:border-red-500/60 transition group relative overflow-hidden">
-                        <div class="absolute top-0 right-0 bg-purple-500 text-white text-[8px] font-bold px-2 py-1 rounded-bl-lg">DATA DUMP</div>
-                        <h3 class="text-red-400 font-mono font-bold text-lg mb-2">Corp_DB_Leak.sql</h3>
-                        <p class="text-xs text-slate-400 mb-4">Unreleased database dump. 5M+ records including hashed passwords.</p>
-                        <div class="flex justify-between items-center mt-auto">
-                            <span class="text-white font-mono font-bold text-sm">0.8 BTC</span>
-                            <button onclick="buyMarketItem()" class="bg-red-500/20 hover:bg-red-500 text-red-500 hover:text-white border border-red-500/50 px-4 py-1.5 rounded font-mono text-xs transition">PURCHASE</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <a href="#communication" id="floatingMsg" class="fixed bottom-6 right-6 md:bottom-10 md:right-10 z-[100] glass-panel border-sky-500/50 p-4 rounded-full text-sky-500 hover:text-sky-400 hover:bg-sky-500/10 shadow-[0_0_15px_rgba(14,165,233,0.3)] hover:shadow-[0_0_25px_rgba(14,165,233,0.5)] transition-all duration-300 transform hover:-translate-y-1 flex items-center justify-center group bg-black/60 backdrop-blur-xl">
             <i data-lucide="message-square" class="w-6 h-6 group-hover:scale-110 transition-transform"></i>
         </a>
@@ -986,7 +972,7 @@
             // Cursor Hex Trail
             if(!document.body.classList.contains('light-mode')) {
                 const trail = document.createElement('div');
-                trail.className = 'hex-trail';
+                trail.className = 'hex-trail text-emerald-500';
                 trail.innerText = "0x" + Math.floor(Math.random()*255).toString(16).toUpperCase();
                 document.body.appendChild(trail);
                 
@@ -1070,7 +1056,46 @@
         }
         let matrixInterval;
 
-        // ================= 4. ADVANCED TERMINAL (INTERACTIVE CTF + EASTER EGGS) =================
+        // ================= ADMIN BYPASS LOGIC =================
+        const adminModal = document.getElementById('adminLoginModal');
+        const adminInput = document.getElementById('admin-user');
+        const adminTermContent = document.getElementById('admin-term-content');
+        
+        function openAdminModal() {
+            adminModal.style.display = 'flex';
+            adminInput.focus();
+        }
+        
+        function closeAdminModal() {
+            adminModal.style.display = 'none';
+        }
+
+        adminInput.addEventListener('keydown', function(e) {
+            if(e.key === 'Enter') {
+                const val = this.value.trim();
+                const newLine = document.createElement('div');
+                newLine.innerHTML = `<span class="admin-prompt">Username:</span> <span class="text-white">${val}</span>`;
+                
+                const response = document.createElement('div');
+                
+                if(val === 'admin' || val === 'root') {
+                    response.innerHTML = `<span class="text-red-500">[ERROR] INVALID CREDENTIALS.</span>`;
+                } else if(val === 'toor' || val.includes("' OR 1=1")) {
+                    response.innerHTML = `<span class="text-emerald-500 font-bold">[SUCCESS] AUTH GRANTED. BYPASS SUCCESSFUL.</span><br><span class="text-sky-400">Loading Secret Admin Panel...</span>`;
+                    setTimeout(() => {
+                        window.location.href = '/admin.html';
+                    }, 1500);
+                } else {
+                    response.innerHTML = `<span class="text-red-500">ACCESS DENIED. THIS INCIDENT WILL BE REPORTED.</span>`;
+                }
+                
+                adminTermContent.insertBefore(newLine, document.getElementById('admin-login-flow'));
+                adminTermContent.insertBefore(response, document.getElementById('admin-login-flow'));
+                this.value = "";
+            }
+        });
+
+        // ================= 4. ADVANCED TERMINAL =================
         const termInput = document.getElementById('term-input');
         const termOutputs = document.getElementById('term-outputs');
         const termPrompt = document.getElementById('term-prompt');
@@ -1530,6 +1555,11 @@
                 
                 // 6. Archives
                 loadMainGallery();
+                
+                // Attach Matrix Glitch Hover Effect
+                setTimeout(attachGlitch, 500);
+                
+                lucide.createIcons();
             } catch (e) {
                 console.error("Data fetching error", e);
             }
