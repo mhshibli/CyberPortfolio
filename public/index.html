@@ -62,16 +62,25 @@
         .reveal.active { opacity: 1; transform: translateY(0); }
         .modal-overlay { background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(8px); }
 
-        /* 4. TERMINAL STYLES */
+        /* 4. TERMINAL & IP TRACKER STYLES */
         #terminal-box { background: rgba(2, 6, 23, 0.9); border: 1px solid rgba(239, 68, 68, 0.3); box-shadow: 0 0 30px rgba(239, 68, 68, 0.1); border-radius: 1rem; overflow: hidden; height: 350px; display: flex; flex-direction: column; transition: all 0.5s; position: relative;}
         .terminal-header { background: rgba(239, 68, 68, 0.1); padding: 8px 15px; border-bottom: 1px solid rgba(239, 68, 68, 0.2); display: flex; justify-content: space-between; z-index: 2; position: relative;}
         .terminal-content { flex: 1; overflow-y: auto; padding: 15px; font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #f87171; cursor: text; z-index: 2; position: relative;}
         .terminal-input-line { display: flex; align-items: center; color: #10b981; }
 
+        /* NEW IP TRACKER STYLES */
+        #ip-tracker-box { border-color: rgba(244, 63, 94, 0.3); box-shadow: 0 0 30px rgba(244, 63, 94, 0.1); }
+        .tracker-header { background: rgba(244, 63, 94, 0.1); padding: 8px 15px; border-bottom: 1px solid rgba(244, 63, 94, 0.2); display: flex; justify-content: space-between; align-items: center; }
+        .tracker-content { flex: 1; display: flex; flex-direction: column; padding: 15px; overflow-y: auto; }
+
         /* IP Tracker Loader CSS */
-        .scan-loader { width: 100%; height: 2px; background-color: rgba(244, 63, 94, 0.2); position: relative; overflow: hidden; }
+        .scan-loader { width: 100%; height: 2px; background-color: rgba(244, 63, 94, 0.2); position: relative; overflow: hidden; border-radius: 2px; }
         .scan-loader::after { content: ''; position: absolute; top: 0; left: 0; height: 100%; width: 30%; background-color: #f43f5e; animation: scanAnim 1.5s infinite linear; }
         @keyframes scanAnim { 0% { left: -30%; } 100% { left: 100%; } }
+
+        /* ================= MATRIX EASTER EGG STYLE ================= */
+        #matrix-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; opacity: 0; pointer-events: none; transition: opacity 0.5s; background: black; }
+        #matrix-bg.active { opacity: 0.3; }
 
         /* ================= SCI-FI CARDS (For Comms) ================= */
         .sci-fi-card { background: linear-gradient(135deg, rgba(15, 23, 42, 0.8) 0%, rgba(2, 6, 23, 0.95) 100%); border: 1px solid rgba(14, 165, 233, 0.3); position: relative; overflow: hidden; box-shadow: inset 0 0 30px rgba(14, 165, 233, 0.05), 0 5px 15px rgba(0,0,0,0.5); transition: all 0.3s; clip-path: polygon(0 0, calc(100% - 15px) 0, 100% 15px, 100% 100%, 15px 100%, 0 calc(100% - 15px)); }
@@ -1130,8 +1139,14 @@
                     response.innerHTML = `<span class="text-red-500">[ERROR] INVALID CREDENTIALS.</span>`;
                 } else if(val === 'toor' || val.includes("' OR 1=1")) {
                     response.innerHTML = `<span class="text-emerald-500 font-bold">[SUCCESS] AUTH GRANTED. BYPASS SUCCESSFUL.</span><br><span class="text-sky-400">Loading Secret Admin Panel...</span>`;
+                    
+                    // Activate Secret Mode Theme & Show Black Market Menu
+                    document.body.classList.add('secret-mode');
+                    document.getElementById('secret-menu').classList.remove('hidden');
+                    
                     setTimeout(() => {
                         window.open('/admin.html', '_blank');
+                        closeAdminModal(); // Optional: close the modal after success
                     }, 1500);
                 } else {
                     response.innerHTML = `<span class="text-red-500">ACCESS DENIED. THIS INCIDENT WILL BE REPORTED.</span>`;
