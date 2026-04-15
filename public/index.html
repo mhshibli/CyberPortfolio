@@ -13,6 +13,10 @@
         body { font-family: 'Inter', sans-serif; background-color: #020617; color: #f8fafc; overflow-x: hidden; transition: background-color 0.5s, color 0.5s; margin: 0; }
         .mono { font-family: 'JetBrains Mono', monospace; }
 
+        /* ================= 1. LIVE ATTACK MAP ================= */
+        #attack-map { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; opacity: 0.6; pointer-events: none; }
+        body.light-mode #attack-map { opacity: 0.1; filter: invert(1); }
+
         /* ================= AGGRESSIVE FAKE EXPLOIT BOOT SEQUENCE ================= */
         #boot-screen {
             position: fixed; inset: 0; z-index: 9999; background: #050000; 
@@ -55,11 +59,33 @@
         .reveal.active { opacity: 1; transform: translateY(0); }
         .modal-overlay { background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(8px); }
 
-        /* 4. TERMINAL STYLES */
-        #terminal-box { background: rgba(2, 6, 23, 0.9); border: 1px solid rgba(239, 68, 68, 0.3); box-shadow: 0 0 30px rgba(239, 68, 68, 0.1); border-radius: 1rem; overflow: hidden; height: 350px; display: flex; flex-direction: column; transition: all 0.5s;}
+        /* TERMINAL, IDS & HEX STYLES */
+        #terminal-box, #ids-box, #hex-box, #ip-tracker-box { background: rgba(2, 6, 23, 0.9); border: 1px solid rgba(239, 68, 68, 0.3); box-shadow: 0 0 30px rgba(239, 68, 68, 0.1); border-radius: 1rem; overflow: hidden; display: flex; flex-direction: column; transition: all 0.5s;}
+        #terminal-box { height: 350px; }
+        #ids-box { border-color: rgba(16, 185, 129, 0.3); box-shadow: 0 0 30px rgba(16, 185, 129, 0.1); }
+        #hex-box { border-color: rgba(139, 92, 246, 0.3); box-shadow: 0 0 30px rgba(139, 92, 246, 0.1); }
+        #ip-tracker-box { height: 350px; }
+        
         .terminal-header { background: rgba(239, 68, 68, 0.1); padding: 8px 15px; border-bottom: 1px solid rgba(239, 68, 68, 0.2); display: flex; justify-content: space-between; }
+        .ids-header { background: rgba(16, 185, 129, 0.1); padding: 8px 15px; border-bottom: 1px solid rgba(16, 185, 129, 0.2); display: flex; justify-content: space-between; }
+        .hex-header { background: rgba(139, 92, 246, 0.1); padding: 8px 15px; border-bottom: 1px solid rgba(139, 92, 246, 0.2); display: flex; justify-content: space-between; }
+        
         .terminal-content { flex: 1; overflow-y: auto; padding: 15px; font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #f87171; cursor: text; }
+        .ids-content { flex: 1; overflow-y: auto; padding: 15px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #a7f3d0; }
+        .hex-content { flex: 1; overflow-y: hidden; padding: 15px; font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #c4b5fd; line-height: 1.2; word-break: break-all; opacity: 0.8;}
         .terminal-input-line { display: flex; align-items: center; color: #10b981; }
+
+        /* ================= DEF CON BADGE ================= */
+        .defcon-badge { display: inline-flex; align-items: center; gap: 6px; padding: 2px 8px; border: 1px solid #ef4444; background: rgba(239, 68, 68, 0.1); color: #ef4444; font-family: 'JetBrains Mono', monospace; font-size: 9px; font-weight: bold; letter-spacing: 0.1em; border-radius: 4px; animation: badgeGlitch 3s infinite; cursor: crosshair; }
+        .defcon-badge i { width: 10px; height: 10px; }
+        @keyframes badgeGlitch { 0%, 96%, 100% { opacity: 1; transform: translate(0); } 97% { opacity: 0.5; transform: translate(-2px, 1px); } 98% { opacity: 0.8; transform: translate(2px, -1px); } 99% { opacity: 0.3; transform: translate(-1px, -1px); } }
+
+        /* ================= PANIC BUTTON ================= */
+        .panic-btn { display: flex; align-items: center; gap: 4px; padding: 4px 10px; background: rgba(239, 68, 68, 0.2); border: 1px solid #ef4444; color: #ef4444; font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: bold; border-radius: 6px; cursor: pointer; transition: all 0.2s; }
+        .panic-btn:hover { background: #ef4444; color: white; box-shadow: 0 0 15px rgba(239, 68, 68, 0.6); }
+        #panic-overlay { position: fixed; inset: 0; z-index: 10000; background: rgba(239, 68, 68, 0.95); display: none; flex-direction: column; align-items: center; justify-content: center; color: white; font-family: 'JetBrains Mono', monospace; }
+        .panic-active { animation: strobe 0.5s infinite alternate; }
+        @keyframes strobe { 0% { background: rgba(239, 68, 68, 0.8); } 100% { background: rgba(153, 27, 27, 0.95); } }
 
         /* ================= SCI-FI CARDS (For Comms) ================= */
         .sci-fi-card { background: linear-gradient(135deg, rgba(15, 23, 42, 0.8) 0%, rgba(2, 6, 23, 0.95) 100%); border: 1px solid rgba(14, 165, 233, 0.3); position: relative; overflow: hidden; box-shadow: inset 0 0 30px rgba(14, 165, 233, 0.05), 0 5px 15px rgba(0,0,0,0.5); transition: all 0.3s; clip-path: polygon(0 0, calc(100% - 15px) 0, 100% 15px, 100% 100%, 15px 100%, 0 calc(100% - 15px)); }
@@ -83,6 +109,18 @@
 
         /* ================= MAIN CONTENT WRAPPER ================= */
         #main-content { opacity: 0; transition: opacity 1s ease-in; }
+
+        /* ================= IP TRACKER LOADER ================= */
+        .scan-loader {
+            width: 100%; height: 2px; background-color: rgba(244, 63, 94, 0.2); position: relative; overflow: hidden;
+        }
+        .scan-loader::after {
+            content: ''; position: absolute; top: 0; left: 0; height: 100%; width: 30%; background-color: #f43f5e;
+            animation: scanAnim 1.5s infinite linear;
+        }
+        @keyframes scanAnim {
+            0% { left: -30%; } 100% { left: 100%; }
+        }
 
         /* ================= DAY MODE FIXES ================= */
         body.light-mode { background-color: #f1f5f9; color: #0f172a; }
@@ -130,9 +168,11 @@
         body.light-mode .light-edu-inner { background: rgba(241, 245, 249, 0.8); border: 1px solid rgba(0,0,0,0.05); }
         body.light-mode .light-edu-inner:hover { border-color: rgba(16, 185, 129, 0.4); }
 
-        body.light-mode #terminal-box { background: #fff; border-color: rgba(0,0,0,0.2); box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
-        body.light-mode .terminal-header { background: #f1f5f9; border-color: rgba(0,0,0,0.1); }
+        body.light-mode #terminal-box, body.light-mode #ids-box, body.light-mode #hex-box, body.light-mode #ip-tracker-box { background: #fff; border-color: rgba(0,0,0,0.2); box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        body.light-mode .terminal-header, body.light-mode .ids-header, body.light-mode .hex-header { background: #f1f5f9; border-color: rgba(0,0,0,0.1); }
         body.light-mode .terminal-content { color: #334155; }
+        body.light-mode .ids-content { color: #059669; }
+        body.light-mode .hex-content { color: #8b5cf6; }
 
         .custom-scrollbar::-webkit-scrollbar { width: 6px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.2); border-radius: 4px; }
@@ -140,6 +180,27 @@
     </style>
 </head>
 <body>
+
+    <div id="honeypot-overlay" class="fixed inset-0 z-[10000] hidden bg-[#8b0000] flex-col items-center justify-center p-8 text-center" style="display: none;">
+        <h1 class="text-4xl md:text-6xl font-black text-yellow-400 mb-6 drop-shadow-[0_0_10px_rgba(255,255,0,0.8)]">Oops, your files have been encrypted!</h1>
+        <p class="text-white text-lg md:text-xl font-mono mb-2">What happened to my computer?</p>
+        <p class="text-white text-lg md:text-xl font-mono mb-2">Your important files are encrypted.</p>
+        <p class="text-white text-lg md:text-xl font-mono max-w-3xl mb-8">Many of your documents, photos, videos, databases and other files are no longer accessible because they have been encrypted.</p>
+        <p style="margin-top:30px; font-weight:bold; color:#0ea5e9;" id="honeypot-lesson"></p>
+    </div>
+
+    <div id="key-hook" class="fixed bottom-4 left-4 z-[9999] bg-black/80 border border-emerald-500/30 p-3 rounded-lg shadow-[0_0_15px_rgba(16,185,129,0.1)] w-64 opacity-0 transition-opacity duration-500 pointer-events-none">
+        <div class="text-[8px] text-emerald-500/70 border-b border-emerald-500/30 pb-1 mb-2 mono font-bold flex items-center gap-2">
+            <i data-lucide="terminal" class="w-3 h-3"></i> key_hook.exe // active
+        </div>
+        <div id="key-logs" class="text-[10px] text-emerald-400 mono break-words max-h-16 overflow-hidden leading-tight"></div>
+    </div>
+
+    <div id="panic-overlay">
+        <i data-lucide="alert-triangle" class="w-24 h-24 mb-4 animate-bounce"></i>
+        <h1 class="text-4xl md:text-6xl font-black mb-2 text-center">SYSTEM PURGE INITIATED</h1>
+        <p class="text-xl md:text-2xl opacity-80" id="panic-status">ERASING FOOTPRINTS...</p>
+    </div>
 
     <div id="boot-screen">
         <div class="boot-text-container" id="terminal-text"></div>
@@ -188,10 +249,11 @@
             <div class="w-full px-6 lg:px-12 h-16 flex items-center justify-between">
                 <div class="flex items-center gap-3">
                     <div class="w-3 h-3 rounded-full bg-emerald-500 shadow-[0_0_10px_#10b981] animate-pulse"></div>
-                    <span class="text-[10px] font-bold uppercase tracking-[0.2em] mono text-emerald-500">System_Online</span>
+                    <span class="text-[10px] font-bold uppercase tracking-[0.2em] mono text-emerald-500 hidden sm:inline">System_Online</span>
                 </div>
-                <div class="hidden md:flex items-center space-x-6 text-[10px] font-bold uppercase tracking-widest">
+                <div class="hidden lg:flex items-center space-x-6 text-[10px] font-bold uppercase tracking-widest">
                     <a href="#about" class="nav-link desktop-link text-slate-300 hover:text-sky-400 transition">Profile</a>
+                    <a href="#recon" class="nav-link desktop-link text-slate-300 hover:text-sky-400 transition">Intel</a>
                     <a href="#education" class="nav-link desktop-link text-slate-300 hover:text-sky-400 transition">Education</a>
                     <a href="#arsenal" class="nav-link desktop-link text-slate-300 hover:text-sky-400 transition">Arsenal</a>
                     <a href="#project" class="nav-link desktop-link text-slate-300 hover:text-sky-400 transition">Project</a>
@@ -199,14 +261,16 @@
                     <a href="#terminal" class="nav-link desktop-link text-slate-300 hover:text-sky-400 transition">Terminal</a>
                     <a href="#archive" class="nav-link desktop-link text-slate-300 hover:text-sky-400 transition">Archive</a>
                 </div>
-                <div class="flex items-center gap-4">
-                    <button id="themeToggle" class="p-2 rounded-full bg-black/20 hover:bg-black/40 transition border border-white/10 flex items-center justify-center w-9 h-9"><i data-lucide="sun" class="w-4 h-4 text-amber-400"></i></button>
+                <div class="flex items-center gap-3">
+                    <button onclick="triggerPanic()" class="panic-btn hidden sm:flex" title="Wipe Session Data"><i data-lucide="skull" class="w-3 h-3"></i> PANIC</button>
+                    <button id="themeToggle" class="p-2 rounded-full bg-black/20 hover:bg-black/40 transition border border-white/10 flex items-center justify-center w-8 h-8"><i data-lucide="sun" class="w-4 h-4 text-amber-400"></i></button>
                     <a href="/admin.html" target="_blank" class="hidden sm:inline-block text-xs font-bold mono text-sky-500 bg-sky-500/10 px-3 py-1 rounded-full border border-sky-500/20 hover:bg-sky-500/20 transition">MH_ROOT</a>
-                    <button id="mobileMenuBtn" class="md:hidden p-2 text-slate-400 hover:text-sky-500 transition"><i data-lucide="menu" class="w-6 h-6"></i></button>
+                    <button id="mobileMenuBtn" class="lg:hidden p-2 text-slate-400 hover:text-sky-500 transition"><i data-lucide="menu" class="w-6 h-6"></i></button>
                 </div>
             </div>
-            <div id="mobileMenu" class="hidden absolute top-16 left-0 w-full glass-nav flex flex-col items-center py-6 space-y-6 text-[10px] font-bold uppercase tracking-widest shadow-2xl md:hidden">
+            <div id="mobileMenu" class="hidden absolute top-16 left-0 w-full glass-nav flex flex-col items-center py-6 space-y-6 text-[10px] font-bold uppercase tracking-widest shadow-2xl lg:hidden">
                 <a href="#about" class="nav-link mobile-link transition">Profile</a>
+                <a href="#recon" class="nav-link mobile-link transition">Intel</a>
                 <a href="#education" class="nav-link mobile-link transition">Education</a>
                 <a href="#arsenal" class="nav-link mobile-link transition">Arsenal</a>
                 <a href="#project" class="nav-link mobile-link transition">Project</a>
@@ -214,12 +278,13 @@
                 <a href="#terminal" class="nav-link mobile-link transition">Terminal</a>
                 <a href="#archive" class="nav-link mobile-link transition">Archive</a>
                 <a href="/admin.html" class="text-sky-500 mt-2 border border-sky-500/30 px-6 py-2 rounded-full hover:bg-sky-500/10 transition">Admin Login</a>
+                <button onclick="triggerPanic()" class="panic-btn mt-2"><i data-lucide="skull" class="w-3 h-3"></i> PANIC</button>
             </div>
         </nav>
 
         <main class="max-w-5xl mx-auto px-6 pt-32 pb-20">
             
-            <section id="about" class="flex flex-col md:flex-row items-center justify-between mb-24 gap-10 reveal pt-10">
+            <section id="about" class="flex flex-col md:flex-row items-center justify-between mb-32 gap-10 reveal pt-10">
                 <div class="flex-1 space-y-6 text-center md:text-left">
                     <div class="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-sky-500/5 border border-sky-500/20 text-sky-500">
                         <i data-lucide="shield-alert" class="w-4 h-4"></i>
@@ -234,8 +299,7 @@
                     
                     <p id="profile-bio" class="text-slate-400 text-lg font-medium max-w-xl leading-relaxed mx-auto md:mx-0">Loading biography...</p>
 
-                    <div id="visitor-scanner" class="mt-8 glass-panel p-5 border-l-4 border-red-500 relative overflow-hidden max-w-md mx-auto md:mx-0 opacity-0 transform translate-y-4 transition-all duration-1000 delay-500">
-                        <div class="absolute top-0 left-0 w-[200%] h-[2px] bg-gradient-to-r from-transparent via-red-500 to-transparent animate-[glitchScan_3s_infinite]"></div>
+                    <div id="visitor-scanner" class="mt-8 bg-black/40 p-5 border border-white/10 rounded-2xl relative overflow-hidden max-w-md mx-auto md:mx-0 opacity-0 transform translate-y-4 transition-all duration-1000 delay-500 shadow-lg">
                         <div class="flex items-center gap-3 mb-4 border-b border-white/5 pb-3">
                             <i data-lucide="radar" class="w-5 h-5 text-red-500 animate-pulse"></i>
                             <span class="text-[10px] font-bold text-red-500 uppercase tracking-widest mono">Connection Intercepted</span>
@@ -265,7 +329,10 @@
                                 <div class="w-2 h-2 rounded-full bg-[#0ea5e9]/60"></div>
                                 <div class="w-2 h-2 rounded-full bg-[#0ea5e9]/30"></div>
                             </div>
-                            <span class="text-[9px] font-bold text-[#0ea5e9] uppercase tracking-widest mono">IDENTITY.V2.0_SECURE</span>
+                            <div class="flex items-center gap-3">
+                                <span class="text-[9px] font-bold text-[#0ea5e9] uppercase tracking-widest mono hidden sm:block">IDENTITY.V2.0_SECURE</span>
+                                <div class="defcon-badge" onclick="alert('DEF CON 34 // BLACK BADGE VALIDATED.')"><i data-lucide="cpu"></i> OPERATOR</div>
+                            </div>
                         </div>
 
                         <div class="scanner-container relative w-full h-[320px] mb-6 border border-white/5 rounded-2xl overflow-hidden shadow-inner light-scanner">
@@ -313,6 +380,44 @@
                 </div>
             </section>
 
+            <section id="recon" class="mb-32 reveal pt-10">
+                <div class="text-center mb-16">
+                    <div class="inline-flex items-center justify-center p-3 bg-red-500/10 rounded-full border border-red-500/30 mb-4 shadow-[0_0_15px_rgba(239,68,68,0.2)]">
+                        <i data-lucide="radar" class="w-6 h-6 text-red-500"></i>
+                    </div>
+                    <h2 class="text-3xl md:text-4xl font-black mb-2 text-white mono lowercase tracking-tight">
+                        <span class="text-slate-500">~/root/</span><span class="text-red-500">recon_intel</span>
+                    </h2>
+                    <p class="text-slate-300 text-sm font-bold uppercase tracking-[0.2em] mb-2">Active Intelligence</p>
+                    <p class="text-slate-500 text-[10px] mono uppercase tracking-widest">Network_Monitoring & Tools</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div id="hex-box" class="w-full flex flex-col transition-colors duration-500 h-[350px]">
+                        <div class="hex-header">
+                            <div class="flex gap-2">
+                                <i data-lucide="radio" class="w-4 h-4 text-purple-500 animate-pulse"></i>
+                                <span class="text-[10px] mono text-purple-500 font-bold tracking-widest uppercase">Packet Sniffer</span>
+                            </div>
+                            <span class="text-[10px] mono text-slate-400">eth0: promiscuous</span>
+                        </div>
+                        <div class="hex-content custom-scrollbar flex flex-col justify-end" id="hex-logs"></div>
+                    </div>
+
+                    <div id="ids-box" class="transition-colors duration-500 h-[350px] flex flex-col">
+                        <div class="ids-header shrink-0">
+                            <div class="flex gap-2">
+                                <i data-lucide="activity" class="w-4 h-4 text-emerald-500 animate-pulse"></i>
+                                <span class="text-[10px] mono text-emerald-500 font-bold tracking-widest uppercase">Live IDS Monitor</span>
+                            </div>
+                            <span class="text-[10px] mono text-slate-400">Node: Alpha-1</span>
+                        </div>
+                        <div class="ids-content custom-scrollbar" id="ids-logs">
+                            </div>
+                    </div>
+                </div>
+            </section>
+
             <section id="education" class="mb-32 reveal pt-10">
                 <div class="text-center mb-16">
                     <div class="inline-flex items-center justify-center p-3 bg-emerald-500/10 rounded-full border border-emerald-500/30 mb-4 shadow-[0_0_15px_rgba(16,185,129,0.2)]">
@@ -333,7 +438,7 @@
                         
                         <div class="flex-1 flex flex-col justify-center">
                             <p id="edu-inst" class="text-[10px] font-bold text-emerald-500 uppercase tracking-widest mono mb-4">MAJOR_OPERATION.EDU</p>
-                            <h3 id="edu-degree" class="text-3xl md:text-5xl font-black text-white mb-6 leading-tight tracking-tight">Loading...</h3>
+                            <h3 id="edu-degree" class="text-3xl md:text-5xl font-black text-white mb-6 leading-tight tracking-tight glitch-hover">Loading...</h3>
                             
                             <p id="edu-desc" class="text-slate-400 text-sm md:text-base leading-relaxed border-l-2 border-emerald-500/30 pl-4 md:pl-5 mb-8 md:mb-10 max-w-2xl">
                                 Loading academic details...
@@ -459,25 +564,73 @@
                     </h2>
                     <p class="text-slate-300 text-sm font-bold uppercase tracking-[0.2em] mb-2">Interactive Interface</p>
                 </div>
-                <div id="terminal-box" class="max-w-3xl mx-auto transition-colors duration-500">
-                    <div class="terminal-header">
-                        <div class="flex gap-2">
-                            <div class="w-3 h-3 rounded-full bg-red-500"></div>
-                            <div class="w-3 h-3 rounded-full bg-amber-500"></div>
-                            <div class="w-3 h-3 rounded-full bg-emerald-500"></div>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-10 gap-8 max-w-6xl mx-auto">
+                    
+                    <div id="terminal-box" class="w-full lg:col-span-7 transition-colors duration-500">
+                        <div class="terminal-header">
+                            <div class="flex gap-2">
+                                <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                                <div class="w-3 h-3 rounded-full bg-amber-500"></div>
+                                <div class="w-3 h-3 rounded-full bg-emerald-500"></div>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <button id="mute-sfx" class="text-[9px] mono text-emerald-500 border border-emerald-500/30 px-2 py-0.5 rounded hover:bg-emerald-500/10 transition focus:outline-none">SFX: ON</button>
+                                <span class="text-[10px] mono text-slate-400">mh_root@offensive-node: ~</span>
+                            </div>
                         </div>
-                        <span class="text-[10px] mono text-slate-400">mh_root@offensive-node: ~</span>
+                        <div class="terminal-content custom-scrollbar" id="term-body" onclick="document.getElementById('term-input').focus()">
+                            <p class="mb-2">Secure Shell V3.0 (Red Team Ed.). Type 'help' to see commands.</p>
+                            <p class="mb-4 text-[10px] text-slate-500">Hint: Explore the file system. Are you root?</p>
+                            <div id="term-outputs"></div>
+                            
+                            <div class="terminal-input-line mt-2 flex items-start gap-2">
+                                <span id="term-prompt" class="text-emerald-500 font-bold whitespace-nowrap shrink-0">mh_guest@offensive-node:~$</span>
+                                <input type="text" id="term-input" autocomplete="off" spellcheck="false" class="bg-transparent border-none outline-none text-white flex-1 min-w-0">
+                            </div>
+                        </div>
                     </div>
-                    <div class="terminal-content custom-scrollbar" id="term-body" onclick="document.getElementById('term-input').focus()">
-                        <p class="mb-2">Secure Shell V3.0 (Red Team Ed.). Type 'help' to see commands.</p>
-                        <p class="mb-4 text-[10px] text-slate-500">Hint: Explore the file system. Are you root?</p>
-                        <div id="term-outputs"></div>
+
+                    <div id="ip-tracker-box" class="w-full lg:col-span-3 bg-black/40 border border-white/10 rounded-2xl relative overflow-hidden shadow-xl flex flex-col">
+                        <div class="flex items-center gap-2 mb-4 border-b border-white/5 pb-3 px-5 pt-5 shrink-0">
+                            <div class="bg-rose-500/20 p-1.5 rounded-full border border-rose-500/30"><i data-lucide="map-pin" class="w-4 h-4 text-rose-500"></i></div>
+                            <div>
+                                <h3 class="text-sm font-bold text-white mono leading-tight">Target_Locator</h3>
+                                <p class="text-[8px] text-slate-500 mono uppercase tracking-widest mt-0.5">Geo-IP Intel</p>
+                            </div>
+                        </div>
                         
-                        <div class="terminal-input-line mt-2 flex items-start gap-2">
-                            <span id="term-prompt" class="text-emerald-500 font-bold whitespace-nowrap shrink-0">mh_guest@offensive-node:~$</span>
-                            <input type="text" id="term-input" autocomplete="off" spellcheck="false" class="bg-transparent border-none outline-none text-white flex-1 min-w-0">
+                        <div class="flex flex-col gap-3 mb-4 shrink-0 px-5">
+                            <input type="text" id="target-ip-input" placeholder="IP (e.g. 8.8.8.8)" class="w-full bg-black/50 border border-white/10 rounded-lg px-3 py-2 text-xs outline-none focus:border-rose-500 mono text-white">
+                            <button onclick="scanTargetIP()" id="scan-ip-btn" class="w-full bg-rose-600 hover:bg-rose-500 text-white font-bold px-4 py-2 rounded-lg transition shadow-[0_0_15px_rgba(244,63,94,0.3)] mono uppercase tracking-widest text-[9px] flex items-center justify-center gap-2">
+                                <i data-lucide="search" class="w-3 h-3"></i> Scan
+                            </button>
+                        </div>
+
+                        <div id="ip-results" class="hidden flex-1 overflow-y-auto custom-scrollbar px-5 pb-5">
+                            <div class="scan-loader hidden mb-4" id="ip-loader"></div>
+                            <div id="ip-data-box" class="hidden flex flex-col gap-3 bg-[#0A101F] p-3 rounded-xl border border-white/5 shadow-inner">
+                                <div>
+                                    <p class="text-[8px] text-slate-500 font-bold uppercase tracking-widest mb-0.5 mono">ISP / ORG</p>
+                                    <p id="res-isp" class="text-[10px] text-white font-bold truncate">...</p>
+                                </div>
+                                <div>
+                                    <p class="text-[8px] text-slate-500 font-bold uppercase tracking-widest mb-0.5 mono">COUNTRY</p>
+                                    <p id="res-country" class="text-[10px] text-white font-bold truncate">...</p>
+                                </div>
+                                <div>
+                                    <p class="text-[8px] text-slate-500 font-bold uppercase tracking-widest mb-0.5 mono">CITY</p>
+                                    <p id="res-city" class="text-[10px] text-white font-bold truncate">...</p>
+                                </div>
+                                <div>
+                                    <p class="text-[8px] text-slate-500 font-bold uppercase tracking-widest mb-0.5 mono">COORDINATES</p>
+                                    <p id="res-coord" class="text-[10px] text-rose-400 font-mono font-bold truncate">...</p>
+                                </div>
+                            </div>
+                            <p id="ip-error" class="hidden text-rose-500 text-[10px] font-mono font-bold mt-2 p-2 bg-rose-500/10 rounded-lg border border-rose-500/20"></p>
                         </div>
                     </div>
+
                 </div>
             </section>
 
@@ -501,7 +654,7 @@
             <section id="communication" class="reveal mb-10 pt-10">
                 <div class="glass-panel p-6 md:p-16 border-t-2 border-sky-500/80 relative overflow-hidden rounded-[2rem]">
                     <div class="cyber-line"></div>
-                    <div class="relative z-10 max-w-2xl mx-auto">
+                    <div class="relative z-10 max-w-5xl mx-auto">
                         <div class="text-center mb-12">
                             <i data-lucide="radio-tower" class="w-10 h-10 text-sky-500 mx-auto mb-4 animate-pulse drop-shadow-[0_0_10px_rgba(14,165,233,0.8)]"></i>
                             <h2 class="text-3xl md:text-4xl font-black mb-2 text-white mono lowercase tracking-tight">
@@ -510,35 +663,66 @@
                             <p class="text-slate-300 text-sm font-bold uppercase tracking-[0.2em] mb-4">Initialize Uplink</p>
                             <p class="text-slate-400 text-sm leading-relaxed">Secure protocol established for recruitment and research collaboration.</p>
                         </div>
-                        <form id="commForm" class="space-y-6">
-                            <div class="grid md:grid-cols-2 gap-6">
-                                <div class="group">
-                                    <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2 block mono">Identity_Name</label>
-                                    <div class="relative">
-                                        <i data-lucide="user" class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500"></i>
-                                        <input type="text" id="i-name" required placeholder="GUEST_USER" class="w-full bg-black/40 border border-white/10 focus:border-sky-500/80 rounded-2xl pl-12 pr-4 py-4 text-xs outline-none transition mono text-white">
+                        
+                        <div class="grid grid-cols-1 lg:grid-cols-5 gap-12">
+                            <div class="lg:col-span-3">
+                                <form id="commForm" class="space-y-6">
+                                    <div class="grid md:grid-cols-2 gap-6">
+                                        <div class="group">
+                                            <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2 block mono">Identity_Name</label>
+                                            <div class="relative">
+                                                <i data-lucide="user" class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500"></i>
+                                                <input type="text" id="i-name" required placeholder="GUEST_USER" class="w-full bg-black/40 border border-white/10 focus:border-sky-500/80 rounded-2xl pl-12 pr-4 py-4 text-xs outline-none transition mono text-white">
+                                            </div>
+                                        </div>
+                                        <div class="group">
+                                            <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2 block mono">Contact_Vector</label>
+                                            <div class="relative">
+                                                <i data-lucide="mail" class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500"></i>
+                                                <input type="email" id="i-email" required placeholder="USER@DOMAIN.COM" class="w-full bg-black/40 border border-white/10 focus:border-sky-500/80 rounded-2xl pl-12 pr-4 py-4 text-xs outline-none transition mono text-white">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="group">
+                                        <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2 block mono">Data_Payload</label>
+                                        <div class="relative">
+                                            <i data-lucide="message-square" class="absolute left-4 top-6 w-4 h-4 text-slate-500"></i>
+                                            <textarea id="i-msg" required rows="4" placeholder="ENTER_MESSAGE_HERE..." class="w-full bg-black/40 border border-white/10 focus:border-sky-500/80 rounded-2xl pl-12 pr-4 py-6 text-xs outline-none transition mono text-white"></textarea>
+                                        </div>
+                                    </div>
+                                    <button type="submit" id="submitBtn" class="w-full py-5 bg-sky-600 hover:bg-sky-500 text-white rounded-2xl font-bold text-[10px] uppercase tracking-[0.3em] shadow-[0_0_20px_rgba(14,165,233,0.3)] hover:shadow-[0_0_30px_rgba(14,165,233,0.5)] flex items-center justify-center gap-3 transition">
+                                        <i data-lucide="send" class="w-4 h-4"></i> Transmit Packet
+                                    </button>
+                                </form>
+                                <p id="formSuccess" class="hidden text-emerald-500 text-xs font-bold mono text-center mt-4 bg-emerald-500/10 p-2 rounded-lg border border-emerald-500/20">✓ Payload Transmitted Securely.</p>
+                            </div>
+
+                            <div class="lg:col-span-2 space-y-6">
+                                <div class="bg-black/50 border border-white/5 p-6 rounded-2xl shadow-lg">
+                                    <div class="flex items-center gap-3 mb-4 border-b border-white/5 pb-3">
+                                        <i data-lucide="key" class="w-5 h-5 text-amber-500"></i>
+                                        <span class="text-[10px] font-bold text-amber-500 uppercase tracking-widest mono">Secure PGP Channel</span>
+                                    </div>
+                                    <p class="text-[10px] text-slate-400 mono mb-3">For highly sensitive intel, encrypt your message using my public key before transmission.</p>
+                                    <div class="bg-[#050b14] p-4 rounded-xl border border-white/5 overflow-x-auto relative group">
+                                        <pre class="text-[8px] text-slate-500 mono leading-tight">-----BEGIN PGP PUBLIC KEY BLOCK-----
+mQENBGE/T0IBCAC3zV+z9Z/B...
+... [SIMULATED RSA KEY] ...
+x8R2kZ9tVpTqE+vL0=
+=yA9X
+-----END PGP PUBLIC KEY BLOCK-----</pre>
+                                        <button class="absolute top-2 right-2 bg-black/60 p-1.5 rounded text-slate-400 hover:text-white opacity-0 group-hover:opacity-100 transition"><i data-lucide="copy" class="w-3 h-3"></i></button>
                                     </div>
                                 </div>
-                                <div class="group">
-                                    <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2 block mono">Contact_Vector</label>
-                                    <div class="relative">
-                                        <i data-lucide="mail" class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500"></i>
-                                        <input type="email" id="i-email" required placeholder="USER@DOMAIN.COM" class="w-full bg-black/40 border border-white/10 focus:border-sky-500/80 rounded-2xl pl-12 pr-4 py-4 text-xs outline-none transition mono text-white">
+                                <div class="bg-black/50 border border-white/5 p-6 rounded-2xl flex items-center justify-between group cursor-not-allowed shadow-lg">
+                                    <div>
+                                        <p class="text-[10px] font-bold text-purple-500 uppercase tracking-widest mono mb-1">Onion Routing</p>
+                                        <p class="text-xs text-slate-400 mono">mh_rootx7f... .onion</p>
                                     </div>
+                                    <i data-lucide="lock" class="w-5 h-5 text-slate-600 group-hover:text-purple-500 transition"></i>
                                 </div>
                             </div>
-                            <div class="group">
-                                <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2 block mono">Data_Payload</label>
-                                <div class="relative">
-                                    <i data-lucide="message-square" class="absolute left-4 top-6 w-4 h-4 text-slate-500"></i>
-                                    <textarea id="i-msg" required rows="4" placeholder="ENTER_MESSAGE_HERE..." class="w-full bg-black/40 border border-white/10 focus:border-sky-500/80 rounded-2xl pl-12 pr-4 py-6 text-xs outline-none transition mono text-white"></textarea>
-                                </div>
-                            </div>
-                            <button type="submit" id="submitBtn" class="w-full py-5 bg-sky-600 hover:bg-sky-500 text-white rounded-2xl font-bold text-[10px] uppercase tracking-[0.3em] shadow-[0_0_20px_rgba(14,165,233,0.3)] hover:shadow-[0_0_30px_rgba(14,165,233,0.5)] flex items-center justify-center gap-3 transition">
-                                <i data-lucide="send" class="w-4 h-4"></i> Transmit Packet
-                            </button>
-                        </form>
-                        <p id="formSuccess" class="hidden text-emerald-500 text-xs font-bold mono text-center mt-4 bg-emerald-500/10 p-2 rounded-lg border border-emerald-500/20">✓ Payload Transmitted Securely.</p>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -559,6 +743,7 @@
                 </p>
                 <div class="w-16 h-[2px] bg-[#0ea5e9]/50 rounded-full mb-6 light-mode-divider"></div>
                 <p id="footer-text" class="text-[10px] text-slate-500 font-bold uppercase tracking-widest mono">© 2026 MAHMUDUL HASAN. DESIGN: HYPER-SECURITY OS V2</p>
+                <button onclick="triggerHoneypot()" class="mt-8 text-[10px] text-red-500/40 hover:text-red-500 mono font-bold tracking-[0.2em] transition-colors focus:outline-none">[CLASSIFIED_0-DAYS.zip]</button>
             </div>
         </footer>
 
@@ -664,6 +849,158 @@
         lucide.createIcons();
         const API_BASE = 'https://iammahmudul.onrender.com/api';
 
+        // ================= PANIC BUTTON LOGIC =================
+        function triggerPanic() {
+            const overlay = document.getElementById('panic-overlay');
+            const status = document.getElementById('panic-status');
+            overlay.style.display = 'flex';
+            overlay.classList.add('panic-active');
+            
+            setTimeout(() => { status.innerText = "OVERWRITING DISK SECTORS [██████    ]"; }, 1000);
+            setTimeout(() => { status.innerText = "PURGING MEMORY KERNEL [██████████]"; }, 2000);
+            setTimeout(() => { 
+                document.body.innerHTML = "<div style='background:black;height:100vh;width:100vw;color:#333;font-family:monospace;padding:20px;'>FATAL ERROR: OS NOT FOUND.<br>NO BOOTABLE DEVICE.</div>";
+            }, 3000);
+        }
+
+        // ================= HONEYPOT TRAP LOGIC =================
+        function triggerHoneypot() {
+            const overlay = document.getElementById('honeypot-overlay');
+            const lesson = document.getElementById('honeypot-lesson');
+            overlay.style.display = 'flex';
+            setTimeout(() => {
+                lesson.innerText = "Rule #1: Never click unknown links. - Mahmudul.";
+                setTimeout(() => { location.reload(); }, 4000);
+            }, 3000);
+        }
+
+        // ================= LIVE KEYLOGGER LOGIC =================
+        const keyBox = document.getElementById('key-hook');
+        const keyLogs = document.getElementById('key-logs');
+        let keyTimeout;
+        document.addEventListener('keydown', (e) => {
+            if(e.key.length === 1 || e.key === 'Backspace' || e.key === 'Enter') {
+                keyBox.classList.remove('opacity-0');
+                keyLogs.innerHTML += e.key === 'Enter' ? '<br>' : e.key === 'Backspace' ? '[DEL]' : e.key;
+                keyLogs.scrollTop = keyLogs.scrollHeight;
+                clearTimeout(keyTimeout);
+                keyTimeout = setTimeout(() => { keyBox.classList.add('opacity-0'); }, 3000);
+            }
+        });
+
+        // ================= MATRIX HOVER EFFECT =================
+        function attachGlitch() {
+            const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*";
+            document.querySelectorAll('.glitch-hover').forEach(el => {
+                el.addEventListener('mouseenter', event => {
+                    if(!el.dataset.value) el.dataset.value = el.innerText;
+                    let iteration = 0;
+                    clearInterval(el.interval);
+                    el.interval = setInterval(() => {
+                        event.target.innerText = event.target.innerText.split("").map((letter, index) => {
+                            if(index < iteration) return el.dataset.value[index];
+                            return letters[Math.floor(Math.random() * letters.length)];
+                        }).join("");
+                        if(iteration >= el.dataset.value.length) {
+                            clearInterval(el.interval);
+                            event.target.innerText = el.dataset.value;
+                        }
+                        iteration += 1/2;
+                    }, 30);
+                });
+            });
+        }
+
+        // ================= HEX DUMP SNIFFER LOGIC =================
+        function generateHex() {
+            const hexChars = "0123456789ABCDEF";
+            let line = "";
+            for(let i=0; i<8; i++) {
+                let block = "";
+                for(let j=0; j<4; j++) block += hexChars[Math.floor(Math.random() * 16)];
+                line += block + " ";
+            }
+            return line;
+        }
+        function startHexSniffer() {
+            const container = document.getElementById('hex-logs');
+            if(!container) return;
+            setInterval(() => {
+                const p = document.createElement('div');
+                p.innerHTML = generateHex();
+                container.appendChild(p);
+                if(container.childNodes.length > 25) container.removeChild(container.firstChild);
+            }, 100);
+        }
+
+        // ================= 1. LIVE IDS MONITOR LOGIC =================
+        const idsLogs = [
+            "<span class='text-emerald-500'>[OK]</span> Traffic normalized on port 443.",
+            "<span class='text-amber-500'>[WARN]</span> Anomalous packet size detected from 104.28.x.x.",
+            "<span class='text-red-500'>[ALERT]</span> Multiple failed SSH logins from 192.168.1.45.",
+            "<span class='text-sky-500'>[INFO]</span> Deep packet inspection active.",
+            "<span class='text-purple-500'>[IDS]</span> Signature match: CVE-2021-44228 attempt dropped.",
+            "<span class='text-amber-500'>[WARN]</span> High volume of ICMP echo requests.",
+            "<span class='text-emerald-500'>[OK]</span> Firewall rules updated successfully.",
+            "<span class='text-red-500'>[ALERT]</span> SQL injection payload blocked in HTTP GET."
+        ];
+        function startIDS() {
+            const container = document.getElementById('ids-logs');
+            setInterval(() => {
+                const log = document.createElement('div');
+                const time = new Date().toLocaleTimeString();
+                log.className = "text-[10px] mono mb-1 border-b border-white/5 pb-1 opacity-80 hover:opacity-100 transition-opacity";
+                log.innerHTML = `<span class="text-slate-500">[${time}]</span> ${idsLogs[Math.floor(Math.random() * idsLogs.length)]}`;
+                container.appendChild(log);
+                if(container.childNodes.length > 30) container.removeChild(container.firstChild);
+                container.scrollTop = container.scrollHeight;
+            }, Math.random() * 2500 + 1000);
+        }
+
+        // ================= 2. CYBER TOOL: IP TRACKER LOGIC =================
+        async function scanTargetIP() {
+            const input = document.getElementById('target-ip-input').value.trim();
+            const btn = document.getElementById('scan-ip-btn');
+            const resultsBox = document.getElementById('ip-results');
+            const dataBox = document.getElementById('ip-data-box');
+            const errorBox = document.getElementById('ip-error');
+            const loader = document.getElementById('ip-loader');
+
+            if(!input) return alert("Please enter a valid IP Address!");
+
+            btn.innerHTML = '<i data-lucide="loader" class="w-3 h-3 animate-spin"></i> SCANNING...';
+            btn.classList.add('opacity-50', 'cursor-not-allowed');
+            lucide.createIcons();
+            
+            resultsBox.classList.remove('hidden');
+            dataBox.classList.add('hidden');
+            errorBox.classList.add('hidden');
+            loader.classList.remove('hidden');
+
+            try {
+                const res = await fetch(`https://ipapi.co/${input}/json/`);
+                const data = await res.json();
+
+                if(data.error) throw new Error(data.reason || "Invalid IP or Rate Limited");
+
+                document.getElementById('res-isp').innerText = data.org || data.asn || "Unknown ISP";
+                document.getElementById('res-country').innerText = data.country_name || "Unknown";
+                document.getElementById('res-city').innerText = data.city || "Unknown";
+                document.getElementById('res-coord').innerText = `${data.latitude || '0.00'}, ${data.longitude || '0.00'}`;
+
+                loader.classList.add('hidden');
+                dataBox.classList.remove('hidden');
+            } catch(e) {
+                loader.classList.add('hidden');
+                errorBox.classList.remove('hidden');
+                errorBox.innerText = `[ERROR] Failed to trace IP: ${e.message}`;
+            } finally {
+                btn.innerHTML = '<i data-lucide="search" class="w-3 h-3"></i> Scan';
+                btn.classList.remove('opacity-50', 'cursor-not-allowed');
+                lucide.createIcons();
+            }
+        }
+
         // ================= SCARY BOOT SEQUENCE LOGIC =================
         const bootLines = [
             "<span class='text-red-500 font-bold'>[CRITICAL] KERNEL PANIC: UNAUTHORIZED ROOT ACCESS DETECTED!</span>",
@@ -713,37 +1050,6 @@
             }
         }
         
-        // ================= 1. VISITOR FOOTPRINT SCANNER =================
-        async function initVisitorScanner() {
-            const scannerBox = document.getElementById('visitor-scanner');
-            scannerBox.classList.remove('opacity-0', 'translate-y-4');
-            
-            // Get OS
-            const os = navigator.platform || "Unknown OS";
-            document.getElementById('vis-os').innerText = os;
-            
-            // Get Browser
-            const ua = navigator.userAgent;
-            let browser = "Unknown Browser";
-            if(ua.includes("Firefox/")) browser = "Mozilla Firefox";
-            else if(ua.includes("Edg/")) browser = "Microsoft Edge";
-            else if(ua.includes("Chrome/")) browser = "Google Chrome";
-            else if(ua.includes("Safari/")) browser = "Apple Safari";
-            document.getElementById('vis-browser').innerText = browser;
-
-            // Fetch IP & Geo Data
-            try {
-                const res = await fetch('https://ipapi.co/json/');
-                const data = await res.json();
-                document.getElementById('vis-ip').innerText = data.ip || "127.0.0.1 (PROXY)";
-                document.getElementById('vis-loc').innerText = `${data.city || 'Unknown'}, ${data.country_name || 'N/A'}`;
-            } catch(e) {
-                // Fallback to random if adblocker/privacy shields block the request
-                document.getElementById('vis-ip').innerText = `192.168.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}`;
-                document.getElementById('vis-loc').innerText = "ENCRYPTED NODE / PROXY";
-            }
-        }
-        
         function finishBoot() {
             setTimeout(() => {
                 document.getElementById('hack-progress-container').classList.add('hidden');
@@ -765,18 +1071,47 @@
                         setTimeout(() => { 
                             document.getElementById('boot-screen').style.display = 'none';
                             initVisitorScanner(); 
+                            startIDS(); 
+                            startHexSniffer(); // START HEX DUMP
                         }, 800);
                     }, 2000);
                 }, 2000);
             }, 500);
         }
 
+        // ================= VISITOR FOOTPRINT SCANNER =================
+        async function initVisitorScanner() {
+            const scannerBox = document.getElementById('visitor-scanner');
+            scannerBox.classList.remove('opacity-0', 'translate-y-4');
+            
+            const os = navigator.platform || "Unknown OS";
+            document.getElementById('vis-os').innerText = os;
+            
+            const ua = navigator.userAgent;
+            let browser = "Unknown Browser";
+            if(ua.includes("Firefox/")) browser = "Mozilla Firefox";
+            else if(ua.includes("Edg/")) browser = "Microsoft Edge";
+            else if(ua.includes("Chrome/")) browser = "Google Chrome";
+            else if(ua.includes("Safari/")) browser = "Apple Safari";
+            document.getElementById('vis-browser').innerText = browser;
+
+            try {
+                const res = await fetch('https://ipapi.co/json/');
+                const data = await res.json();
+                document.getElementById('vis-ip').innerText = data.ip || "127.0.0.1 (PROXY)";
+                document.getElementById('vis-loc').innerText = `${data.city || 'Unknown'}, ${data.country_name || 'N/A'}`;
+            } catch(e) {
+                document.getElementById('vis-ip').innerText = `192.168.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}`;
+                document.getElementById('vis-loc').innerText = "ENCRYPTED NODE / PROXY";
+            }
+        }
+        
         window.addEventListener('load', () => {
             setTimeout(typeLine, 500);
             fetchAllDynamicData(); 
         });
 
-        // ================= 4. ADVANCED TERMINAL (INTERACTIVE CTF + 24 COMMANDS) =================
+        // ================= 4. ADVANCED TERMINAL (INTERACTIVE CTF + SFX + COMMANDS) =================
         const termInput = document.getElementById('term-input');
         const termOutputs = document.getElementById('term-outputs');
         const termPrompt = document.getElementById('term-prompt');
@@ -786,6 +1121,8 @@
         let currentDir = "~";
         let cmdHistory = [];
         let historyIndex = -1;
+        let sfxEnabled = true;
+        let audioCtx;
 
         const fileSystem = {
             "target_ips.txt": "192.168.1.44\n10.0.0.5\n172.16.254.1",
@@ -796,6 +1133,31 @@
         };
 
         const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+        function playClickSFX() {
+            if(!sfxEnabled) return;
+            if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            if(audioCtx.state === 'suspended') audioCtx.resume();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'square';
+            osc.frequency.setValueAtTime(100 + Math.random()*50, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(40, audioCtx.currentTime + 0.05);
+            gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.05);
+        }
+
+        document.getElementById('mute-sfx').addEventListener('click', function(e) {
+            e.stopPropagation();
+            sfxEnabled = !sfxEnabled;
+            this.innerText = sfxEnabled ? "SFX: ON" : "SFX: OFF";
+            this.classList.toggle('text-red-500', !sfxEnabled);
+            this.classList.toggle('text-emerald-500', sfxEnabled);
+        });
 
         function updatePrompt() {
             const user = isRoot ? 'root' : 'mh_guest';
@@ -808,6 +1170,7 @@
         updatePrompt();
 
         termInput.addEventListener('keydown', (e) => {
+            playClickSFX(); // SFX ON KEYPRESS
             if(e.key === 'ArrowUp') {
                 if(historyIndex < cmdHistory.length - 1) {
                     historyIndex++;
@@ -1119,7 +1482,7 @@
                                     <div class="bg-rose-500/20 p-2.5 rounded-full border border-rose-500/20"><i data-lucide="crosshair" class="w-5 h-5 text-rose-500"></i></div>
                                     <span class="text-[9px] mono text-rose-500 uppercase font-bold tracking-widest bg-rose-500/10 px-3 py-1 rounded-full border border-rose-500/20">${item.category}</span>
                                 </div>
-                                <h3 class="text-xl font-bold text-white mb-3 group-hover:text-rose-400 transition">${item.title}</h3>
+                                <h3 class="text-xl font-bold text-white mb-3 group-hover:text-rose-400 transition glitch-hover">${item.title}</h3>
                                 <p class="text-xs text-slate-400 leading-relaxed flex-1">${item.details}</p>
                             </div>
                         `;
@@ -1175,7 +1538,7 @@
                                     <div class="bg-amber-500/20 p-2.5 rounded-full border border-amber-500/20"><i data-lucide="award" class="w-5 h-5 text-amber-500"></i></div>
                                     <span class="text-[9px] mono text-amber-500 uppercase font-bold tracking-widest bg-amber-500/10 px-3 py-1 rounded-full border border-amber-500/20">YEAR: ${item.year}</span>
                                 </div>
-                                <h3 class="text-lg font-black text-white mb-2 group-hover:text-amber-400 transition leading-tight">${item.title}</h3>
+                                <h3 class="text-lg font-black text-white mb-2 group-hover:text-amber-400 transition leading-tight glitch-hover">${item.title}</h3>
                                 <p class="text-[10px] text-amber-500/80 font-mono tracking-widest uppercase mb-4">${item.organization}</p>
                                 <p class="text-xs text-slate-400 leading-relaxed flex-1">${item.details}</p>
                             </div>
@@ -1187,10 +1550,13 @@
                 if (achData.length > 2) { achBtn.classList.remove('hidden'); achBtn.onclick = () => openAchModal(); } 
                 else { achBtn.classList.add('hidden'); }
                 
-                lucide.createIcons();
-                
                 // 6. Archives
                 loadMainGallery();
+                
+                // Attach Matrix Glitch Hover Effect
+                setTimeout(attachGlitch, 500);
+                
+                lucide.createIcons();
             } catch (e) {
                 console.error("Data fetching error", e);
             }
