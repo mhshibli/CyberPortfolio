@@ -1083,9 +1083,9 @@
                 } else if(val === 'toor' || val.includes("' OR 1=1")) {
                     response.innerHTML = `<span class="text-emerald-500 font-bold">[SUCCESS] AUTH GRANTED. BYPASS SUCCESSFUL.</span><br><span class="text-sky-400">Loading Secret Admin Panel...</span>`;
                     setTimeout(() => {
-                        window.location.href = '/admin.html', '_blank';
+                        window.open('/admin.html', '_blank');
                     }, 1500);
-                } else {
+                    } else {
                     response.innerHTML = `<span class="text-red-500">ACCESS DENIED. THIS INCIDENT WILL BE REPORTED.</span>`;
                 }
                 
