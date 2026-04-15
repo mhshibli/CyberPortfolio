@@ -9,6 +9,13 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap');
         :root { --glass-bg: rgba(15, 23, 42, 0.7); --glass-border: rgba(255, 255, 255, 0.1); }
+        
+        /* ================= 3. CUSTOM CYBER CURSOR ================= */
+        html, body, a, button, input, textarea { cursor: crosshair !important; }
+        .hex-trail { position: absolute; font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: bold; pointer-events: none; z-index: 9999; animation: trailFade 0.8s ease-out forwards; color: #ef4444; text-shadow: 0 0 5px #ef4444; }
+        body:not(.secret-mode) .hex-trail { color: #10b981; text-shadow: 0 0 5px #10b981; }
+        @keyframes trailFade { 0% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(0.5) translateY(-10px); } }
+
         html { scroll-behavior: smooth; }
         body { font-family: 'Inter', sans-serif; background-color: #020617; color: #f8fafc; overflow-x: hidden; transition: background-color 0.5s, color 0.5s; margin: 0; }
         .mono { font-family: 'JetBrains Mono', monospace; }
@@ -30,8 +37,8 @@
         @keyframes blink { 50% { opacity: 0; } }
 
         /* ================= EXTREME CYBER BACKGROUND ================= */
-        .bg-cyber { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; background-color: #020617; overflow: hidden; }
-        .bg-cyber::before { content: ''; position: absolute; top: -20%; left: -10%; width: 50%; height: 50%; background: radial-gradient(circle, rgba(14, 165, 233, 0.1) 0%, transparent 70%); border-radius: 50%; filter: blur(60px); pointer-events: none; }
+        .bg-cyber { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; background-color: #020617; overflow: hidden; transition: background-color 0.5s; }
+        .bg-cyber::before { content: ''; position: absolute; top: -20%; left: -10%; width: 50%; height: 50%; background: radial-gradient(circle, rgba(14, 165, 233, 0.1) 0%, transparent 70%); border-radius: 50%; filter: blur(60px); pointer-events: none; transition: background 0.5s; }
         .bg-cyber::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2) 1px, transparent 1px, transparent 3px); z-index: 1; pointer-events: none; opacity: 0.5; }
         
         .hacker-decals { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: bold; opacity: 0.8; animation: backgroundGlitch 4s infinite; }
@@ -41,8 +48,8 @@
             94% { transform: translate(4px, -2px); opacity: 0.5; filter: drop-shadow(-4px 0 0 rgba(239, 68, 68, 0.7)) drop-shadow(4px 0 0 rgba(14, 165, 233, 0.7)); }
             96% { transform: translate(-1px, 1px); opacity: 0.9; filter: none; }
         }
-        .decal-1 { position: absolute; top: 15%; left: 2%; line-height: 1.6; letter-spacing: 0.1em; color: rgba(14, 165, 233, 0.15); }
-        .decal-2 { position: absolute; bottom: 20%; right: 2%; line-height: 1.6; text-align: right; letter-spacing: 0.1em; color: rgba(16, 185, 129, 0.15); }
+        .decal-1 { position: absolute; top: 15%; left: 2%; line-height: 1.6; letter-spacing: 0.1em; color: rgba(14, 165, 233, 0.15); transition: color 0.5s; }
+        .decal-2 { position: absolute; bottom: 20%; right: 2%; line-height: 1.6; text-align: right; letter-spacing: 0.1em; color: rgba(16, 185, 129, 0.15); transition: color 0.5s; }
         .decal-3 { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: rgba(255, 255, 255, 0.02); font-size: clamp(80px, 15vw, 200px); font-weight: 900; letter-spacing: -15px; user-select: none; }
 
         /* General UI Elements */
@@ -56,20 +63,24 @@
         .modal-overlay { background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(8px); }
 
         /* 4. TERMINAL & IP TRACKER STYLES */
-        #terminal-box { background: rgba(2, 6, 23, 0.9); border: 1px solid rgba(239, 68, 68, 0.3); box-shadow: 0 0 30px rgba(239, 68, 68, 0.1); border-radius: 1rem; overflow: hidden; height: 350px; display: flex; flex-direction: column; transition: all 0.5s; position: relative;}
+        #terminal-box, #ip-tracker-box { background: rgba(2, 6, 23, 0.9); border: 1px solid rgba(239, 68, 68, 0.3); box-shadow: 0 0 30px rgba(239, 68, 68, 0.1); border-radius: 1rem; overflow: hidden; height: 350px; display: flex; flex-direction: column; transition: all 0.5s; position: relative;}
         .terminal-header { background: rgba(239, 68, 68, 0.1); padding: 8px 15px; border-bottom: 1px solid rgba(239, 68, 68, 0.2); display: flex; justify-content: space-between; z-index: 2; position: relative;}
         .terminal-content { flex: 1; overflow-y: auto; padding: 15px; font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #f87171; cursor: text; z-index: 2; position: relative;}
         .terminal-input-line { display: flex; align-items: center; color: #10b981; }
 
         /* NEW IP TRACKER STYLES */
-        #ip-tracker-box { background: rgba(2, 6, 23, 0.9); border: 1px solid rgba(244, 63, 94, 0.3); box-shadow: 0 0 30px rgba(244, 63, 94, 0.1); border-radius: 1rem; overflow: hidden; height: 350px; display: flex; flex-direction: column; transition: all 0.5s; }
+        #ip-tracker-box { border-color: rgba(244, 63, 94, 0.3); box-shadow: 0 0 30px rgba(244, 63, 94, 0.1); }
         .tracker-header { background: rgba(244, 63, 94, 0.1); padding: 8px 15px; border-bottom: 1px solid rgba(244, 63, 94, 0.2); display: flex; justify-content: space-between; align-items: center; }
-        .tracker-content { flex: 1; display: flex; flex-direction: column; padding: 15px; }
+        .tracker-content { flex: 1; display: flex; flex-direction: column; padding: 15px; overflow-y: auto; }
 
         /* IP Tracker Loader CSS */
         .scan-loader { width: 100%; height: 2px; background-color: rgba(244, 63, 94, 0.2); position: relative; overflow: hidden; border-radius: 2px; }
         .scan-loader::after { content: ''; position: absolute; top: 0; left: 0; height: 100%; width: 30%; background-color: #f43f5e; animation: scanAnim 1.5s infinite linear; }
         @keyframes scanAnim { 0% { left: -30%; } 100% { left: 100%; } }
+
+        /* ================= MATRIX EASTER EGG STYLE ================= */
+        #matrix-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; opacity: 0; pointer-events: none; transition: opacity 0.5s; background: black; }
+        #matrix-bg.active { opacity: 0.3; }
 
         /* ================= SCI-FI CARDS (For Comms) ================= */
         .sci-fi-card { background: linear-gradient(135deg, rgba(15, 23, 42, 0.8) 0%, rgba(2, 6, 23, 0.95) 100%); border: 1px solid rgba(14, 165, 233, 0.3); position: relative; overflow: hidden; box-shadow: inset 0 0 30px rgba(14, 165, 233, 0.05), 0 5px 15px rgba(0,0,0,0.5); transition: all 0.3s; clip-path: polygon(0 0, calc(100% - 15px) 0, 100% 15px, 100% 100%, 15px 100%, 0 calc(100% - 15px)); }
@@ -144,12 +155,49 @@
         body.light-mode .terminal-header, body.light-mode .tracker-header { background: #f1f5f9; border-color: rgba(0,0,0,0.1); }
         body.light-mode .terminal-content { color: #334155; }
 
+        /* ================= 2. ANTI FORENSICS TRAP ================= */
+        #fbi-warning { position: fixed; inset: 0; z-index: 10001; background: #8b0000; display: none; flex-direction: column; align-items: center; justify-content: center; color: white; font-family: 'Courier New', monospace; padding: 20px; text-align: center; animation: strobe 0.5s infinite alternate; }
+        #fbi-warning h1 { font-size: 4rem; font-weight: bold; margin-bottom: 20px; color: yellow; text-shadow: 0 0 10px black; }
+        @keyframes strobe { 0% { background: rgba(139, 0, 0, 1); } 100% { background: rgba(255, 0, 0, 1); } }
+
+        /* ================= 1. CAM HACK MODAL ================= */
+        #cam-hack-modal { position: fixed; top: 20%; left: 50%; transform: translateX(-50%) scale(0.9); z-index: 9999; background: rgba(0, 20, 0, 0.9); border: 2px solid #0f0; box-shadow: 0 0 30px #0f0; padding: 10px; border-radius: 10px; display: none; flex-direction: column; align-items: center; opacity: 0; transition: all 0.3s; }
+        #cam-hack-modal.active { opacity: 1; transform: translateX(-50%) scale(1); }
+        #cam-video { width: 320px; height: 240px; filter: contrast(1.5) brightness(1.2) sepia(1) hue-rotate(90deg) saturate(3); border: 1px solid #0f0; object-fit: cover; }
+        .cam-overlay-text { position: absolute; top: 20px; left: 20px; color: #0f0; font-family: monospace; font-size: 12px; font-weight: bold; text-shadow: 0 0 5px #0f0; animation: blink 1s infinite; z-index: 10;}
+        .facial-box { position: absolute; top: 50px; left: 80px; width: 160px; height: 140px; border: 2px dashed #0f0; box-shadow: inset 0 0 10px rgba(0,255,0,0.5); pointer-events: none; z-index: 10;}
+
+        /* ================= 4. SECRET BACKDOOR THEME (NULLSCRIPT) ================= */
+        body.secret-mode { background-color: #1a0000; color: #f8fafc; }
+        body.secret-mode .bg-cyber::before { background: radial-gradient(circle, rgba(239, 68, 68, 0.15) 0%, transparent 70%); }
+        body.secret-mode .decal-1 { color: rgba(239, 68, 68, 0.2); }
+        body.secret-mode .text-sky-500, body.secret-mode .text-emerald-500, body.secret-mode .text-purple-500, body.secret-mode .text-amber-500 { color: #ef4444 !important; }
+        body.secret-mode .bg-sky-500\/5, body.secret-mode .bg-emerald-500\/5, body.secret-mode .bg-purple-500\/5, body.secret-mode .bg-amber-500\/5 { background-color: rgba(239, 68, 68, 0.05) !important; }
+        body.secret-mode .border-sky-500\/20, body.secret-mode .border-emerald-500\/20, body.secret-mode .border-purple-500\/20, body.secret-mode .border-amber-500\/20 { border-color: rgba(239, 68, 68, 0.2) !important; }
+        body.secret-mode .light-shield-box i { color: #ef4444; }
+        body.secret-mode .scanner-line { background: #ef4444; box-shadow: 0 0 15px #ef4444, 0 0 30px #ef4444; }
+
         .custom-scrollbar::-webkit-scrollbar { width: 6px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.2); border-radius: 4px; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(14, 165, 233, 0.5); border-radius: 4px; }
     </style>
 </head>
 <body>
+
+    <div id="fbi-warning">
+        <h1>WARNING!</h1>
+        <p class="text-xl font-bold">REVERSE ENGINEERING ATTEMPT DETECTED.</p>
+        <p class="text-lg mt-4 text-white">SYSTEM LOCKDOWN INITIATED.</p>
+        <p class="text-lg mt-2 text-white animate-pulse font-bold">LOGGING IP TO FBI DATABASE...</p>
+    </div>
+
+    <div id="cam-hack-modal">
+        <p class="cam-overlay-text">REC &nbsp; <span style="display:inline-block; width:10px; height:10px; border-radius:50%; background:red;"></span></p>
+        <video id="cam-video" autoplay playsinline></video>
+        <div class="facial-box"></div>
+        <p class="text-center text-[#0f0] font-mono text-sm mt-3 animate-pulse font-bold">[TARGET ACQUIRED - FACIAL RECOGNITION MATCHED]</p>
+        <button onclick="closeCam()" class="mt-4 border border-[#0f0] text-[#0f0] hover:bg-[#0f0] hover:text-black px-4 py-1 text-xs font-bold transition rounded focus:outline-none">TERMINATE UPLINK</button>
+    </div>
 
     <div id="boot-screen">
         <div class="boot-text-container" id="terminal-text"></div>
@@ -208,6 +256,7 @@
                     <a href="#achievements" class="nav-link desktop-link text-slate-300 hover:text-sky-400 transition">Certs</a>
                     <a href="#terminal" class="nav-link desktop-link text-slate-300 hover:text-sky-400 transition">Terminal</a>
                     <a href="#archive" class="nav-link desktop-link text-slate-300 hover:text-sky-400 transition">Archive</a>
+                    <a href="#" id="secret-menu" class="nav-link desktop-link text-red-500 hover:text-red-400 transition hidden animate-pulse">[BLACK MARKET]</a>
                 </div>
                 <div class="flex items-center gap-4">
                     <button id="themeToggle" class="p-2 rounded-full bg-black/20 hover:bg-black/40 transition border border-white/10 flex items-center justify-center w-8 h-8"><i data-lucide="sun" class="w-4 h-4 text-amber-400"></i></button>
@@ -233,7 +282,7 @@
                 <div class="flex-1 space-y-6 text-center md:text-left">
                     <div class="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-sky-500/5 border border-sky-500/20 text-sky-500">
                         <i data-lucide="shield-alert" class="w-4 h-4"></i>
-                        <span class="text-[10px] font-bold uppercase tracking-[0.2em] mono">Auth Granted // UID: 0x99A3</span>
+                        <span class="text-[10px] font-bold uppercase tracking-[0.25em] mono">Auth Granted // UID: 0x99A3</span>
                     </div>
                     
                     <h1 class="text-5xl md:text-7xl font-black tracking-tighter leading-[0.95] text-white glow-text">
@@ -455,9 +504,11 @@
                     <p class="text-slate-300 text-sm font-bold uppercase tracking-[0.2em] mb-2">Interactive Interface</p>
                 </div>
                 
-                <div class="grid grid-cols-1 lg:grid-cols-10 gap-8 max-w-6xl mx-auto">
+                <div class="grid grid-cols-1 lg:grid-cols-10 gap-8 max-w-6xl mx-auto relative">
                     
-                    <div id="terminal-box" class="w-full lg:col-span-7 transition-colors duration-500 relative">
+                    <div id="terminal-box" class="w-full lg:col-span-7 transition-colors duration-500">
+                        <canvas id="matrix-bg"></canvas>
+                        
                         <div class="terminal-header" style="border-bottom-color: rgba(239, 68, 68, 0.2); background: rgba(239, 68, 68, 0.1);">
                             <div class="flex gap-2 items-center">
                                 <div class="w-3 h-3 rounded-full bg-red-500"></div>
@@ -471,7 +522,7 @@
                             <p class="mb-4 text-[10px] text-slate-500">Hint: Explore the file system. Are you root?</p>
                             <div id="term-outputs"></div>
                             
-                            <div class="terminal-input-line mt-2 flex items-start gap-2">
+                            <div class="terminal-input-line mt-2 flex items-start gap-2 z-10 relative">
                                 <span id="term-prompt" class="text-emerald-500 font-bold whitespace-nowrap shrink-0">mh_guest@offensive-node:~$</span>
                                 <input type="text" id="term-input" autocomplete="off" spellcheck="false" class="bg-transparent border-none outline-none text-white flex-1 min-w-0">
                             </div>
@@ -860,7 +911,125 @@
             fetchAllDynamicData(); 
         });
 
-        // ================= 4. ADVANCED TERMINAL =================
+        // ================= ANTI-FORENSICS / DEVTOOLS TRAP =================
+        document.addEventListener('contextmenu', event => event.preventDefault());
+        document.addEventListener('keydown', function(e) {
+            if(e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74))) {
+                e.preventDefault();
+                document.getElementById('fbi-warning').style.display = 'flex';
+                setTimeout(() => { location.reload(); }, 4000);
+            }
+        });
+
+        // ================= LIVE KEYLOGGER LOGIC =================
+        const keyBox = document.getElementById('key-hook');
+        const keyLogs = document.getElementById('key-logs');
+        let keyTimeout;
+        document.addEventListener('keydown', (e) => {
+            // Secret Backdoor Tracker
+            window.secretCombo = (window.secretCombo || "") + e.key;
+            if(window.secretCombo.endsWith("nullscript")) {
+                document.body.classList.add('secret-mode');
+                document.getElementById('secret-menu').classList.remove('hidden');
+                window.secretCombo = "";
+            }
+
+            if(e.key.length === 1 || e.key === 'Backspace' || e.key === 'Enter') {
+                keyBox.classList.remove('opacity-0');
+                keyLogs.innerHTML += e.key === 'Enter' ? '<br>' : e.key === 'Backspace' ? '[DEL]' : e.key;
+                keyLogs.scrollTop = keyLogs.scrollHeight;
+                clearTimeout(keyTimeout);
+                keyTimeout = setTimeout(() => { keyBox.classList.add('opacity-0'); }, 3000);
+            }
+            
+            // Cursor Hex Trail
+            if(!document.body.classList.contains('light-mode')) {
+                const trail = document.createElement('div');
+                trail.className = 'hex-trail';
+                trail.innerText = "0x" + Math.floor(Math.random()*255).toString(16).toUpperCase();
+                document.body.appendChild(trail);
+                
+                document.addEventListener('mousemove', function moveTrail(e) {
+                    trail.style.left = (e.pageX + 10) + 'px';
+                    trail.style.top = (e.pageY + 10) + 'px';
+                    document.removeEventListener('mousemove', moveTrail);
+                });
+                setTimeout(() => trail.remove(), 800);
+            }
+        });
+
+        // ================= MATRIX HOVER EFFECT =================
+        function attachGlitch() {
+            const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*";
+            document.querySelectorAll('.glitch-hover').forEach(el => {
+                el.addEventListener('mouseenter', event => {
+                    if(!el.dataset.value) el.dataset.value = el.innerText;
+                    let iteration = 0;
+                    clearInterval(el.interval);
+                    el.interval = setInterval(() => {
+                        event.target.innerText = event.target.innerText.split("").map((letter, index) => {
+                            if(index < iteration) return el.dataset.value[index];
+                            return letters[Math.floor(Math.random() * letters.length)];
+                        }).join("");
+                        if(iteration >= el.dataset.value.length) {
+                            clearInterval(el.interval);
+                            event.target.innerText = el.dataset.value;
+                        }
+                        iteration += 1/2;
+                    }, 30);
+                });
+            });
+        }
+
+        // ================= CAM HACK LOGIC =================
+        let camStream = null;
+        async function startCamHack() {
+            const modal = document.getElementById('cam-hack-modal');
+            const video = document.getElementById('cam-video');
+            try {
+                camStream = await navigator.mediaDevices.getUserMedia({ video: true });
+                video.srcObject = camStream;
+                modal.style.display = 'flex';
+                setTimeout(() => modal.classList.add('active'), 10);
+            } catch(e) {
+                alert("Cam access denied. Target secure.");
+            }
+        }
+        function closeCam() {
+            const modal = document.getElementById('cam-hack-modal');
+            if(camStream) { camStream.getTracks().forEach(track => track.stop()); camStream = null; }
+            modal.classList.remove('active');
+            setTimeout(() => modal.style.display = 'none', 300);
+        }
+
+        // ================= MATRIX BACKGROUND LOGIC =================
+        const canvas = document.getElementById('matrix-bg');
+        const ctx = canvas.getContext('2d');
+        canvas.width = document.getElementById('terminal-box').offsetWidth;
+        canvas.height = document.getElementById('terminal-box').offsetHeight;
+
+        const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*";
+        const fontSize = 10;
+        const columns = canvas.width / fontSize;
+        const drops = [];
+        for(let x = 0; x < columns; x++) drops[x] = 1;
+
+        function drawMatrix() {
+            ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "#0F0";
+            ctx.font = fontSize + "px monospace";
+
+            for(let i = 0; i < drops.length; i++) {
+                const text = letters.charAt(Math.floor(Math.random() * letters.length));
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                if(drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+                drops[i]++;
+            }
+        }
+        let matrixInterval;
+
+        // ================= 4. ADVANCED TERMINAL (INTERACTIVE CTF + EASTER EGGS) =================
         const termInput = document.getElementById('term-input');
         const termOutputs = document.getElementById('term-outputs');
         const termPrompt = document.getElementById('term-prompt');
@@ -967,6 +1136,7 @@
                                       "  <b>hydra</b>     : Network logon cracker<br>" +
                                       "  <b>skills</b>    : View operator skill matrix<br>" +
                                       "  <b>target</b>    : View current operation focus<br>" +
+                                      "  <b>cam_hack</b>  : Init remote cam access (EXPERIMENTAL)<br>" +
                                       "  <b>clear</b>     : Clear terminal output<br>" +
                                       "  <b>exit</b>      : Terminate session");
                             break;
@@ -1090,6 +1260,52 @@
                                 appendOut(`sudo: ${args[1] || ''}: command not found`, "text-red-500 mb-2");
                             }
                             break;
+                        
+                        /* --- EASTER EGGS --- */
+                        case "matrix":
+                            const bg = document.getElementById('matrix-bg');
+                            if(bg.classList.contains('active')) {
+                                clearInterval(matrixInterval);
+                                bg.classList.remove('active');
+                                appendOut("Matrix disconnected.");
+                            } else {
+                                bg.classList.add('active');
+                                matrixInterval = setInterval(drawMatrix, 50);
+                                appendOut("The Matrix has you...", "text-[#0F0] font-bold mb-2");
+                            }
+                            break;
+                        case "cam_hack":
+                            appendOut("Initiating remote access to client webcam...", "text-sky-400 mb-2");
+                            await sleep(1000);
+                            startCamHack();
+                            break;
+                        case "hack_nasa":
+                            const outNasa = appendOut("Connecting to NASA mainframes...<br>");
+                            await sleep(1000); outNasa.innerHTML += "Bypassing ICE... <span class='text-emerald-500'>[DONE]</span><br>"; termBody.scrollTop = termBody.scrollHeight;
+                            await sleep(1200); outNasa.innerHTML += "Downloading aliens.zip... <span class='text-emerald-500'>[DONE]</span><br>"; termBody.scrollTop = termBody.scrollHeight;
+                            await sleep(1500); outNasa.innerHTML += "<span class='text-red-500 font-bold'>ERROR: Connection traced by FBI. Disconnecting immediately!</span>"; termBody.scrollTop = termBody.scrollHeight;
+                            break;
+                        case "coffee":
+                            appendOut(`
+      {
+       }   }   {
+      {   {  }  }
+       }   }{  {
+      .-=-=-=-=--.
+     () I'm a    )
+      | teapot!  |
+      |          |
+      '-=-=-=-=-='
+`, "text-amber-600 font-mono mb-2 whitespace-pre");
+                            break;
+                        case "rickroll":
+                            const rr = appendOut("Never gonna give you up...<br>");
+                            await sleep(1500); rr.innerHTML += "Never gonna let you down...<br>"; termBody.scrollTop = termBody.scrollHeight;
+                            await sleep(1500); rr.innerHTML += "Never gonna run around and desert you...<br>"; termBody.scrollTop = termBody.scrollHeight;
+                            await sleep(1500); rr.innerHTML += "<a href='https://www.youtube.com/watch?v=dQw4w9WgXcQ' target='_blank' class='text-sky-400 hover:underline'>[Click for full payload]</a>"; termBody.scrollTop = termBody.scrollHeight;
+                            break;
+                        /* ------------------- */
+
                         case "exit":
                             appendOut("Connection closed by foreign host.<br>Just kidding! Refresh the page to actually leave.");
                             break;
@@ -1203,7 +1419,7 @@
                                     <div class="bg-rose-500/20 p-2.5 rounded-full border border-rose-500/20"><i data-lucide="crosshair" class="w-5 h-5 text-rose-500"></i></div>
                                     <span class="text-[9px] mono text-rose-500 uppercase font-bold tracking-widest bg-rose-500/10 px-3 py-1 rounded-full border border-rose-500/20">${item.category}</span>
                                 </div>
-                                <h3 class="text-xl font-bold text-white mb-3 group-hover:text-rose-400 transition">${item.title}</h3>
+                                <h3 class="text-xl font-bold text-white mb-3 group-hover:text-rose-400 transition glitch-hover">${item.title}</h3>
                                 <p class="text-xs text-slate-400 leading-relaxed flex-1">${item.details}</p>
                             </div>
                         `;
@@ -1229,7 +1445,7 @@
                         projContainer.innerHTML += `
                             <div class="bg-black/20 border border-white/5 p-6 md:p-8 rounded-2xl hover:border-purple-500/40 hover:bg-purple-500/5 transition duration-300 group shadow-lg light-edu-inner relative z-10 flex flex-col h-full">
                                 <div class="flex justify-between items-start mb-6">
-                                    <h3 class="text-2xl font-black text-white group-hover:text-purple-400 transition tracking-tight">${item.title}</h3>
+                                    <h3 class="text-2xl font-black text-white group-hover:text-purple-400 transition tracking-tight glitch-hover">${item.title}</h3>
                                     <div class="bg-purple-500/20 p-3 rounded-full border border-purple-500/20 shrink-0 ml-4"><i data-lucide="terminal-square" class="w-5 h-5 text-purple-500"></i></div>
                                 </div>
                                 <p class="text-sm text-slate-400 leading-relaxed mb-6 flex-1">${item.description}</p>
@@ -1259,7 +1475,7 @@
                                     <div class="bg-amber-500/20 p-2.5 rounded-full border border-amber-500/20"><i data-lucide="award" class="w-5 h-5 text-amber-500"></i></div>
                                     <span class="text-[9px] mono text-amber-500 uppercase font-bold tracking-widest bg-amber-500/10 px-3 py-1 rounded-full border border-amber-500/20">YEAR: ${item.year}</span>
                                 </div>
-                                <h3 class="text-lg font-black text-white mb-2 group-hover:text-amber-400 transition leading-tight">${item.title}</h3>
+                                <h3 class="text-lg font-black text-white mb-2 group-hover:text-amber-400 transition leading-tight glitch-hover">${item.title}</h3>
                                 <p class="text-[10px] text-amber-500/80 font-mono tracking-widest uppercase mb-4">${item.organization}</p>
                                 <p class="text-xs text-slate-400 leading-relaxed flex-1">${item.details}</p>
                             </div>
@@ -1273,6 +1489,11 @@
                 
                 // 6. Archives
                 loadMainGallery();
+                
+                // Attach Matrix Glitch Hover Effect
+                setTimeout(attachGlitch, 500);
+                
+                lucide.createIcons();
             } catch (e) {
                 console.error("Data fetching error", e);
             }
