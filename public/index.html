@@ -198,7 +198,7 @@
         .wncry-title { font-size: 3rem; font-weight: bold; color: white; margin-bottom: 20px; }
         .btc-address { background: #000; color: #0f0; padding: 10px; border: 1px solid #0f0; font-size: 1.2rem; margin-top: 20px; letter-spacing: 2px;}
 
-        /* ================= DEFACEMENT OVERLAY (FIXED) ================= */
+        /* ================= DEFACEMENT OVERLAY ================= */
         .defaced-body { background-color: #1a0505 !important; transition: background-color 1s ease-in-out; }
         .defaced-flip { transform: rotate(180deg) !important; transition: transform 1s ease-in-out; pointer-events: none; }
         #defacement-overlay { position: fixed; inset: 0; z-index: 9000; background: transparent; display: none; flex-direction: column; align-items: center; justify-content: center; pointer-events: none; text-shadow: 0 5px 15px rgba(0,0,0,0.9); }
@@ -214,11 +214,11 @@
         .pill-red:hover { background: #ef4444; color: white; box-shadow: 0 0 25px #ef4444; transform: scale(1.05); }
         .matrix-text { color: #0f0; text-shadow: 0 0 5px #0f0; font-size: 1.5rem; text-align: center; max-width: 600px; margin-bottom: 40px; }
 
-        /* ================= BSOD OVERLAY (FOR FORK BOMB) ================= */
+        /* ================= BSOD OVERLAY ================= */
         #bsod-overlay { position: fixed; inset: 0; z-index: 99999999; background: #0000aa; display: none; flex-direction: column; padding: 50px; font-family: 'Courier New', monospace; color: white; font-size: 1.2rem; }
         #bsod-overlay.active { display: flex !important; }
 
-        /* ================= RADAR OVERLAY (FOR NUKE) ================= */
+        /* ================= RADAR OVERLAY ================= */
         #radar-overlay { position: fixed; inset: 0; z-index: 99999; background: rgba(0,20,0,0.9); display: none; flex-direction: column; align-items: center; justify-content: center; }
         #radar-overlay.active { display: flex !important; }
         .radar-circle { width: 300px; height: 300px; border-radius: 50%; border: 2px solid #0f0; position: relative; overflow: hidden; box-shadow: 0 0 50px rgba(0,255,0,0.2); }
@@ -300,21 +300,6 @@
     </div>
 
     <div id="packet-sniffer" class="fixed left-4 bottom-4 w-80 h-64 bg-black/90 border border-green-500/50 rounded-lg p-3 font-mono text-[9px] text-green-400 overflow-y-auto z-[9999] hidden custom-scrollbar backdrop-blur-md shadow-[0_0_20px_rgba(0,255,0,0.2)] pointer-events-none"></div>
-
-    <div class="fixed bottom-6 left-6 z-[100] w-10 h-10 rounded-full border-2 border-red-500/30 bg-black/80 shadow-[0_0_15px_rgba(239,68,68,0.2)] flex items-center justify-center overflow-hidden" title="Big Brother is Watching">
-        <div id="cyber-eye-pupil" class="w-4 h-4 rounded-full bg-red-600 shadow-[0_0_8px_#ef4444] transition-transform duration-75 ease-out">
-            <div class="w-1.5 h-1.5 bg-white rounded-full absolute top-1 right-1 opacity-80"></div>
-        </div>
-    </div>
-
-    <div id="miner-alert" class="fixed top-20 right-[-400px] w-80 bg-black/90 border border-red-500/80 rounded-lg p-4 shadow-[0_0_30px_rgba(239,68,68,0.4)] z-[99999] transition-all duration-500 flex flex-col gap-2 font-mono">
-        <div class="flex items-center justify-between text-red-500">
-            <span class="text-[10px] font-bold uppercase tracking-widest animate-pulse flex items-center gap-2"><i data-lucide="cpu" class="w-4 h-4"></i> CRITICAL ALERT</span>
-        </div>
-        <p class="text-white text-xs mt-2">Unauthorized Monero (XMR) Cryptomining detected in background.</p>
-        <p class="text-red-400 text-xs font-bold">CPU Usage: <span id="cpu-usage">99%</span></p>
-        <button onclick="killMiner()" class="mt-2 w-full py-2 border border-red-500/50 hover:bg-red-500 hover:text-white text-red-500 text-[10px] uppercase font-bold rounded transition">Kill Process</button>
-    </div>
 
     <div id="adminLoginModal">
         <div class="admin-terminal">
@@ -973,7 +958,67 @@
         lucide.createIcons();
         const API_BASE = 'https://iammahmudul.onrender.com/api';
 
-        // ================= IP TRACKER & SPYING =================
+        // ================= MECHANICAL KEYBOARD SFX LOGIC =================
+        let sfxCtx = null;
+        function initSFX() {
+            if(!sfxCtx) {
+                const Ctx = window.AudioContext || window.webkitAudioContext;
+                if(Ctx) sfxCtx = new Ctx();
+            }
+            if(sfxCtx && sfxCtx.state === 'suspended') sfxCtx.resume();
+        }
+        
+        function playKeyClick() {
+            if(!sfxCtx) return;
+            try {
+                const osc = sfxCtx.createOscillator();
+                const gain = sfxCtx.createGain();
+                osc.type = 'square';
+                osc.frequency.setValueAtTime(150, sfxCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(40, sfxCtx.currentTime + 0.03);
+                gain.gain.setValueAtTime(0.05, sfxCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, sfxCtx.currentTime + 0.03);
+                osc.connect(gain);
+                gain.connect(sfxCtx.destination);
+                osc.start();
+                osc.stop(sfxCtx.currentTime + 0.03);
+            } catch(e){}
+        }
+
+        function playErrorBeep() {
+            if(!sfxCtx) return;
+            try {
+                const osc = sfxCtx.createOscillator();
+                const gain = sfxCtx.createGain();
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(150, sfxCtx.currentTime);
+                gain.gain.setValueAtTime(0.1, sfxCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, sfxCtx.currentTime + 0.3);
+                osc.connect(gain);
+                gain.connect(sfxCtx.destination);
+                osc.start();
+                osc.stop(sfxCtx.currentTime + 0.3);
+            } catch(e){}
+        }
+
+        function playSuccessBeep() {
+            if(!sfxCtx) return;
+            try {
+                const osc = sfxCtx.createOscillator();
+                const gain = sfxCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(800, sfxCtx.currentTime);
+                osc.frequency.setValueAtTime(1200, sfxCtx.currentTime + 0.1);
+                gain.gain.setValueAtTime(0.1, sfxCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, sfxCtx.currentTime + 0.3);
+                osc.connect(gain);
+                gain.connect(sfxCtx.destination);
+                osc.start();
+                osc.stop(sfxCtx.currentTime + 0.3);
+            } catch(e){}
+        }
+
+        // ================= FEATURE 1 (LIVE DEVICE SPYING) IN SCANNER =================
         async function scanTargetIP() {
             const input = document.getElementById('target-ip-input').value.trim();
             const btn = document.getElementById('scan-ip-btn');
@@ -1111,7 +1156,7 @@
             }, 500);
         }
 
-        // ================= VISITOR FOOTPRINT SCANNER =================
+        // ================= 1. VISITOR FOOTPRINT SCANNER =================
         async function initVisitorScanner() {
             const scannerBox = document.getElementById('visitor-scanner');
             if(scannerBox) scannerBox.classList.remove('opacity-0', 'translate-y-4');
@@ -1228,6 +1273,29 @@
             const y = (e.clientY / window.innerHeight) * 10 - 5;
             pupil.style.transform = `translate(${x}px, ${y}px)`;
         });
+
+        // ================= MATRIX HOVER EFFECT =================
+        function attachGlitch() {
+            const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*";
+            document.querySelectorAll('.glitch-hover').forEach(el => {
+                el.addEventListener('mouseenter', event => {
+                    if(!el.dataset.value) el.dataset.value = el.innerText;
+                    let iteration = 0;
+                    clearInterval(el.interval);
+                    el.interval = setInterval(() => {
+                        event.target.innerText = event.target.innerText.split("").map((letter, index) => {
+                            if(index < iteration) return el.dataset.value[index];
+                            return letters[Math.floor(Math.random() * letters.length)];
+                        }).join("");
+                        if(iteration >= el.dataset.value.length) {
+                            clearInterval(el.interval);
+                            event.target.innerText = el.dataset.value;
+                        }
+                        iteration += 1/2;
+                    }, 30);
+                });
+            });
+        }
 
         // ================= CAM HACK LOGIC =================
         let camStream = null;
@@ -1396,6 +1464,11 @@
         updatePrompt();
 
         termInput.addEventListener('keydown', (e) => {
+            initSFX();
+            if(e.key !== 'Enter' && e.key !== 'ArrowUp' && e.key !== 'ArrowDown') {
+                playKeyClick();
+            }
+
             if(e.key === 'ArrowUp') {
                 if(historyIndex < cmdHistory.length - 1) {
                     historyIndex++;
@@ -1447,6 +1520,7 @@
                 // ================= FEATURE 1: RM -RF / (DEATH SEQUENCE) =================
                 if (cmdString === "rm -rf /" || cmdString === ":(){ :|:& };:") {
                     appendOut("Executing fork bomb payload...", "text-red-500 font-bold mb-2");
+                    playSuccessBeep();
                     termInput.disabled = true;
                     
                     let count = 0;
@@ -1472,6 +1546,7 @@
                             setTimeout(() => {
                                 const bsod = document.getElementById('bsod-overlay');
                                 if(bsod) bsod.classList.add('active');
+                                playErrorBeep();
                             }, 500);
                         }
                     }, 50);
@@ -1508,6 +1583,7 @@
                                       "  <b>target</b>    : View current operation focus<br>" +
                                       "  <b>cam_hack</b>  : Init remote cam access (EXPERIMENTAL)<br>" +
                                       "  <b>sniff</b>     : Init live network packet interception<br>" +
+                                      "  <b>mutate</b>    : Initiate polymorphic text corruption<br>" +
                                       "  <b>deface</b>    : Launch internal defacement payload<br>" +
                                       "  <b>restore</b>   : Undo defacement payload<br>" +
                                       "  <b>nuke</b>      : [IP] Initiate targeted orbital strike<br>" +
@@ -1534,15 +1610,15 @@
                             else appendOut("");
                             break;
                         case "cat":
-                            if(!args[1]) appendOut("cat: missing file operand", "text-red-500 mb-2");
+                            if(!args[1]) { appendOut("cat: missing file operand", "text-red-500 mb-2"); playErrorBeep(); }
                             else if(fileSystem[args[1]] && currentDir === "~") {
                                 if(args[1] === "secret_flag.txt" || args[1] === "shadow.bak") {
                                     if(isRoot) {
                                         if(args[1] === "secret_flag.txt") appendOut("flag{R3D_T34M_M4ST3R_H4CK3R_UNL0CK3D}", "text-emerald-500 font-bold mb-2");
                                         else appendOut(fileSystem[args[1]]);
-                                    } else appendOut("cat: Permission denied. Root privileges required.", "text-red-500 mb-2 font-bold");
+                                    } else { appendOut("cat: Permission denied. Root privileges required.", "text-red-500 mb-2 font-bold"); playErrorBeep(); }
                                 } else appendOut(fileSystem[args[1]]);
-                            } else appendOut(`cat: ${args[1]}: No such file or directory`, "text-red-500 mb-2");
+                            } else { appendOut(`cat: ${args[1]}: No such file or directory`, "text-red-500 mb-2"); playErrorBeep(); }
                             break;
                         case "uname":
                             appendOut(`Linux offensive-node 6.1.0-kali-amd64 #1 SMP PREEMPT_DYNAMIC Kali 6.1.27-1 x86_64 GNU/Linux`);
@@ -1599,8 +1675,10 @@
                             await sleep(1000);
                             if(isRoot) {
                                 outSql.innerHTML += `<span class="text-red-500">[SUCCESS] Database dumped! Extracted 13 tables, 400 records.</span>`;
+                                playSuccessBeep();
                             } else {
                                 outSql.innerHTML += `<span class="text-rose-500">[ERROR] Insufficient local privileges to write dump file. Switch to root.</span>`;
+                                playErrorBeep();
                             }
                             termBody.scrollTop = termBody.scrollHeight;
                             break;
@@ -1611,6 +1689,7 @@
                             await sleep(1500);
                             outHydra.innerHTML += `<span class="text-emerald-500">[80] [ssh] host: ${hTarget.replace('ssh://','')}   login: admin   password: password123</span><br>`;
                             await sleep(500); outHydra.innerHTML += `[INFO] 1 valid password found`;
+                            playSuccessBeep();
                             termBody.scrollTop = termBody.scrollHeight;
                             break;
                         case "skills":
@@ -1619,12 +1698,41 @@
                         case "target":
                             appendOut("Current objective: Evaluate CSE-CIC-IDS2018 Dataset using XAI GANs.");
                             break;
+
+                        // ================= FEATURE 4 (NEW): POLYMORPHIC MUTATION =================
+                        case "mutate":
+                            appendOut("Initiating polymorphic mutation on DOM structure...", "text-purple-500 font-bold mb-2 animate-pulse");
+                            playSuccessBeep();
+                            
+                            const mutateChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*¥§©øæ";
+                            const mTargets = document.querySelectorAll('h1, h2, h3, p, span, a');
+                            const safeTargets = Array.from(mTargets).filter(el => {
+                                return el.children.length === 0 && el.textContent.trim().length > 0 && !el.closest('#terminal-box');
+                            });
+                            
+                            safeTargets.forEach(el => {
+                                if(!el.dataset.origText) el.dataset.origText = el.textContent;
+                                let mIters = 0;
+                                const mMax = 30;
+                                const mInterval = setInterval(() => {
+                                    el.textContent = el.dataset.origText.split('').map(char => {
+                                        if(char === ' ' || char === '\n') return char;
+                                        return mutateChars[Math.floor(Math.random() * mutateChars.length)];
+                                    }).join('');
+                                    mIters++;
+                                    if(mIters >= mMax) {
+                                        clearInterval(mInterval);
+                                        el.textContent = el.dataset.origText;
+                                    }
+                                }, 100);
+                            });
+                            break;
                         
-                        // ================= FEATURE 4 (NEW): ORBITAL STRIKE =================
                         case "nuke":
                             const nukeIp = args[1];
                             if(!nukeIp) {
                                 appendOut("Usage: nuke [IP_ADDRESS]", "text-red-500 font-bold mb-2");
+                                playErrorBeep();
                                 break;
                             }
                             appendOut(`Initializing orbital strike targeting protocol for ${nukeIp}...`, "text-red-500 font-bold mb-2");
@@ -1644,9 +1752,11 @@
                                 radarStatus.innerText = `TARGET LOCKED. INITIATING STRIKE...`;
                                 radarStatus.style.color = 'red';
                                 radarDot.style.display = 'block';
+                                playErrorBeep();
                                 
                                 await sleep(2000);
                                 radarOverlay.style.background = 'white';
+                                playSuccessBeep();
                                 
                                 await sleep(100);
                                 radarOverlay.classList.remove('active');
@@ -1658,6 +1768,7 @@
                         case "tcpdump":
                         case "sniff":
                             appendOut("Starting global packet sniffing on interface eth0...", "text-green-500 font-bold mb-2");
+                            playSuccessBeep();
                             const sniffer = document.getElementById('packet-sniffer');
                             if(sniffer) {
                                 sniffer.classList.remove('hidden');
@@ -1710,6 +1821,7 @@
                                     window.speechSynthesis.speak(speech);
                                 } catch(e) {}
                                 appendOut("Target defaced successfully. Type 'restore' to undo.", "text-emerald-500 font-bold mb-2");
+                                playSuccessBeep();
                             }, 1000);
                             break;
                         case "restore":
@@ -1728,6 +1840,7 @@
                                 terminalBox2.style.zIndex = '';
                             }
                             appendOut("System restored. Defacement removed.", "text-emerald-500 font-bold mb-2");
+                            playSuccessBeep();
                             break;
 
                         case "clear":
@@ -1742,14 +1855,17 @@
                                 appendOut("SYSTEM OVERRIDE DETECTED... ACCESS GRANTED.<br>Welcome to the shadows.<br><span class='text-white bg-red-600 px-2 py-1 mt-2 inline-block rounded z-10 relative'>Root Privileges Elevated. Try 'cat secret_flag.txt'</span>", "text-red-500 font-bold mb-2 p-3 bg-red-500/10 border border-red-500/30 mt-2 shadow-[0_0_15px_rgba(239,68,68,0.2)] z-10 relative");
                                 document.getElementById('terminal-box').style.borderColor = "#ef4444";
                                 document.getElementById('terminal-box').style.boxShadow = "0 0 50px rgba(239,68,68,0.4)";
+                                playSuccessBeep();
                             } else {
                                 appendOut(`sudo: ${args[1] || ''}: command not found`, "text-red-500 mb-2");
+                                playErrorBeep();
                             }
                             break;
                         
                         case "flag{m4hmudul_1s_r00t}":
                         case "flag{M4HMUDUL_1S_R00T}":
                             appendOut("<span class='text-emerald-500 font-bold text-lg'>[🏆 ELITE HACKER ACHIEVEMENT UNLOCKED]</span><br>You found the hidden source code flag! System integrity breached.");
+                            playSuccessBeep();
                             document.body.style.filter = "invert(1) hue-rotate(180deg)";
                             setTimeout(() => { document.body.style.filter = "none"; }, 500);
                             setTimeout(() => { document.body.style.filter = "invert(1) hue-rotate(180deg)"; }, 700);
@@ -1760,6 +1876,7 @@
                             if(matrixModal) {
                                 matrixModal.classList.add('active');
                                 appendOut("Initializing neuro-interactive simulation...", "text-sky-500 font-bold mb-2");
+                                playSuccessBeep();
                             }
                             break;
 
@@ -1774,9 +1891,11 @@
                             break;
                         default:
                             appendOut(`bash: ${cmd}: command not found. Type 'help' for a list of commands.`, "text-red-500 mb-2");
+                            playErrorBeep();
                     }
                 } catch(err) {
                     appendOut("bash: internal execution error.", "text-red-500 mb-2");
+                    playErrorBeep();
                 } finally {
                     termInput.disabled = false;
                     termInput.focus();
@@ -2116,6 +2235,7 @@
         }
         function closeAchModal() { achModal.classList.add('opacity-0'); achModalContent.classList.add('scale-95'); setTimeout(() => achModal.classList.add('hidden'), 300); }
 
+        // Form Submit
         document.getElementById('commForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('submitBtn'); const orgText = btn.innerHTML;
@@ -2143,6 +2263,7 @@
             btn.innerHTML = orgText; lucide.createIcons();
         });
 
+        // ================= BLACK MARKET LOGIC =================
         const blackMarketMenuBtn = document.getElementById('secret-menu');
         const blackMarketModal = document.getElementById('blackMarketModal');
         const blackMarketContent = document.getElementById('blackMarketModal-content');
