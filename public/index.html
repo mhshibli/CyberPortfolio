@@ -199,9 +199,9 @@
         .btc-address { background: #000; color: #0f0; padding: 10px; border: 1px solid #0f0; font-size: 1.2rem; margin-top: 20px; letter-spacing: 2px;}
 
         /* ================= DEFACEMENT OVERLAY (FIXED) ================= */
-        .defaced-invert { filter: hue-rotate(315deg) contrast(150%) !important; transition: all 1s ease-in-out; }
-        .defaced-flip { transform: rotate(180deg) scaleX(-1) !important; transition: transform 1s ease-in-out; pointer-events: none; }
-        #defacement-overlay { position: fixed; inset: 0; z-index: 9000; background: rgba(50,0,0,0.4); display: none; flex-direction: column; align-items: center; justify-content: center; pointer-events: none; backdrop-filter: blur(2px); }
+        .defaced-body { background-color: #1a0505 !important; transition: background-color 1s ease-in-out; }
+        .defaced-flip { transform: rotate(180deg) !important; transition: transform 1s ease-in-out; pointer-events: none; }
+        #defacement-overlay { position: fixed; inset: 0; z-index: 9000; background: transparent; display: none; flex-direction: column; align-items: center; justify-content: center; pointer-events: none; text-shadow: 0 5px 15px rgba(0,0,0,0.9); }
         #defacement-overlay.active { display: flex !important; }
 
         .custom-scrollbar::-webkit-scrollbar { width: 6px; }
@@ -1513,18 +1513,20 @@
                             appendOut("Initiating global defacement payload...", "text-red-500 font-bold mb-2 animate-pulse");
                             setTimeout(() => {
                                 const defOverlay = document.getElementById('defacement-overlay');
-                                if(defOverlay) defOverlay.classList.add('active');
+                                if(defOverlay) {
+                                    // Force display flex using Javascript inline style
+                                    defOverlay.style.setProperty('display', 'flex', 'important');
+                                }
                                 
-                                document.body.classList.add('defaced-invert');
-                                
-                                document.querySelectorAll('section:not(#terminal), nav, footer, #main-content > div:first-child').forEach(el => {
-                                    el.classList.add('defaced-flip');
-                                });
-
-                                const terminalBox = document.getElementById('terminal');
-                                if(terminalBox) {
-                                    terminalBox.style.position = 'relative';
-                                    terminalBox.style.zIndex = '99999';
+                                // Injecting a highly specific style tag to force invert and flip on main content
+                                if(!document.getElementById('deface-styles')) {
+                                    const s = document.createElement('style');
+                                    s.id = 'deface-styles';
+                                    s.innerHTML = `
+                                        body { filter: hue-rotate(315deg) contrast(150%) !important; background: #300 !important; }
+                                        main > section:not(#terminal) { transform: rotate(180deg) scaleX(-1) !important; transition: all 1s ease-in-out; pointer-events: none; }
+                                    `;
+                                    document.head.appendChild(s);
                                 }
 
                                 try {
@@ -1538,19 +1540,9 @@
                             break;
                         case "restore":
                             const defOverlay2 = document.getElementById('defacement-overlay');
-                            if(defOverlay2) defOverlay2.classList.remove('active');
-                            
-                            document.body.classList.remove('defaced-invert');
-                            
-                            document.querySelectorAll('.defaced-flip').forEach(el => {
-                                el.classList.remove('defaced-flip');
-                            });
-                            
-                            const terminalBox2 = document.getElementById('terminal');
-                            if(terminalBox2) {
-                                terminalBox2.style.position = '';
-                                terminalBox2.style.zIndex = '';
-                            }
+                            if(defOverlay2) defOverlay2.style.setProperty('display', 'none', 'important');
+                            const ds = document.getElementById('deface-styles');
+                            if(ds) ds.remove();
                             appendOut("System restored. Defacement removed.", "text-emerald-500 font-bold mb-2");
                             break;
 
@@ -1732,7 +1724,7 @@
                 if(arsData.length > 0) {
                     arsData.slice(0, 2).forEach((item) => {
                         arsContainer.innerHTML += `
-                            <div class="bg-black/20 border border-white/5 p-6 rounded-2xl hover:border-rose-500/40 hover:bg-rose-500/5 transition duration-300 group shadow-lg light-edu-inner relative z-10 flex flex-col h-full">
+                            <div class="bg-black/20 border border-white/5 p-6 rounded-2xl hover:border-rose-500/40 hover:bg-rose-500/5 transition duration-300 group shadow-lg light-edu-inner relative z-10 flex flex-col h-full scroll-glitch-target">
                                 <div class="flex justify-between items-start mb-4">
                                     <div class="bg-rose-500/20 p-2.5 rounded-full border border-rose-500/20"><i data-lucide="crosshair" class="w-5 h-5 text-rose-500"></i></div>
                                     <span class="text-[9px] mono text-rose-500 uppercase font-bold tracking-widest bg-rose-500/10 px-3 py-1 rounded-full border border-rose-500/20">${item.category}</span>
@@ -1761,7 +1753,7 @@
                         const linkHtml = item.link && item.link.trim() !== '' ? `<a href="${item.link}" target="_blank" class="inline-flex items-center gap-2 text-[10px] font-bold text-purple-500 hover:text-purple-400 mono tracking-widest mt-auto group/link bg-purple-500/10 hover:bg-purple-500/20 px-4 py-2 rounded-lg border border-purple-500/20 transition w-fit"><i data-lucide="external-link" class="w-4 h-4 group-hover/link:scale-110 transition"></i> VIEW_DEPLOYMENT</a>` : '';
                         
                         projContainer.innerHTML += `
-                            <div class="bg-black/20 border border-white/5 p-6 md:p-8 rounded-2xl hover:border-purple-500/40 hover:bg-purple-500/5 transition duration-300 group shadow-lg light-edu-inner relative z-10 flex flex-col h-full">
+                            <div class="bg-black/20 border border-white/5 p-6 md:p-8 rounded-2xl hover:border-purple-500/40 hover:bg-purple-500/5 transition duration-300 group shadow-lg light-edu-inner relative z-10 flex flex-col h-full scroll-glitch-target">
                                 <div class="flex justify-between items-start mb-6">
                                     <h3 class="text-2xl font-black text-white group-hover:text-purple-400 transition tracking-tight">${item.title}</h3>
                                     <div class="bg-purple-500/20 p-3 rounded-full border border-purple-500/20 shrink-0 ml-4"><i data-lucide="terminal-square" class="w-5 h-5 text-purple-500"></i></div>
@@ -1788,7 +1780,7 @@
                 if(achData.length > 0) {
                     achData.slice(0, 2).forEach((item) => {
                         certContainer.innerHTML += `
-                            <div class="bg-black/20 border border-white/5 p-6 rounded-2xl hover:border-amber-500/40 hover:bg-amber-500/5 transition duration-300 group shadow-lg light-edu-inner relative z-10 flex flex-col h-full">
+                            <div class="bg-black/20 border border-white/5 p-6 rounded-2xl hover:border-amber-500/40 hover:bg-amber-500/5 transition duration-300 group shadow-lg light-edu-inner relative z-10 flex flex-col h-full scroll-glitch-target">
                                 <div class="flex justify-between items-start mb-5">
                                     <div class="bg-amber-500/20 p-2.5 rounded-full border border-amber-500/20"><i data-lucide="award" class="w-5 h-5 text-amber-500"></i></div>
                                     <span class="text-[9px] mono text-amber-500 uppercase font-bold tracking-widest bg-amber-500/10 px-3 py-1 rounded-full border border-amber-500/20">YEAR: ${item.year}</span>
