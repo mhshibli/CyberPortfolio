@@ -193,7 +193,23 @@
         .glitch-text-scary { font-size: 3rem; font-weight: bold; color: red; text-shadow: 0 0 10px red; margin-bottom: 10px; animation: textGlitch 0.2s infinite; }
         @keyframes textGlitch { 0% { transform: translate(0); } 20% { transform: translate(-2px, 2px); } 40% { transform: translate(-2px, -2px); } 60% { transform: translate(2px, 2px); } 80% { transform: translate(2px, -2px); } 100% { transform: translate(0); } }
 
-        /* ================= NEW: DEFACEMENT OVERLAY ================= */
+        /* ================= RANSOMWARE OVERLAY ================= */
+        #ransomware-overlay { position: fixed !important; top: 0 !important; left: 0 !important; width: 100vw !important; height: 100vh !important; z-index: 9999999 !important; background: #8b0000 !important; display: none; flex-direction: column; align-items: center; justify-content: center; color: white; font-family: 'Courier New', monospace; padding: 20px; text-align: center; }
+        .wncry-title { font-size: 3rem; font-weight: bold; color: white; margin-bottom: 20px; }
+        .btc-address { background: #000; color: #0f0; padding: 10px; border: 1px solid #0f0; font-size: 1.2rem; margin-top: 20px; letter-spacing: 2px;}
+
+        /* ================= SCROLL GLITCH ================= */
+        @keyframes scrollGlitch {
+            0% { transform: translate(0) skewX(0deg); filter: hue-rotate(0deg); }
+            20% { transform: translate(-2px, 2px) skewX(2deg); filter: hue-rotate(90deg); }
+            40% { transform: translate(2px, -2px) skewX(-2deg); filter: hue-rotate(-90deg); }
+            60% { transform: translate(-2px, -2px) skewX(2deg); filter: hue-rotate(90deg); }
+            80% { transform: translate(2px, 2px) skewX(-2deg); filter: hue-rotate(-90deg); }
+            100% { transform: translate(0) skewX(0deg); filter: hue-rotate(0deg); }
+        }
+        .scroll-glitching { animation: scrollGlitch 0.2s ease-in-out; }
+
+        /* ================= DEFACEMENT OVERLAY ================= */
         #defacement-overlay { position: fixed !important; top: 0 !important; left: 0 !important; width: 100vw !important; height: 100vh !important; z-index: 9000 !important; background: rgba(0,0,0,0.85) !important; display: none; flex-direction: column; align-items: center; justify-content: center; pointer-events: none; }
 
         .custom-scrollbar::-webkit-scrollbar { width: 6px; }
@@ -210,6 +226,15 @@
         <h2 style="font-size: 1.5rem; margin-bottom: 20px;">AS PART OF A JOINT LAW ENFORCEMENT OPERATION</h2>
         <p style="font-size: 1rem; color: #0f0; margin-bottom: 10px;" id="seizure-ip">YOUR IP ADDRESS HAS BEEN LOGGED AND REPORTED.</p>
         <p style="font-size: 1.2rem; color: yellow; margin-top: 20px; animation: blink 1s infinite;">LOCAL AUTHORITIES HAVE BEEN DISPATCHED TO YOUR LOCATION.</p>
+    </div>
+
+    <div id="ransomware-overlay">
+        <i data-lucide="lock" style="width: 100px; height: 100px; color: white; margin-bottom: 20px;"></i>
+        <h1 class="wncry-title">Ooops, your files have been encrypted!</h1>
+        <p style="font-size: 1.2rem; max-width: 600px; margin-bottom: 20px;">Your documents, photos, databases, and other important files have been encrypted with military-grade algorithms. You cannot access them without the decryption key.</p>
+        <p style="font-size: 1.2rem; font-weight: bold;">Send 2.0 Bitcoin to the following address to recover your data:</p>
+        <div class="btc-address">bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh</div>
+        <p style="margin-top: 20px; font-size: 0.8rem; opacity: 0.7; animation: blink 1s infinite;">Time remaining: 23:59:59</p>
     </div>
 
     <div id="defacement-overlay">
@@ -371,7 +396,7 @@
                         <i data-lucide="shield-check" class="w-8 h-8 text-[#0ea5e9]"></i>
                     </div>
 
-                    <div class="profile-box border border-white/5 rounded-[2rem] p-6 relative z-10 shadow-2xl">
+                    <div class="profile-box border border-white/5 rounded-[2rem] p-6 relative z-10 shadow-2xl scroll-glitch-target">
                         <div class="flex items-center justify-between mb-5 pl-1 pr-6">
                             <div class="flex gap-1.5">
                                 <div class="w-2 h-2 rounded-full bg-[#0ea5e9]"></div>
@@ -463,7 +488,7 @@
 
                         <div id="edu-right-side" class="w-full lg:w-80 shrink-0 flex flex-col gap-4 md:gap-6 justify-center">
                             
-                            <div id="thesis-card" class="bg-black/20 border border-white/5 p-5 md:p-6 rounded-2xl hover:border-emerald-500/40 transition duration-300 group shadow-lg light-edu-inner hidden">
+                            <div id="thesis-card" class="bg-black/20 border border-white/5 p-5 md:p-6 rounded-2xl hover:border-emerald-500/40 transition duration-300 group shadow-lg light-edu-inner hidden scroll-glitch-target">
                                 <div class="flex items-center gap-3 mb-4">
                                     <div class="bg-emerald-500/20 p-2 rounded-full border border-emerald-500/20">
                                         <i data-lucide="microscope" class="w-5 h-5 text-emerald-500"></i>
@@ -473,7 +498,7 @@
                                 <h4 id="thesis-desc" class="text-white font-bold italic mb-3 leading-tight group-hover:text-emerald-400 transition"></h4>
                             </div>
 
-                            <div id="core-focus-card" class="bg-black/20 border border-white/5 p-5 md:p-6 rounded-2xl hover:border-sky-500/40 transition duration-300 group shadow-lg light-edu-inner hidden">
+                            <div id="core-focus-card" class="bg-black/20 border border-white/5 p-5 md:p-6 rounded-2xl hover:border-sky-500/40 transition duration-300 group shadow-lg light-edu-inner hidden scroll-glitch-target">
                                 <div class="flex items-center gap-3 mb-4">
                                     <div class="bg-sky-500/20 p-2 rounded-full border border-sky-500/20">
                                         <i data-lucide="book-open" class="w-5 h-5 text-sky-500"></i>
@@ -701,6 +726,10 @@
                                     <i data-lucide="message-square" class="absolute left-4 top-6 w-4 h-4 text-slate-500"></i>
                                     <textarea id="i-msg" required rows="4" placeholder="ENTER_MESSAGE_HERE..." class="w-full bg-black/40 border border-white/10 rounded-2xl pl-12 pr-4 py-6 text-xs outline-none transition mono text-white"></textarea>
                                 </div>
+                                <div id="pgp-output-container" class="mt-4 p-4 bg-[#050b14]/80 border border-emerald-500/30 rounded-xl hidden shadow-[inset_0_0_15px_rgba(16,185,129,0.1)] transition-all duration-500">
+                                    <p class="text-[8px] text-emerald-500 font-mono font-bold mb-2 flex items-center gap-2 uppercase tracking-widest"><span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Live PGP Encryption</p>
+                                    <pre id="pgp-output" class="text-[10px] text-emerald-400/70 font-mono whitespace-pre-wrap break-all leading-tight"></pre>
+                                </div>
                             </div>
                             <button type="submit" id="submitBtn" class="w-full py-5 bg-sky-600 hover:bg-sky-500 text-white rounded-2xl font-bold text-[10px] uppercase tracking-[0.3em] shadow-[0_0_20px_rgba(14,165,233,0.3)] hover:shadow-[0_0_30px_rgba(14,165,233,0.5)] flex items-center justify-center gap-3 transition">
                                 <i data-lucide="send" class="w-4 h-4"></i> Transmit Packet
@@ -730,6 +759,7 @@
                 <div class="w-16 h-[2px] bg-[#0ea5e9]/50 rounded-full mb-6 light-mode-divider"></div>
                 <div class="flex items-center gap-2">
                     <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest mono">© 2026 MAHMUDUL HASAN. DESIGN: HYPER-SECURITY OS V2</p>
+                    <span id="ransomware-trigger" class="text-[8px] text-red-500 font-mono cursor-pointer hover:opacity-100 opacity-5 transition-opacity">payload.exe</span>
                 </div>
             </div>
         </footer>
@@ -886,7 +916,7 @@
         lucide.createIcons();
         const API_BASE = 'https://iammahmudul.onrender.com/api';
 
-        // ================= NEW: FEATURE 1 (LIVE DEVICE SPYING) IN SCANNER =================
+        // ================= IP TRACKER LOGIC =================
         async function scanTargetIP() {
             const input = document.getElementById('target-ip-input').value.trim();
             const btn = document.getElementById('scan-ip-btn');
@@ -1343,7 +1373,6 @@
                                       "  <b>skills</b>    : View operator skill matrix<br>" +
                                       "  <b>target</b>    : View current operation focus<br>" +
                                       "  <b>cam_hack</b>  : Init remote cam access (EXPERIMENTAL)<br>" +
-                                      // NEW FEATURE COMMANDS
                                       "  <b>sniff</b>     : Init live network packet interception<br>" +
                                       "  <b>deface</b>    : Launch internal defacement payload<br>" +
                                       "  <b>restore</b>   : Undo defacement payload<br>" +
@@ -1486,16 +1515,27 @@
                             } else { appendOut("No active sniffing process found."); }
                             break;
 
-                        // ================= FEATURE 4: WEB DEFACEMENT =================
+                        // ================= FEATURE 4: WEB DEFACEMENT (FIXED) =================
                         case "deface":
                             appendOut("Initiating global defacement payload...", "text-red-500 font-bold mb-2 animate-pulse");
                             setTimeout(() => {
                                 const defOverlay = document.getElementById('defacement-overlay');
-                                if(defOverlay) defOverlay.classList.remove('hidden');
-                                document.querySelectorAll('section:not(#terminal)').forEach(s => {
-                                    s.style.filter = "invert(1) hue-rotate(180deg) saturate(200%)";
-                                    s.style.transform = "rotate(1deg) skew(-2deg)";
-                                });
+                                if(defOverlay) {
+                                    // Force display flex using Javascript inline style
+                                    defOverlay.style.setProperty('display', 'flex', 'important');
+                                }
+                                
+                                // Injecting a highly specific style tag to force invert and flip on main content
+                                if(!document.getElementById('deface-styles')) {
+                                    const s = document.createElement('style');
+                                    s.id = 'deface-styles';
+                                    s.innerHTML = `
+                                        body { filter: invert(1) hue-rotate(180deg) saturate(200%) !important; background: #300 !important; }
+                                        main > section:not(#terminal) { transform: rotate(180deg) scaleX(-1) !important; transition: all 1s ease-in-out; pointer-events: none; }
+                                    `;
+                                    document.head.appendChild(s);
+                                }
+
                                 try {
                                     const speech = new SpeechSynthesisUtterance("System compromised by Null Script Infiltrators.");
                                     speech.pitch = 0.5;
@@ -1507,11 +1547,9 @@
                             break;
                         case "restore":
                             const defOverlay = document.getElementById('defacement-overlay');
-                            if(defOverlay) defOverlay.classList.add('hidden');
-                            document.querySelectorAll('section:not(#terminal)').forEach(s => {
-                                s.style.filter = "none";
-                                s.style.transform = "none";
-                            });
+                            if(defOverlay) defOverlay.style.setProperty('display', 'none', 'important');
+                            const ds = document.getElementById('deface-styles');
+                            if(ds) ds.remove();
                             appendOut("System restored. Defacement removed.", "text-emerald-500 font-bold mb-2");
                             break;
 
@@ -1955,10 +1993,26 @@
         document.getElementById('commForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('submitBtn'); const orgText = btn.innerHTML;
+            const pgpContainer = document.getElementById('pgp-output-container');
+            const pgpOutput = document.getElementById('pgp-output');
+            
             btn.innerHTML = '<i data-lucide="loader" class="w-4 h-4 animate-spin"></i> Transmitting...'; lucide.createIcons();
+            
+            if (pgpContainer && !pgpContainer.classList.contains('hidden')) {
+                pgpContainer.classList.add('border-sky-500', 'animate-pulse');
+                pgpOutput.classList.replace('text-emerald-400/70', 'text-sky-400');
+            }
+
             try {
                 await fetch(`${API_BASE}/messages`, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({identity_name: document.getElementById('i-name').value, contact_vector: document.getElementById('i-email').value, data_payload: document.getElementById('i-msg').value}) });
-                e.target.reset(); document.getElementById('formSuccess').classList.remove('hidden'); setTimeout(() => document.getElementById('formSuccess').classList.add('hidden'), 5000);
+                e.target.reset(); 
+                document.getElementById('formSuccess').classList.remove('hidden'); 
+                if(pgpContainer) { 
+                    pgpContainer.classList.add('hidden'); 
+                    pgpContainer.classList.remove('border-sky-500', 'animate-pulse');
+                    pgpOutput.classList.replace('text-sky-400', 'text-emerald-400/70');
+                }
+                setTimeout(() => document.getElementById('formSuccess').classList.add('hidden'), 5000);
             } catch(err){ alert("Failed!"); }
             btn.innerHTML = orgText; lucide.createIcons();
         });
@@ -1987,7 +2041,6 @@
         }
 
         window.buyMarketItem = function() {
-            // Force close modal
             try {
                 const modal = document.getElementById('blackMarketModal');
                 if(modal) {
@@ -1996,7 +2049,6 @@
                 }
             } catch(e) {}
             
-            // Show Overlay
             try {
                 const overlay = document.getElementById('seizure-overlay');
                 if (overlay) {
@@ -2012,7 +2064,6 @@
                 }
             } catch(err) {}
             
-            // Play Audio
             try {
                 const Ctx = window.AudioContext || window.webkitAudioContext;
                 if (Ctx) {
@@ -2034,12 +2085,126 @@
                 }
             } catch(e) {}
 
-            setTimeout(() => {
-                window.location.reload();
-            }, 5000);
+            setTimeout(() => { window.location.reload(); }, 5000);
         };
 
-        // ================= FEATURE 3: UNCLICKABLE BUTTON =================
+        // ================= FEATURE 1: RANSOMWARE TRAP LOGIC =================
+        const ransomTrigger = document.getElementById('ransomware-trigger');
+        const ransomOverlay = document.getElementById('ransomware-overlay');
+        if(ransomTrigger && ransomOverlay) {
+            ransomTrigger.addEventListener('click', () => {
+                ransomOverlay.style.setProperty('display', 'flex', 'important');
+                try {
+                    const Ctx = window.AudioContext || window.webkitAudioContext;
+                    if (Ctx) {
+                        const ctx = new Ctx();
+                        const osc = ctx.createOscillator();
+                        osc.type = 'sawtooth';
+                        osc.frequency.setValueAtTime(100, ctx.currentTime);
+                        osc.frequency.linearRampToValueAtTime(50, ctx.currentTime + 1);
+                        osc.connect(ctx.destination);
+                        osc.start();
+                        osc.stop(ctx.currentTime + 1);
+                    }
+                } catch(e){}
+
+                setTimeout(() => { window.location.reload(); }, 5000);
+            });
+        }
+
+        // ================= FEATURE 3: GHOST IN THE MACHINE LOGIC =================
+        let idleTime = 0;
+        let ghostTyping = false;
+        const ghostMessages = ["> I see you watching...", "> System breach at 98%...", "> Extracting local files...", "> Initiating reverse shell..."];
+        
+        const resetIdle = () => { idleTime = 0; };
+        window.addEventListener('mousemove', resetIdle);
+        window.addEventListener('keypress', resetIdle);
+        window.addEventListener('scroll', resetIdle);
+        window.addEventListener('click', resetIdle);
+
+        setInterval(() => {
+            idleTime++;
+            if (idleTime >= 15 && !ghostTyping && document.getElementById('term-outputs')) {
+                ghostTyping = true;
+                const termOutputs = document.getElementById('term-outputs');
+                const termBody = document.getElementById('term-body');
+                const termInputObj = document.getElementById('term-input');
+                
+                if(termInputObj) termInputObj.disabled = true;
+
+                const ghostDiv = document.createElement('div');
+                ghostDiv.className = "flex items-start gap-2 mb-1 z-10 relative opacity-80";
+                termOutputs.appendChild(ghostDiv);
+                
+                const msg = ghostMessages[Math.floor(Math.random() * ghostMessages.length)];
+                let i = 0;
+                
+                const typeInterval = setInterval(() => {
+                    ghostDiv.innerHTML = `<span class="text-red-500 font-bold whitespace-nowrap shrink-0">UNKNOWN@system:~$</span> <span class="text-white">${msg.substring(0, i)}<span class="animate-pulse">█</span></span>`;
+                    termBody.scrollTop = termBody.scrollHeight;
+                    i++;
+                    if (i > msg.length) {
+                        clearInterval(typeInterval);
+                        setTimeout(() => {
+                            ghostDiv.remove();
+                            if(termInputObj) { termInputObj.disabled = false; termInputObj.focus(); }
+                            ghostTyping = false;
+                            idleTime = 0; 
+                        }, 2000);
+                    }
+                }, 80);
+            }
+        }, 1000);
+
+        // ================= FEATURE 4: CYBER GLITCH ON SCROLL LOGIC =================
+        let scrollTimeout;
+        window.addEventListener('scroll', () => {
+            if (!scrollTimeout) {
+                const cards = document.querySelectorAll('.scroll-glitch-target, .light-edu-inner, .profile-box');
+                cards.forEach(card => {
+                    if(Math.random() > 0.75) { 
+                        card.classList.add('scroll-glitching');
+                        setTimeout(() => card.classList.remove('scroll-glitching'), 200);
+                    }
+                });
+                
+                scrollTimeout = setTimeout(() => {
+                    scrollTimeout = null;
+                }, 200); 
+            }
+        });
+
+        // ================= REAL-TIME PGP ENCRYPTION LOGIC =================
+        const iMsg = document.getElementById('i-msg');
+        const pgpContainer = document.getElementById('pgp-output-container');
+        const pgpOutput = document.getElementById('pgp-output');
+
+        if(iMsg && pgpContainer && pgpOutput) {
+            iMsg.addEventListener('input', function(e) {
+                const val = e.target.value;
+                if(val.length > 0) {
+                    pgpContainer.classList.remove('hidden');
+                    
+                    try {
+                        const salted = val + "SECURE_UPLINK_NODE_v2_ENCRYPTION_KEY_" + Date.now();
+                        let base64 = btoa(unescape(encodeURIComponent(salted)));
+                        
+                        base64 = base64.split('').reverse().join('');
+                        
+                        const formatted = base64.match(/.{1,64}/g)?.join('\n') || base64;
+                        
+                        pgpOutput.innerHTML = `-----BEGIN PGP MESSAGE-----\nVersion: OpenPGP v2.0.8\n\n${formatted}\n-----END PGP MESSAGE-----`;
+                    } catch(err) {
+                        pgpOutput.innerHTML = "ENCRYPTING...";
+                    }
+                } else {
+                    pgpContainer.classList.add('hidden');
+                }
+            });
+        }
+
+        // ================= FEATURE: UNCLICKABLE BUTTON =================
         const trollBtn = document.getElementById('troll-btn');
         if(trollBtn) {
             trollBtn.addEventListener('mouseenter', function() {
@@ -2047,7 +2212,7 @@
                 const maxX = parent.clientWidth - this.offsetWidth - 10;
                 const maxY = parent.clientHeight - this.offsetHeight - 10;
                 const randomX = Math.max(10, Math.floor(Math.random() * maxX));
-                const randomY = Math.max(30, Math.floor(Math.random() * maxY)); // offset for the header
+                const randomY = Math.max(30, Math.floor(Math.random() * maxY)); 
                 this.style.position = 'absolute';
                 this.style.right = 'auto';
                 this.style.bottom = 'auto';
