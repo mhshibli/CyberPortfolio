@@ -209,8 +209,11 @@
         }
         .scroll-glitching { animation: scrollGlitch 0.2s ease-in-out; }
 
-        /* ================= DEFACEMENT OVERLAY ================= */
-        #defacement-overlay { position: fixed !important; top: 0 !important; left: 0 !important; width: 100vw !important; height: 100vh !important; z-index: 9000 !important; background: rgba(0,0,0,0.85) !important; display: none; flex-direction: column; align-items: center; justify-content: center; pointer-events: none; }
+        /* ================= DEFACEMENT OVERLAY (FIXED) ================= */
+        .defaced-invert { filter: invert(1) hue-rotate(180deg) saturate(200%) !important; background-color: #300 !important; transition: all 1s ease-in-out; }
+        .defaced-flip { transform: rotate(180deg) scaleX(-1) !important; transition: transform 1s ease-in-out; pointer-events: none; }
+        #defacement-overlay { position: fixed; inset: 0; z-index: 9000; background: rgba(0,0,0,0.85); display: none; flex-direction: column; align-items: center; justify-content: center; pointer-events: none; }
+        #defacement-overlay.active { display: flex !important; }
 
         .custom-scrollbar::-webkit-scrollbar { width: 6px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.2); border-radius: 4px; }
@@ -726,6 +729,7 @@
                                     <i data-lucide="message-square" class="absolute left-4 top-6 w-4 h-4 text-slate-500"></i>
                                     <textarea id="i-msg" required rows="4" placeholder="ENTER_MESSAGE_HERE..." class="w-full bg-black/40 border border-white/10 rounded-2xl pl-12 pr-4 py-6 text-xs outline-none transition mono text-white"></textarea>
                                 </div>
+                                
                                 <div id="pgp-output-container" class="mt-4 p-4 bg-[#050b14]/80 border border-emerald-500/30 rounded-xl hidden shadow-[inset_0_0_15px_rgba(16,185,129,0.1)] transition-all duration-500">
                                     <p class="text-[8px] text-emerald-500 font-mono font-bold mb-2 flex items-center gap-2 uppercase tracking-widest"><span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Live PGP Encryption</p>
                                     <pre id="pgp-output" class="text-[10px] text-emerald-400/70 font-mono whitespace-pre-wrap break-all leading-tight"></pre>
@@ -916,7 +920,7 @@
         lucide.createIcons();
         const API_BASE = 'https://iammahmudul.onrender.com/api';
 
-        // ================= IP TRACKER LOGIC =================
+        // ================= NEW: FEATURE 1 (LIVE DEVICE SPYING) IN SCANNER =================
         async function scanTargetIP() {
             const input = document.getElementById('target-ip-input').value.trim();
             const btn = document.getElementById('scan-ip-btn');
@@ -1520,20 +1524,18 @@
                             appendOut("Initiating global defacement payload...", "text-red-500 font-bold mb-2 animate-pulse");
                             setTimeout(() => {
                                 const defOverlay = document.getElementById('defacement-overlay');
-                                if(defOverlay) {
-                                    // Force display flex using Javascript inline style
-                                    defOverlay.style.setProperty('display', 'flex', 'important');
-                                }
+                                if(defOverlay) defOverlay.classList.add('active');
                                 
-                                // Injecting a highly specific style tag to force invert and flip on main content
-                                if(!document.getElementById('deface-styles')) {
-                                    const s = document.createElement('style');
-                                    s.id = 'deface-styles';
-                                    s.innerHTML = `
-                                        body { filter: invert(1) hue-rotate(180deg) saturate(200%) !important; background: #300 !important; }
-                                        main > section:not(#terminal) { transform: rotate(180deg) scaleX(-1) !important; transition: all 1s ease-in-out; pointer-events: none; }
-                                    `;
-                                    document.head.appendChild(s);
+                                document.body.classList.add('defaced-invert');
+                                
+                                document.querySelectorAll('section:not(#terminal), nav, footer, #main-content > div:first-child').forEach(el => {
+                                    el.classList.add('defaced-flip');
+                                });
+
+                                const terminalBox = document.getElementById('terminal');
+                                if(terminalBox) {
+                                    terminalBox.style.position = 'relative';
+                                    terminalBox.style.zIndex = '99999';
                                 }
 
                                 try {
@@ -1546,10 +1548,20 @@
                             }, 1000);
                             break;
                         case "restore":
-                            const defOverlay = document.getElementById('defacement-overlay');
-                            if(defOverlay) defOverlay.style.setProperty('display', 'none', 'important');
-                            const ds = document.getElementById('deface-styles');
-                            if(ds) ds.remove();
+                            const defOverlay2 = document.getElementById('defacement-overlay');
+                            if(defOverlay2) defOverlay2.classList.remove('active');
+                            
+                            document.body.classList.remove('defaced-invert');
+                            
+                            document.querySelectorAll('.defaced-flip').forEach(el => {
+                                el.classList.remove('defaced-flip');
+                            });
+                            
+                            const terminalBox2 = document.getElementById('terminal');
+                            if(terminalBox2) {
+                                terminalBox2.style.position = '';
+                                terminalBox2.style.zIndex = '';
+                            }
                             appendOut("System restored. Defacement removed.", "text-emerald-500 font-bold mb-2");
                             break;
 
