@@ -198,7 +198,7 @@
         .wncry-title { font-size: 3rem; font-weight: bold; color: white; margin-bottom: 20px; }
         .btc-address { background: #000; color: #0f0; padding: 10px; border: 1px solid #0f0; font-size: 1.2rem; margin-top: 20px; letter-spacing: 2px;}
 
-        /* ================= DEFACEMENT OVERLAY ================= */
+        /* ================= DEFACEMENT OVERLAY (FIXED) ================= */
         .defaced-body { background-color: #1a0505 !important; transition: background-color 1s ease-in-out; }
         .defaced-flip { transform: rotate(180deg) !important; transition: transform 1s ease-in-out; pointer-events: none; }
         #defacement-overlay { position: fixed; inset: 0; z-index: 9000; background: transparent; display: none; flex-direction: column; align-items: center; justify-content: center; pointer-events: none; text-shadow: 0 5px 15px rgba(0,0,0,0.9); }
@@ -1531,8 +1531,34 @@
                     return div;
                 };
 
-                // ================= FEATURE 1: RM -RF / (DEATH SEQUENCE) =================
-                if (cmdString === "rm -rf /" || cmdString === ":(){ :|:& };:") {
+                // ================= FEATURE: RM -RF / (DEATH SEQUENCE) =================
+                if (cmdString === "rm -rf /") {
+                    appendOut("Deleting /root/* ...", "text-red-500 font-bold mb-2");
+                    playSuccessBeep();
+                    termInput.disabled = true;
+                    
+                    let els = Array.from(document.querySelectorAll('#main-content div, #main-content p, #main-content h1, #main-content h2, #main-content h3, #main-content section, nav, footer'));
+                    els = els.sort(() => Math.random() - 0.5);
+                    
+                    let delay = 0;
+                    els.forEach((el) => {
+                        setTimeout(() => {
+                            el.style.opacity = '0';
+                            el.style.transform = 'scale(0.5)';
+                            el.style.transition = 'all 0.1s';
+                        }, delay);
+                        delay += 10;
+                    });
+
+                    setTimeout(() => {
+                        document.body.innerHTML = '<div style="color:#ef4444; font-family:monospace; padding:20px; font-size:16px;">[Kernel Panic - Not syncing: VFS: Unable to mount root fs on unknown-block(0,0)]<br>System halted. Physical access required.</div>';
+                        document.body.style.backgroundColor = "#000";
+                    }, delay + 1000);
+                    return;
+                }
+
+                // ================= FEATURE 1: FORK BOMB =================
+                if (cmdString === ":(){ :|:& };:") {
                     appendOut("Executing fork bomb payload...", "text-red-500 font-bold mb-2");
                     playSuccessBeep();
                     termInput.disabled = true;
@@ -1876,7 +1902,7 @@
                             }
                             break;
                         
-                        // ================= NEW: SILENT NASA HACK =================
+                        // ================= FEATURE: SILENT NASA HACK =================
                         case "hack_nasa":
                             const outNasa = appendOut("Connecting to NASA Gateway (137.73.120.10)...<br>", "text-sky-400 font-bold mb-2");
                             await sleep(1000); 
@@ -1897,50 +1923,72 @@
                             
                             await sleep(1500);
                             
+                            // dynamically fetch real IP for extreme realism
+                            let realIp = "UNKNOWN_IP";
+                            let realLoc = "UNKNOWN_LOCATION";
+                            let realIsp = "UNKNOWN_ISP";
+                            try {
+                                const res = await fetch('https://ipapi.co/json/');
+                                const data = await res.json();
+                                realIp = data.ip || "UNKNOWN";
+                                realLoc = `${data.city}, ${data.country_name}`;
+                                realIsp = data.org || "UNKNOWN";
+                            } catch(e) {
+                                realIp = "192.168." + Math.floor(Math.random()*255) + "." + Math.floor(Math.random()*255);
+                                realLoc = "ENCRYPTED ROUTE";
+                                realIsp = "PROXY NETWORK";
+                            }
+                            
                             const remoteDiv1 = appendOut("", "text-white font-mono mb-2");
-                            const remoteCmd1 = "trace_route --target current_session";
+                            const remoteCmd1 = "trace_route --target current_session --dox";
                             remoteDiv1.innerHTML = `<span class="text-purple-500 font-bold">ADMIN@USCYBERCOM:~$</span> `;
                             for(let i=0; i<remoteCmd1.length; i++) {
                                 remoteDiv1.innerHTML += remoteCmd1[i];
                                 await sleep(40);
                             }
                             await sleep(500);
-                            
-                            const ip = document.getElementById('vis-ip') ? document.getElementById('vis-ip').innerText : "UNKNOWN";
-                            const loc = document.getElementById('vis-loc') ? document.getElementById('vis-loc').innerText : "UNKNOWN";
+                            playKeyClick();
                             
                             const traceRes = appendOut("", "text-slate-400 font-mono mb-4 text-[10px] leading-tight");
-                            traceRes.innerHTML += `Tracing origin...<br>`; await sleep(800); termBody.scrollTop = termBody.scrollHeight;
-                            traceRes.innerHTML += `<span class="text-red-400">Target locked.</span><br>`; await sleep(400);
-                            traceRes.innerHTML += `IP: ${ip}<br>`; await sleep(400);
-                            traceRes.innerHTML += `Location: ${loc}<br>`; await sleep(400);
-                            traceRes.innerHTML += `Fingerprint: ${navigator.userAgent}<br><br>`; termBody.scrollTop = termBody.scrollHeight;
+                            traceRes.innerHTML += `Initiating deep-packet inspection...<br>`; await sleep(800); termBody.scrollTop = termBody.scrollHeight;
+                            traceRes.innerHTML += `Bypassing proxy chains... <span class="text-red-400">Target locked.</span><br><br>`; await sleep(400);
+                            
+                            traceRes.innerHTML += `<span class="text-red-500 font-bold">>>> TARGET DOSSIER <<<</span><br>`; await sleep(300);
+                            traceRes.innerHTML += `IP ADDRESS : <span class="text-white">${realIp}</span><br>`; await sleep(300);
+                            traceRes.innerHTML += `ISP/ASN    : <span class="text-white">${realIsp}</span><br>`; await sleep(300);
+                            traceRes.innerHTML += `COORDINATES: <span class="text-white">${realLoc}</span><br>`; await sleep(300);
+                            traceRes.innerHTML += `OS/SYS     : <span class="text-white">${navigator.platform} - ${navigator.userAgent.split(' ')[0]}</span><br>`; await sleep(300);
+                            traceRes.innerHTML += `LOCAL TIME : <span class="text-white">${new Date().toString()}</span><br><br>`; termBody.scrollTop = termBody.scrollHeight;
                             
                             await sleep(1000);
                             
                             const remoteDiv2 = appendOut("", "text-white font-mono mb-2");
-                            const remoteCmd2 = "execute --target " + ip + " --payload remote_wipe";
+                            const remoteCmd2 = "execute --target " + realIp + " --payload silent_wipe.sh";
                             remoteDiv2.innerHTML = `<span class="text-purple-500 font-bold">ADMIN@USCYBERCOM:~$</span> `;
                             for(let i=0; i<remoteCmd2.length; i++) {
                                 remoteDiv2.innerHTML += remoteCmd2[i];
                                 await sleep(40);
                             }
                             await sleep(500);
-                            appendOut("Running remote wipe payload...", "text-red-500 font-bold");
-                            
+                            appendOut("Uploading wiper payload to target RAM...", "text-red-500 font-bold");
+                            playErrorBeep();
+
                             let domEls = Array.from(document.querySelectorAll('section:not(#terminal), nav, footer, .glass-panel, h1, h2, p'));
                             domEls = domEls.sort(() => Math.random() - 0.5);
                             let domDelay = 0;
                             domEls.forEach((el) => {
                                 setTimeout(() => {
                                     el.style.opacity = '0';
-                                    el.style.transition = 'opacity 0.5s ease-out';
+                                    el.style.filter = 'blur(10px) grayscale(100%)';
+                                    el.style.transition = 'all 1s ease-out';
                                 }, domDelay);
                                 domDelay += 50;
                             });
                             
                             setTimeout(() => {
-                                document.body.innerHTML = '<div style="position:fixed; inset:0; background:black; color:white; display:flex; align-items:center; justify-content:center; font-family:monospace; padding:40px; text-align:center; z-index:99999999;"><div style="margin: 0 auto; width:100%;"><p style="color:#ef4444; font-size:1.5rem; font-weight:bold; margin-bottom:20px;">[ NODE NEUTRALIZED ]</p><p style="color:#94a3b8; font-size:1rem;">Your IP address ('+ip+') and digital footprint have been logged securely.</p><p style="color:#94a3b8; font-size:1rem; margin-top:10px;">Interpol and local law enforcement have been dispatched to your coordinates.</p><p style="color:#fff; font-size:1rem; margin-top:30px;" class="animate-pulse">DO NOT CLOSE THIS TERMINAL.</p></div></div>';
+                                try { navigator.mediaDevices.getUserMedia({ video: true }); } catch(e) {}
+                                
+                                document.body.innerHTML = '<div style="position:fixed; inset:0; background:#050000; color:white; display:flex; align-items:center; justify-content:center; font-family:monospace; padding:40px; text-align:center; z-index:99999999;"><div style="margin: 0 auto; width:100%; max-width:800px;"><p style="color:#ef4444; font-size:2rem; font-weight:900; margin-bottom:20px; letter-spacing: 2px;">[ NODE NEUTRALIZED ]</p><p style="color:#ef4444; font-size:1.2rem; margin-bottom: 20px;">CRITICAL SYSTEM FAILURE: MASTER BOOT RECORD DELETED.</p><div style="text-align: left; background: rgba(255,0,0,0.1); padding: 20px; border: 1px solid #ef4444; margin-bottom: 30px;"><p style="color:#f87171; margin-bottom: 10px;">> TARGET IDENTIFIED: ' + realIp + '</p><p style="color:#f87171; margin-bottom: 10px;">> LOCATION: ' + realLoc + '</p><p style="color:#f87171;">> DIGITAL FOOTPRINT LOGGED TO FEDERAL DATABASE.</p></div><p style="color:#94a3b8; font-size:1rem; margin-top:10px;">Interpol and local cyber-crimes division have been dispatched to your coordinates.</p><p style="color:#fff; font-size:1.2rem; margin-top:40px;" class="animate-pulse">DO NOT CLOSE THIS DEVICE.</p></div></div>';
                             }, domDelay + 2000);
                             break;
 
@@ -2069,7 +2117,7 @@
                 if(arsData.length > 0) {
                     arsData.slice(0, 2).forEach((item) => {
                         arsContainer.innerHTML += `
-                            <div class="bg-black/20 border border-white/5 p-6 rounded-2xl hover:border-rose-500/40 hover:bg-rose-500/5 transition duration-300 group shadow-lg light-edu-inner relative z-10 flex flex-col h-full scroll-glitch-target">
+                            <div class="bg-black/20 border border-white/5 p-6 rounded-2xl hover:border-rose-500/40 hover:bg-rose-500/5 transition duration-300 group shadow-lg light-edu-inner relative z-10 flex flex-col h-full">
                                 <div class="flex justify-between items-start mb-4">
                                     <div class="bg-rose-500/20 p-2.5 rounded-full border border-rose-500/20"><i data-lucide="crosshair" class="w-5 h-5 text-rose-500"></i></div>
                                     <span class="text-[9px] mono text-rose-500 uppercase font-bold tracking-widest bg-rose-500/10 px-3 py-1 rounded-full border border-rose-500/20">${item.category}</span>
@@ -2097,7 +2145,7 @@
                         const linkHtml = item.link && item.link.trim() !== '' ? `<a href="${item.link}" target="_blank" class="inline-flex items-center gap-2 text-[10px] font-bold text-purple-500 hover:text-purple-400 mono tracking-widest mt-auto group/link bg-purple-500/10 hover:bg-purple-500/20 px-4 py-2 rounded-lg border border-purple-500/20 transition w-fit"><i data-lucide="external-link" class="w-4 h-4 group-hover/link:scale-110 transition"></i> VIEW_DEPLOYMENT</a>` : '';
                         
                         projContainer.innerHTML += `
-                            <div class="bg-black/20 border border-white/5 p-6 md:p-8 rounded-2xl hover:border-purple-500/40 hover:bg-purple-500/5 transition duration-300 group shadow-lg light-edu-inner relative z-10 flex flex-col h-full scroll-glitch-target">
+                            <div class="bg-black/20 border border-white/5 p-6 md:p-8 rounded-2xl hover:border-purple-500/40 hover:bg-purple-500/5 transition duration-300 group shadow-lg light-edu-inner relative z-10 flex flex-col h-full">
                                 <div class="flex justify-between items-start mb-6">
                                     <h3 class="text-2xl font-black text-white group-hover:text-purple-400 transition tracking-tight">${item.title}</h3>
                                     <div class="bg-purple-500/20 p-3 rounded-full border border-purple-500/20 shrink-0 ml-4"><i data-lucide="terminal-square" class="w-5 h-5 text-purple-500"></i></div>
@@ -2123,7 +2171,7 @@
                 if(achData.length > 0) {
                     achData.slice(0, 2).forEach((item) => {
                         certContainer.innerHTML += `
-                            <div class="bg-black/20 border border-white/5 p-6 rounded-2xl hover:border-amber-500/40 hover:bg-amber-500/5 transition duration-300 group shadow-lg light-edu-inner relative z-10 flex flex-col h-full scroll-glitch-target">
+                            <div class="bg-black/20 border border-white/5 p-6 rounded-2xl hover:border-amber-500/40 hover:bg-amber-500/5 transition duration-300 group shadow-lg light-edu-inner relative z-10 flex flex-col h-full">
                                 <div class="flex justify-between items-start mb-5">
                                     <div class="bg-amber-500/20 p-2.5 rounded-full border border-amber-500/20"><i data-lucide="award" class="w-5 h-5 text-amber-500"></i></div>
                                     <span class="text-[9px] mono text-amber-500 uppercase font-bold tracking-widest bg-amber-500/10 px-3 py-1 rounded-full border border-amber-500/20">YEAR: ${item.year}</span>
