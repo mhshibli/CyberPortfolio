@@ -198,7 +198,7 @@
         .wncry-title { font-size: 3rem; font-weight: bold; color: white; margin-bottom: 20px; }
         .btc-address { background: #000; color: #0f0; padding: 10px; border: 1px solid #0f0; font-size: 1.2rem; margin-top: 20px; letter-spacing: 2px;}
 
-        /* ================= DEFACEMENT OVERLAY ================= */
+        /* ================= DEFACEMENT OVERLAY (FIXED) ================= */
         .defaced-body { background-color: #1a0505 !important; transition: background-color 1s ease-in-out; }
         .defaced-flip { transform: rotate(180deg) !important; transition: transform 1s ease-in-out; pointer-events: none; }
         #defacement-overlay { position: fixed; inset: 0; z-index: 9000; background: transparent; display: none; flex-direction: column; align-items: center; justify-content: center; pointer-events: none; text-shadow: 0 5px 15px rgba(0,0,0,0.9); }
@@ -973,67 +973,7 @@
         lucide.createIcons();
         const API_BASE = 'https://iammahmudul.onrender.com/api';
 
-        // ================= MECHANICAL KEYBOARD SFX LOGIC =================
-        let sfxCtx = null;
-        function initSFX() {
-            if(!sfxCtx) {
-                const Ctx = window.AudioContext || window.webkitAudioContext;
-                if(Ctx) sfxCtx = new Ctx();
-            }
-            if(sfxCtx && sfxCtx.state === 'suspended') sfxCtx.resume();
-        }
-        
-        function playKeyClick() {
-            if(!sfxCtx) return;
-            try {
-                const osc = sfxCtx.createOscillator();
-                const gain = sfxCtx.createGain();
-                osc.type = 'square';
-                osc.frequency.setValueAtTime(150, sfxCtx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(40, sfxCtx.currentTime + 0.03);
-                gain.gain.setValueAtTime(0.05, sfxCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.001, sfxCtx.currentTime + 0.03);
-                osc.connect(gain);
-                gain.connect(sfxCtx.destination);
-                osc.start();
-                osc.stop(sfxCtx.currentTime + 0.03);
-            } catch(e){}
-        }
-
-        function playErrorBeep() {
-            if(!sfxCtx) return;
-            try {
-                const osc = sfxCtx.createOscillator();
-                const gain = sfxCtx.createGain();
-                osc.type = 'sawtooth';
-                osc.frequency.setValueAtTime(150, sfxCtx.currentTime);
-                gain.gain.setValueAtTime(0.1, sfxCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.01, sfxCtx.currentTime + 0.3);
-                osc.connect(gain);
-                gain.connect(sfxCtx.destination);
-                osc.start();
-                osc.stop(sfxCtx.currentTime + 0.3);
-            } catch(e){}
-        }
-
-        function playSuccessBeep() {
-            if(!sfxCtx) return;
-            try {
-                const osc = sfxCtx.createOscillator();
-                const gain = sfxCtx.createGain();
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(800, sfxCtx.currentTime);
-                osc.frequency.setValueAtTime(1200, sfxCtx.currentTime + 0.1);
-                gain.gain.setValueAtTime(0.1, sfxCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.01, sfxCtx.currentTime + 0.3);
-                osc.connect(gain);
-                gain.connect(sfxCtx.destination);
-                osc.start();
-                osc.stop(sfxCtx.currentTime + 0.3);
-            } catch(e){}
-        }
-
-        // ================= FEATURE 1 (LIVE DEVICE SPYING) IN SCANNER =================
+        // ================= IP TRACKER & SPYING =================
         async function scanTargetIP() {
             const input = document.getElementById('target-ip-input').value.trim();
             const btn = document.getElementById('scan-ip-btn');
@@ -1064,6 +1004,7 @@
                 document.getElementById('res-city').innerText = data.city || "Unknown";
                 document.getElementById('res-coord').innerText = `${data.latitude || '0.00'}, ${data.longitude || '0.00'}`;
 
+                // --- BATTERY SPYING ---
                 try {
                     if (navigator.getBattery) {
                         const battery = await navigator.getBattery();
@@ -1073,6 +1014,7 @@
                     }
                 } catch(e) { document.getElementById('res-battery').innerText = "BLOCKED"; }
 
+                // --- NETWORK SPYING ---
                 try {
                     const conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
                     if (conn) {
@@ -1171,15 +1113,17 @@
             }, 500);
         }
 
-        // ================= VISITOR FOOTPRINT SCANNER =================
+        // ================= 1. VISITOR FOOTPRINT SCANNER =================
         async function initVisitorScanner() {
             const scannerBox = document.getElementById('visitor-scanner');
             if(scannerBox) scannerBox.classList.remove('opacity-0', 'translate-y-4');
             
+            // Get OS
             const os = navigator.platform || "Unknown OS";
             const osEl = document.getElementById('vis-os');
             if(osEl) osEl.innerText = os;
             
+            // Get Browser
             const ua = navigator.userAgent;
             let browser = "Unknown Browser";
             if(ua.includes("Firefox/")) browser = "Mozilla Firefox";
@@ -1190,6 +1134,7 @@
             const browserEl = document.getElementById('vis-browser');
             if(browserEl) browserEl.innerText = browser;
 
+            // Fetch IP & Geo Data
             try {
                 const res = await fetch('https://ipapi.co/json/');
                 const data = await res.json();
@@ -1200,6 +1145,7 @@
                 const locEl = document.getElementById('vis-loc');
                 if(locEl) locEl.innerText = `${data.city || 'Unknown'}, ${data.country_name || 'N/A'}`;
             } catch(e) {
+                // Fallback to random if adblocker/privacy shields block the request
                 const ipEl = document.getElementById('vis-ip');
                 if(ipEl) ipEl.innerText = `192.168.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}`;
                 
@@ -1223,9 +1169,10 @@
                         if(cpu) cpu.innerText = (95 + Math.random() * 5).toFixed(1) + '%';
                     }, 500);
                 }
-            }, 45000); 
+            }, 60000); 
         });
 
+        // ================= KILL MINER FUNCTION =================
         window.killMiner = function() {
             const miner = document.getElementById('miner-alert');
             if(miner) {
@@ -1250,6 +1197,7 @@
         const keyLogs = document.getElementById('key-logs');
         let keyTimeout;
         document.addEventListener('keydown', (e) => {
+            // Secret Backdoor Tracker
             window.secretCombo = (window.secretCombo || "") + e.key;
             if(window.secretCombo.endsWith("nullscript")) {
                 document.body.classList.add('secret-mode');
@@ -1265,28 +1213,20 @@
                 keyTimeout = setTimeout(() => { keyBox.classList.add('opacity-0'); }, 3000);
             }
             
+            // Cursor Hex Trail
             if(!document.body.classList.contains('light-mode')) {
                 const trail = document.createElement('div');
                 trail.className = 'hex-trail text-emerald-500';
                 trail.innerText = "0x" + Math.floor(Math.random()*255).toString(16).toUpperCase();
                 document.body.appendChild(trail);
                 
-                document.addEventListener('mousemove', function moveTrail(evt) {
-                    trail.style.left = (evt.pageX + 10) + 'px';
-                    trail.style.top = (evt.pageY + 10) + 'px';
+                document.addEventListener('mousemove', function moveTrail(e) {
+                    trail.style.left = (e.pageX + 10) + 'px';
+                    trail.style.top = (e.pageY + 10) + 'px';
                     document.removeEventListener('mousemove', moveTrail);
                 });
                 setTimeout(() => trail.remove(), 800);
             }
-        });
-
-        // ================= CYBER EYE TRACKER =================
-        document.addEventListener('mousemove', (e) => {
-            const pupil = document.getElementById('cyber-eye-pupil');
-            if(!pupil) return;
-            const x = (e.clientX / window.innerWidth) * 10 - 5;
-            const y = (e.clientY / window.innerHeight) * 10 - 5;
-            pupil.style.transform = `translate(${x}px, ${y}px)`;
         });
 
         // ================= MATRIX HOVER EFFECT =================
@@ -1360,48 +1300,6 @@
         }
         let matrixInterval;
 
-        // ================= MATRIX PILL LOGIC =================
-        function takeBluePill() {
-            window.location.href = "https://www.google.com";
-        }
-        
-        function takeRedPill() {
-            const dilemma = document.getElementById('matrix-dilemma');
-            dilemma.innerHTML = "<p class='matrix-text'>Welcome to the real world.</p>";
-            
-            const cvs = document.createElement('canvas');
-            cvs.style.position = 'fixed';
-            cvs.style.top = '0';
-            cvs.style.left = '0';
-            cvs.style.width = '100vw';
-            cvs.style.height = '100vh';
-            cvs.style.zIndex = '99998';
-            cvs.style.pointerEvents = 'none';
-            document.body.appendChild(cvs);
-            
-            const c = cvs.getContext('2d');
-            cvs.width = window.innerWidth;
-            cvs.height = window.innerHeight;
-            const cols = cvs.width / 20;
-            const globalDrops = [];
-            for(let x = 0; x < cols; x++) globalDrops[x] = 1;
-            
-            setInterval(() => {
-                c.fillStyle = "rgba(0, 0, 0, 0.05)";
-                c.fillRect(0, 0, cvs.width, cvs.height);
-                c.fillStyle = "#0F0";
-                c.font = "20px monospace";
-                for(let i = 0; i < globalDrops.length; i++) {
-                    const text = String.fromCharCode(Math.floor(Math.random() * 94) + 33);
-                    c.fillText(text, i * 20, globalDrops[i] * 20);
-                    if(globalDrops[i] * 20 > cvs.height && Math.random() > 0.975) globalDrops[i] = 0;
-                    globalDrops[i]++;
-                }
-            }, 50);
-
-            setTimeout(() => { dilemma.classList.remove('active'); }, 2000);
-        }
-
         // ================= ADMIN BYPASS LOGIC =================
         const adminModal = document.getElementById('adminLoginModal');
         const adminInput = document.getElementById('admin-user');
@@ -1429,12 +1327,13 @@
                 } else if(val === 'toor' || val.includes("' OR 1=1")) {
                     response.innerHTML = `<span class="text-emerald-500 font-bold">[SUCCESS] AUTH GRANTED. BYPASS SUCCESSFUL.</span><br><span class="text-sky-400">Loading Secret Admin Panel...</span>`;
                     
+                    // Activate Secret Mode Theme & Show Black Market Menu
                     document.body.classList.add('secret-mode');
                     document.getElementById('secret-menu').classList.remove('hidden');
                     
                     setTimeout(() => {
                         window.open('/admin.html', '_blank');
-                        closeAdminModal(); 
+                        closeAdminModal(); // Optional: close the modal after success
                     }, 1500);
                 } else {
                     response.innerHTML = `<span class="text-red-500">ACCESS DENIED. THIS INCIDENT WILL BE REPORTED.</span>`;
@@ -1478,11 +1377,6 @@
         updatePrompt();
 
         termInput.addEventListener('keydown', (e) => {
-            initSFX();
-            if(e.key !== 'Enter' && e.key !== 'ArrowUp' && e.key !== 'ArrowDown') {
-                playKeyClick();
-            }
-
             if(e.key === 'ArrowUp') {
                 if(historyIndex < cmdHistory.length - 1) {
                     historyIndex++;
@@ -1522,19 +1416,33 @@
 
                 if (!val) return;
 
-                const appendOut = (text, className="text-slate-300 mb-2 whitespace-pre-wrap leading-tight z-10 relative") => {
-                    const div = document.createElement('div');
-                    div.className = className;
-                    div.innerHTML = text;
-                    termOutputs.appendChild(div);
-                    termBody.scrollTop = termBody.scrollHeight;
-                    return div;
-                };
+                // ================= FEATURE: RM -RF / =================
+                if (cmdString === "rm -rf /") {
+                    appendOut("Deleting /root/* ...", "text-red-500 font-bold mb-2");
+                    termInput.disabled = true;
+                    let els = Array.from(document.querySelectorAll('#main-content div, #main-content p, #main-content h1, #main-content h2, #main-content h3, #main-content section, nav, footer'));
+                    els = els.sort(() => Math.random() - 0.5);
+                    
+                    let delay = 0;
+                    els.forEach((el) => {
+                        setTimeout(() => {
+                            el.style.opacity = '0';
+                            el.style.transform = 'scale(0.5)';
+                            el.style.transition = 'all 0.1s';
+                        }, delay);
+                        delay += 10;
+                    });
 
-                // ================= FEATURE 1: RM -RF / (DEATH SEQUENCE) =================
-                if (cmdString === "rm -rf /" || cmdString === ":(){ :|:& };:") {
+                    setTimeout(() => {
+                        document.body.innerHTML = '<div style="color:#ef4444; font-family:monospace; padding:20px; font-size:16px;">[Kernel Panic - Not syncing: VFS: Unable to mount root fs on unknown-block(0,0)]<br>System halted. Physical access required.</div>';
+                        document.body.style.backgroundColor = "#000";
+                    }, delay + 1000);
+                    return;
+                }
+
+                // ================= FEATURE 1: FORK BOMB =================
+                if (cmdString === ":(){ :|:& };:") {
                     appendOut("Executing fork bomb payload...", "text-red-500 font-bold mb-2");
-                    playSuccessBeep();
                     termInput.disabled = true;
                     
                     let count = 0;
@@ -1560,7 +1468,6 @@
                             setTimeout(() => {
                                 const bsod = document.getElementById('bsod-overlay');
                                 if(bsod) bsod.classList.add('active');
-                                playErrorBeep();
                             }, 500);
                         }
                     }, 50);
@@ -1569,7 +1476,17 @@
 
                 const args = val.split(' ').filter(Boolean);
                 const cmd = args[0].toLowerCase();
+                
                 termInput.disabled = true; 
+
+                const appendOut = (text, className="text-slate-300 mb-2 whitespace-pre-wrap leading-tight z-10 relative") => {
+                    const div = document.createElement('div');
+                    div.className = className;
+                    div.innerHTML = text;
+                    termOutputs.appendChild(div);
+                    termBody.scrollTop = termBody.scrollHeight;
+                    return div;
+                };
 
                 try {
                     switch(cmd) {
@@ -1597,11 +1514,10 @@
                                       "  <b>target</b>    : View current operation focus<br>" +
                                       "  <b>cam_hack</b>  : Init remote cam access (EXPERIMENTAL)<br>" +
                                       "  <b>sniff</b>     : Init live network packet interception<br>" +
-                                      "  <b>mutate</b>    : Initiate polymorphic text corruption<br>" +
                                       "  <b>deface</b>    : Launch internal defacement payload<br>" +
                                       "  <b>restore</b>   : Undo defacement payload<br>" +
                                       "  <b>nuke</b>      : [IP] Initiate targeted orbital strike<br>" +
-                                      "  <b>hack_nasa</b> : Remote exploit target infrastructure<br>" + 
+                                      "  <b>hack_nasa</b> : Remote exploit target infrastructure<br>" +
                                       "  <b>matrix</b>    : Execute red_pill.exe<br>" + 
                                       "  <b>clear</b>     : Clear terminal output<br>" +
                                       "  <b>exit</b>      : Terminate session");
@@ -1625,15 +1541,15 @@
                             else appendOut("");
                             break;
                         case "cat":
-                            if(!args[1]) { appendOut("cat: missing file operand", "text-red-500 mb-2"); playErrorBeep(); }
+                            if(!args[1]) appendOut("cat: missing file operand", "text-red-500 mb-2");
                             else if(fileSystem[args[1]] && currentDir === "~") {
                                 if(args[1] === "secret_flag.txt" || args[1] === "shadow.bak") {
                                     if(isRoot) {
                                         if(args[1] === "secret_flag.txt") appendOut("flag{R3D_T34M_M4ST3R_H4CK3R_UNL0CK3D}", "text-emerald-500 font-bold mb-2");
                                         else appendOut(fileSystem[args[1]]);
-                                    } else { appendOut("cat: Permission denied. Root privileges required.", "text-red-500 mb-2 font-bold"); playErrorBeep(); }
+                                    } else appendOut("cat: Permission denied. Root privileges required.", "text-red-500 mb-2 font-bold");
                                 } else appendOut(fileSystem[args[1]]);
-                            } else { appendOut(`cat: ${args[1]}: No such file or directory`, "text-red-500 mb-2"); playErrorBeep(); }
+                            } else appendOut(`cat: ${args[1]}: No such file or directory`, "text-red-500 mb-2");
                             break;
                         case "uname":
                             appendOut(`Linux offensive-node 6.1.0-kali-amd64 #1 SMP PREEMPT_DYNAMIC Kali 6.1.27-1 x86_64 GNU/Linux`);
@@ -1690,10 +1606,8 @@
                             await sleep(1000);
                             if(isRoot) {
                                 outSql.innerHTML += `<span class="text-red-500">[SUCCESS] Database dumped! Extracted 13 tables, 400 records.</span>`;
-                                playSuccessBeep();
                             } else {
                                 outSql.innerHTML += `<span class="text-rose-500">[ERROR] Insufficient local privileges to write dump file. Switch to root.</span>`;
-                                playErrorBeep();
                             }
                             termBody.scrollTop = termBody.scrollHeight;
                             break;
@@ -1704,7 +1618,6 @@
                             await sleep(1500);
                             outHydra.innerHTML += `<span class="text-emerald-500">[80] [ssh] host: ${hTarget.replace('ssh://','')}   login: admin   password: password123</span><br>`;
                             await sleep(500); outHydra.innerHTML += `[INFO] 1 valid password found`;
-                            playSuccessBeep();
                             termBody.scrollTop = termBody.scrollHeight;
                             break;
                         case "skills":
@@ -1713,76 +1626,10 @@
                         case "target":
                             appendOut("Current objective: Evaluate CSE-CIC-IDS2018 Dataset using XAI GANs.");
                             break;
-
-                        case "mutate":
-                            appendOut("Initiating polymorphic mutation on DOM structure...", "text-purple-500 font-bold mb-2 animate-pulse");
-                            playSuccessBeep();
-                            
-                            const mutateChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*¥§©øæ";
-                            const mTargets = document.querySelectorAll('h1, h2, h3, p, span, a');
-                            const safeTargets = Array.from(mTargets).filter(el => {
-                                return el.children.length === 0 && el.textContent.trim().length > 0 && !el.closest('#terminal-box');
-                            });
-                            
-                            safeTargets.forEach(el => {
-                                if(!el.dataset.origText) el.dataset.origText = el.textContent;
-                                let mIters = 0;
-                                const mMax = 30;
-                                const mInterval = setInterval(() => {
-                                    el.textContent = el.dataset.origText.split('').map(char => {
-                                        if(char === ' ' || char === '\n') return char;
-                                        return mutateChars[Math.floor(Math.random() * mutateChars.length)];
-                                    }).join('');
-                                    mIters++;
-                                    if(mIters >= mMax) {
-                                        clearInterval(mInterval);
-                                        el.textContent = el.dataset.origText;
-                                    }
-                                }, 100);
-                            });
-                            break;
-                        
-                        case "nuke":
-                            const nukeIp = args[1];
-                            if(!nukeIp) {
-                                appendOut("Usage: nuke [IP_ADDRESS]", "text-red-500 font-bold mb-2");
-                                playErrorBeep();
-                                break;
-                            }
-                            appendOut(`Initializing orbital strike targeting protocol for ${nukeIp}...`, "text-red-500 font-bold mb-2");
-                            await sleep(1000);
-                            
-                            const radarOverlay = document.getElementById('radar-overlay');
-                            const radarStatus = document.getElementById('radar-status');
-                            const radarDot = document.getElementById('radar-target-dot');
-                            
-                            if(radarOverlay) {
-                                radarOverlay.classList.add('active');
-                                radarStatus.innerText = `SCANNING COORDINATES FOR ${nukeIp}...`;
-                                radarStatus.style.color = '#0f0';
-                                radarDot.style.display = 'none';
-                                
-                                await sleep(3000);
-                                radarStatus.innerText = `TARGET LOCKED. INITIATING STRIKE...`;
-                                radarStatus.style.color = 'red';
-                                radarDot.style.display = 'block';
-                                playErrorBeep();
-                                
-                                await sleep(2000);
-                                radarOverlay.style.background = 'white';
-                                playSuccessBeep();
-                                
-                                await sleep(100);
-                                radarOverlay.classList.remove('active');
-                                radarOverlay.style.background = 'rgba(0,20,0,0.9)';
-                                appendOut(`[CRITICAL] ORBITAL STRIKE SUCCESSFUL. TARGET ${nukeIp} DESTROYED.`, "text-red-600 font-black mb-2 text-xl");
-                            }
-                            break;
                         
                         case "tcpdump":
                         case "sniff":
                             appendOut("Starting global packet sniffing on interface eth0...", "text-green-500 font-bold mb-2");
-                            playSuccessBeep();
                             const sniffer = document.getElementById('packet-sniffer');
                             if(sniffer) {
                                 sniffer.classList.remove('hidden');
@@ -1835,7 +1682,6 @@
                                     window.speechSynthesis.speak(speech);
                                 } catch(e) {}
                                 appendOut("Target defaced successfully. Type 'restore' to undo.", "text-emerald-500 font-bold mb-2");
-                                playSuccessBeep();
                             }, 1000);
                             break;
                         case "restore":
@@ -1854,7 +1700,6 @@
                                 terminalBox2.style.zIndex = '';
                             }
                             appendOut("System restored. Defacement removed.", "text-emerald-500 font-bold mb-2");
-                            playSuccessBeep();
                             break;
 
                         case "clear":
@@ -1869,17 +1714,93 @@
                                 appendOut("SYSTEM OVERRIDE DETECTED... ACCESS GRANTED.<br>Welcome to the shadows.<br><span class='text-white bg-red-600 px-2 py-1 mt-2 inline-block rounded z-10 relative'>Root Privileges Elevated. Try 'cat secret_flag.txt'</span>", "text-red-500 font-bold mb-2 p-3 bg-red-500/10 border border-red-500/30 mt-2 shadow-[0_0_15px_rgba(239,68,68,0.2)] z-10 relative");
                                 document.getElementById('terminal-box').style.borderColor = "#ef4444";
                                 document.getElementById('terminal-box').style.boxShadow = "0 0 50px rgba(239,68,68,0.4)";
-                                playSuccessBeep();
                             } else {
                                 appendOut(`sudo: ${args[1] || ''}: command not found`, "text-red-500 mb-2");
-                                playErrorBeep();
+                            }
+                            break;
+                        
+                        // ================= FEATURE 2 (NEW): ORBITAL STRIKE =================
+                        case "nuke":
+                            const nukeIp = args[1];
+                            if(!nukeIp) {
+                                appendOut("Usage: nuke [IP_ADDRESS]", "text-red-500 font-bold mb-2");
+                                break;
+                            }
+                            appendOut(`Initializing orbital strike targeting protocol for ${nukeIp}...`, "text-red-500 font-bold mb-2");
+                            await sleep(1000);
+                            
+                            const radarOverlay = document.getElementById('radar-overlay');
+                            const radarStatus = document.getElementById('radar-status');
+                            const radarDot = document.getElementById('radar-target-dot');
+                            
+                            if(radarOverlay) {
+                                radarOverlay.classList.add('active');
+                                radarStatus.innerText = `SCANNING COORDINATES FOR ${nukeIp}...`;
+                                radarStatus.style.color = '#0f0';
+                                radarDot.style.display = 'none';
+                                
+                                await sleep(3000);
+                                radarStatus.innerText = `TARGET LOCKED. INITIATING STRIKE...`;
+                                radarStatus.style.color = 'red';
+                                radarDot.style.display = 'block';
+                                
+                                await sleep(2000);
+                                radarOverlay.style.background = 'white';
+                                
+                                await sleep(100);
+                                radarOverlay.classList.remove('active');
+                                radarOverlay.style.background = 'rgba(0,20,0,0.9)';
+                                appendOut(`[CRITICAL] ORBITAL STRIKE SUCCESSFUL. TARGET ${nukeIp} DESTROYED.`, "text-red-600 font-black mb-2 text-xl");
+                            }
+                            break;
+
+                        case "hack_nasa":
+                            const outNasa = appendOut("Connecting to NASA mainframes...<br>", "text-sky-400 font-bold mb-2");
+                            await sleep(1000); 
+                            outNasa.innerHTML += "Bypassing EINSTEIN 3 Firewall... <span class='text-emerald-500'>[SUCCESS]</span><br>"; 
+                            termBody.scrollTop = termBody.scrollHeight;
+                            
+                            await sleep(1200); 
+                            outNasa.innerHTML += "Injecting payload into proxy relay... <span class='text-emerald-500'>[SUCCESS]</span><br>"; 
+                            termBody.scrollTop = termBody.scrollHeight;
+                            
+                            await sleep(1500); 
+                            outNasa.innerHTML += "Extracting classified telemetry data... <span class='text-emerald-500'>[DONE]</span><br>"; 
+                            termBody.scrollTop = termBody.scrollHeight;
+                            
+                            await sleep(1000);
+                            termOutputs.innerHTML = "";
+                            const clsOut = appendOut("", "text-emerald-500 font-mono text-[10px] mb-2 leading-tight");
+                            
+                            const secretData = "TOP SECRET // NOFORN\nPROJECT: BLACKBRIAR\nSATELLITE ORBITAL COORDINATES: 38.8895 N, 77.0353 W\nDOWNLINK ESTABLISHED. PREPARING LOCAL SECURE TRANSFER...\n";
+                            for(let i=0; i<secretData.length; i++) {
+                                clsOut.innerHTML += secretData[i];
+                                if(secretData[i] === '\n') {
+                                    termBody.scrollTop = termBody.scrollHeight;
+                                    await sleep(400);
+                                } else {
+                                    await sleep(20);
+                                }
+                            }
+                            
+                            await sleep(1000);
+                            
+                            try {
+                                const payloadContent = "TOP SECRET // NASA INTERNAL DB\n\nIf you are reading this, the breach was successful.\nKeep fighting the good fight.\n\n- Null Script Infiltrators";
+                                const blob = new Blob([payloadContent], { type: "text/plain" });
+                                const link = document.createElement("a");
+                                link.href = URL.createObjectURL(blob);
+                                link.download = "NASA_Classified_Payload.txt";
+                                link.click();
+                                appendOut("Payload downloaded to local filesystem.", "text-sky-400 font-bold");
+                            } catch(e) {
+                                appendOut("Download blocked by local browser policy.", "text-red-500");
                             }
                             break;
                         
                         case "flag{m4hmudul_1s_r00t}":
                         case "flag{M4HMUDUL_1S_R00T}":
                             appendOut("<span class='text-emerald-500 font-bold text-lg'>[🏆 ELITE HACKER ACHIEVEMENT UNLOCKED]</span><br>You found the hidden source code flag! System integrity breached.");
-                            playSuccessBeep();
                             document.body.style.filter = "invert(1) hue-rotate(180deg)";
                             setTimeout(() => { document.body.style.filter = "none"; }, 500);
                             setTimeout(() => { document.body.style.filter = "invert(1) hue-rotate(180deg)"; }, 700);
@@ -1890,7 +1811,6 @@
                             if(matrixModal) {
                                 matrixModal.classList.add('active');
                                 appendOut("Initializing neuro-interactive simulation...", "text-sky-500 font-bold mb-2");
-                                playSuccessBeep();
                             }
                             break;
 
@@ -1905,11 +1825,9 @@
                             break;
                         default:
                             appendOut(`bash: ${cmd}: command not found. Type 'help' for a list of commands.`, "text-red-500 mb-2");
-                            playErrorBeep();
                     }
                 } catch(err) {
                     appendOut("bash: internal execution error.", "text-red-500 mb-2");
-                    playErrorBeep();
                 } finally {
                     termInput.disabled = false;
                     termInput.focus();
@@ -2249,7 +2167,6 @@
         }
         function closeAchModal() { achModal.classList.add('opacity-0'); achModalContent.classList.add('scale-95'); setTimeout(() => achModal.classList.add('hidden'), 300); }
 
-        // Form Submit
         document.getElementById('commForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('submitBtn'); const orgText = btn.innerHTML;
