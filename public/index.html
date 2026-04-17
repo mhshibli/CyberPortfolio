@@ -227,6 +227,12 @@
         .radar-target { width: 10px; height: 10px; background: red; border-radius: 50%; position: absolute; top: 30%; left: 60%; box-shadow: 0 0 10px red; display: none; }
         .radar-text { color: #0f0; font-family: monospace; font-size: 1.5rem; margin-top: 30px; text-shadow: 0 0 10px #0f0; }
 
+        /* ================= NASA COUNTER-HACK OVERLAY ================= */
+        #nasa-overlay { position: fixed !important; top: 0 !important; left: 0 !important; width: 100vw !important; height: 100vh !important; z-index: 99999999 !important; background: #000 !important; display: none; flex-direction: column; align-items: center; justify-content: center; font-family: 'Courier New', monospace; text-align: center; animation: nasaStrobe 0.1s infinite; }
+        @keyframes nasaStrobe { 0% { background: #300; color: #fff; } 100% { background: #f00; color: #000; } }
+        .nuke-shake { animation: nukeShake 0.1s infinite; }
+        @keyframes nukeShake { 0% { transform: translate(5px, 5px) rotate(0deg); } 20% { transform: translate(-5px, -5px) rotate(1deg); } 40% { transform: translate(5px, -5px) rotate(-1deg); } 60% { transform: translate(-5px, 5px) rotate(0deg); } 80% { transform: translate(5px, -5px) rotate(1deg); } 100% { transform: translate(0, 0) rotate(0deg); } }
+
         .custom-scrollbar::-webkit-scrollbar { width: 6px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.2); border-radius: 4px; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(14, 165, 233, 0.5); border-radius: 4px; }
@@ -241,6 +247,14 @@
         <h2 style="font-size: 1.5rem; margin-bottom: 20px;">AS PART OF A JOINT LAW ENFORCEMENT OPERATION</h2>
         <p style="font-size: 1rem; color: #0f0; margin-bottom: 10px;" id="seizure-ip">YOUR IP ADDRESS HAS BEEN LOGGED AND REPORTED.</p>
         <p style="font-size: 1.2rem; color: yellow; margin-top: 20px; animation: blink 1s infinite;">LOCAL AUTHORITIES HAVE BEEN DISPATCHED TO YOUR LOCATION.</p>
+    </div>
+
+    <div id="nasa-overlay">
+        <i data-lucide="alert-triangle" style="width: 150px; height: 150px; margin-bottom: 20px;"></i>
+        <h1 style="font-size: 4rem; font-weight: 900; margin-bottom: 10px;">TRACE COMPLETED</h1>
+        <h2 style="font-size: 2rem; font-weight: bold; margin-bottom: 20px;">TARGET IDENTIFIED: REGION BD-DHAKA</h2>
+        <p style="font-size: 1.5rem; font-weight: bold;">UPLOADING LOCAL HARD DRIVES TO US_DOD_SERVER_09...</p>
+        <p style="font-size: 1.2rem; margin-top: 30px; font-weight: bold;" class="animate-pulse">[ DO NOT TURN OFF YOUR DEVICE ]</p>
     </div>
 
     <div id="bsod-overlay">
@@ -300,6 +314,21 @@
     </div>
 
     <div id="packet-sniffer" class="fixed left-4 bottom-4 w-80 h-64 bg-black/90 border border-green-500/50 rounded-lg p-3 font-mono text-[9px] text-green-400 overflow-y-auto z-[9999] hidden custom-scrollbar backdrop-blur-md shadow-[0_0_20px_rgba(0,255,0,0.2)] pointer-events-none"></div>
+
+    <div class="fixed bottom-6 left-6 z-[100] w-10 h-10 rounded-full border-2 border-red-500/30 bg-black/80 shadow-[0_0_15px_rgba(239,68,68,0.2)] flex items-center justify-center overflow-hidden" title="Big Brother is Watching">
+        <div id="cyber-eye-pupil" class="w-4 h-4 rounded-full bg-red-600 shadow-[0_0_8px_#ef4444] transition-transform duration-75 ease-out">
+            <div class="w-1.5 h-1.5 bg-white rounded-full absolute top-1 right-1 opacity-80"></div>
+        </div>
+    </div>
+
+    <div id="miner-alert" class="fixed top-20 right-[-400px] w-80 bg-black/90 border border-red-500/80 rounded-lg p-4 shadow-[0_0_30px_rgba(239,68,68,0.4)] z-[99999] transition-all duration-500 flex flex-col gap-2 font-mono">
+        <div class="flex items-center justify-between text-red-500">
+            <span class="text-[10px] font-bold uppercase tracking-widest animate-pulse flex items-center gap-2"><i data-lucide="cpu" class="w-4 h-4"></i> CRITICAL ALERT</span>
+        </div>
+        <p class="text-white text-xs mt-2">Unauthorized Monero (XMR) Cryptomining detected in background.</p>
+        <p class="text-red-400 text-xs font-bold">CPU Usage: <span id="cpu-usage">99%</span></p>
+        <button onclick="killMiner()" class="mt-2 w-full py-2 border border-red-500/50 hover:bg-red-500 hover:text-white text-red-500 text-[10px] uppercase font-bold rounded transition">Kill Process</button>
+    </div>
 
     <div id="adminLoginModal">
         <div class="admin-terminal">
@@ -437,7 +466,7 @@
                         <i data-lucide="shield-check" class="w-8 h-8 text-[#0ea5e9]"></i>
                     </div>
 
-                    <div class="profile-box border border-white/5 rounded-[2rem] p-6 relative z-10 shadow-2xl">
+                    <div class="profile-box border border-white/5 rounded-[2rem] p-6 relative z-10 shadow-2xl scroll-glitch-target">
                         <div class="flex items-center justify-between mb-5 pl-1 pr-6">
                             <div class="flex gap-1.5">
                                 <div class="w-2 h-2 rounded-full bg-[#0ea5e9]"></div>
@@ -529,7 +558,7 @@
 
                         <div id="edu-right-side" class="w-full lg:w-80 shrink-0 flex flex-col gap-4 md:gap-6 justify-center">
                             
-                            <div id="thesis-card" class="bg-black/20 border border-white/5 p-5 md:p-6 rounded-2xl hover:border-emerald-500/40 transition duration-300 group shadow-lg light-edu-inner hidden">
+                            <div id="thesis-card" class="bg-black/20 border border-white/5 p-5 md:p-6 rounded-2xl hover:border-emerald-500/40 transition duration-300 group shadow-lg light-edu-inner hidden scroll-glitch-target">
                                 <div class="flex items-center gap-3 mb-4">
                                     <div class="bg-emerald-500/20 p-2 rounded-full border border-emerald-500/20">
                                         <i data-lucide="microscope" class="w-5 h-5 text-emerald-500"></i>
@@ -539,7 +568,7 @@
                                 <h4 id="thesis-desc" class="text-white font-bold italic mb-3 leading-tight group-hover:text-emerald-400 transition"></h4>
                             </div>
 
-                            <div id="core-focus-card" class="bg-black/20 border border-white/5 p-5 md:p-6 rounded-2xl hover:border-sky-500/40 transition duration-300 group shadow-lg light-edu-inner hidden">
+                            <div id="core-focus-card" class="bg-black/20 border border-white/5 p-5 md:p-6 rounded-2xl hover:border-sky-500/40 transition duration-300 group shadow-lg light-edu-inner hidden scroll-glitch-target">
                                 <div class="flex items-center gap-3 mb-4">
                                     <div class="bg-sky-500/20 p-2 rounded-full border border-sky-500/20">
                                         <i data-lucide="book-open" class="w-5 h-5 text-sky-500"></i>
@@ -1156,7 +1185,7 @@
             }, 500);
         }
 
-        // ================= 1. VISITOR FOOTPRINT SCANNER =================
+        // ================= VISITOR FOOTPRINT SCANNER =================
         async function initVisitorScanner() {
             const scannerBox = document.getElementById('visitor-scanner');
             if(scannerBox) scannerBox.classList.remove('opacity-0', 'translate-y-4');
@@ -1197,7 +1226,6 @@
             setTimeout(typeLine, 500);
             fetchAllDynamicData(); 
             
-            // ================= FAKE MINER TRIGGER =================
             setTimeout(() => {
                 const miner = document.getElementById('miner-alert');
                 if(miner) {
@@ -1354,7 +1382,6 @@
             const dilemma = document.getElementById('matrix-dilemma');
             dilemma.innerHTML = "<p class='matrix-text'>Welcome to the real world.</p>";
             
-            // Start Global Matrix Rain
             const cvs = document.createElement('canvas');
             cvs.style.position = 'fixed';
             cvs.style.top = '0';
@@ -1587,6 +1614,7 @@
                                       "  <b>deface</b>    : Launch internal defacement payload<br>" +
                                       "  <b>restore</b>   : Undo defacement payload<br>" +
                                       "  <b>nuke</b>      : [IP] Initiate targeted orbital strike<br>" +
+                                      "  <b>hack_nasa</b> : Remote exploit target infrastructure<br>" + 
                                       "  <b>matrix</b>    : Execute red_pill.exe<br>" + 
                                       "  <b>clear</b>     : Clear terminal output<br>" +
                                       "  <b>exit</b>      : Terminate session");
@@ -1699,7 +1727,6 @@
                             appendOut("Current objective: Evaluate CSE-CIC-IDS2018 Dataset using XAI GANs.");
                             break;
 
-                        // ================= FEATURE 4 (NEW): POLYMORPHIC MUTATION =================
                         case "mutate":
                             appendOut("Initiating polymorphic mutation on DOM structure...", "text-purple-500 font-bold mb-2 animate-pulse");
                             playSuccessBeep();
@@ -1860,6 +1887,58 @@
                                 appendOut(`sudo: ${args[1] || ''}: command not found`, "text-red-500 mb-2");
                                 playErrorBeep();
                             }
+                            break;
+                        
+                        // ================= NEW: NASA COUNTER-HACK =================
+                        case "hack_nasa":
+                            const outNasa = appendOut("Connecting to NASA mainframes...<br>", "text-sky-400 font-bold mb-2");
+                            playKeyClick();
+                            await sleep(1000); 
+                            outNasa.innerHTML += "Bypassing ICE protocols... <span class='text-emerald-500'>[SUCCESS]</span><br>"; 
+                            playSuccessBeep();
+                            termBody.scrollTop = termBody.scrollHeight;
+                            
+                            await sleep(1200); 
+                            outNasa.innerHTML += "Downloading classified_aliens.zip... <span class='text-amber-400'>[54%]</span><br>"; 
+                            termBody.scrollTop = termBody.scrollHeight;
+                            
+                            await sleep(1500); 
+                            outNasa.innerHTML += "<span class='text-red-500 font-bold bg-red-500/20 px-2 py-1'>[!] CRITICAL WARNING: REVERSE SHELL DETECTED!</span><br>"; 
+                            playErrorBeep();
+                            termBody.scrollTop = termBody.scrollHeight;
+                            
+                            await sleep(1000);
+                            outNasa.innerHTML += "<span class='text-red-600 font-black text-xl'>NASA IS HACKING YOU BACK. RUN.</span>";
+                            termBody.scrollTop = termBody.scrollHeight;
+                            
+                            await sleep(1000);
+                            const nasaOverlay = document.getElementById('nasa-overlay');
+                            if(nasaOverlay) nasaOverlay.style.setProperty('display', 'flex', 'important');
+                            document.body.classList.add('nuke-shake');
+                            
+                            try {
+                                const Ctx = window.AudioContext || window.webkitAudioContext;
+                                if (Ctx) {
+                                    const ctx = new Ctx();
+                                    const osc = ctx.createOscillator();
+                                    const gain = ctx.createGain();
+                                    osc.connect(gain);
+                                    gain.connect(ctx.destination);
+                                    osc.type = 'sawtooth';
+                                    
+                                    let freq = 400;
+                                    const siren = setInterval(() => {
+                                        freq = freq === 400 ? 800 : 400;
+                                        osc.frequency.setValueAtTime(freq, ctx.currentTime);
+                                    }, 200);
+                                    
+                                    gain.gain.setValueAtTime(0.1, ctx.currentTime);
+                                    osc.start();
+                                    setTimeout(() => { clearInterval(siren); osc.stop(); }, 5000);
+                                }
+                            } catch(e) {}
+                            
+                            setTimeout(() => { window.location.reload(); }, 5000);
                             break;
                         
                         case "flag{m4hmudul_1s_r00t}":
@@ -2235,7 +2314,6 @@
         }
         function closeAchModal() { achModal.classList.add('opacity-0'); achModalContent.classList.add('scale-95'); setTimeout(() => achModal.classList.add('hidden'), 300); }
 
-        // Form Submit
         document.getElementById('commForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('submitBtn'); const orgText = btn.innerHTML;
@@ -2263,7 +2341,6 @@
             btn.innerHTML = orgText; lucide.createIcons();
         });
 
-        // ================= BLACK MARKET LOGIC =================
         const blackMarketMenuBtn = document.getElementById('secret-menu');
         const blackMarketModal = document.getElementById('blackMarketModal');
         const blackMarketContent = document.getElementById('blackMarketModal-content');
