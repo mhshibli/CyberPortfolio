@@ -37,6 +37,20 @@
         body.light-mode #msgModal p, body.light-mode #statModal p { color: #334155 !important; }
         body.light-mode #modal-msg-payload { color: #1e293b !important; }
         body.light-mode #msgModal-content, body.light-mode #statModal-content { border-color: rgba(14, 165, 233, 0.3); }
+
+        /* BEACON TABLE STYLES */
+        .beacon-row { transition: all 0.2s; cursor: crosshair; }
+        .beacon-row:hover { background: rgba(14, 165, 233, 0.1); }
+        .blinking-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 5px; }
+        .dot-green { background: #10b981; box-shadow: 0 0 8px #10b981; animation: pulse-green 2s infinite; }
+        .dot-red { background: #ef4444; box-shadow: 0 0 8px #ef4444; animation: pulse-red 1s infinite; }
+        @keyframes pulse-green { 0% { transform: scale(0.95); opacity: 0.7; } 50% { transform: scale(1.1); opacity: 1; } 100% { transform: scale(0.95); opacity: 0.7; } }
+        @keyframes pulse-red { 0% { transform: scale(0.95); opacity: 0.7; } 50% { transform: scale(1.2); opacity: 1; } 100% { transform: scale(0.95); opacity: 0.7; } }
+        
+        /* WIRETAP TERMINAL */
+        #wiretap-term { background: #050505; border: 1px solid #333; font-family: 'JetBrains Mono', monospace; font-size: 11px; padding: 15px; height: 250px; overflow-y: auto; box-shadow: inset 0 0 20px rgba(0,0,0,0.8); }
+        .wiretap-line { margin-bottom: 4px; line-height: 1.4; border-bottom: 1px dashed rgba(255,255,255,0.05); padding-bottom: 2px;}
+        body.light-mode #wiretap-term { background: #1e293b; border-color: #cbd5e1; }
     </style>
 </head>
 <body class="p-4 md:p-8">
@@ -165,7 +179,10 @@
                     <button onclick="switchTab('achievements')" id="btn-achievements" class="nav-btn w-full text-left p-4 rounded-2xl flex items-center gap-4 text-sm font-bold mono transition whitespace-nowrap"><i data-lucide="award" class="w-5 h-5 shrink-0"></i> Achievement</button>
                     <button onclick="switchTab('gallery')" id="btn-gallery" class="nav-btn w-full text-left p-4 rounded-2xl flex items-center gap-4 text-sm font-bold mono transition whitespace-nowrap"><i data-lucide="image" class="w-5 h-5 shrink-0"></i> Archive</button>
                     <button onclick="switchTab('messages')" id="btn-messages" class="nav-btn w-full text-left p-4 rounded-2xl flex items-center gap-4 text-sm font-bold mono transition whitespace-nowrap"><i data-lucide="message-square" class="w-5 h-5 shrink-0"></i> Messages</button>
+                    
                     <div class="h-px bg-white/10 my-2 hidden lg:block"></div>
+                    <button onclick="switchTab('surveillance')" id="btn-surveillance" class="nav-btn w-full text-left p-4 rounded-2xl flex items-center gap-4 text-sm font-bold mono transition whitespace-nowrap text-red-500 hover:bg-red-500/10"><i data-lucide="radar" class="w-5 h-5 shrink-0 text-red-500"></i> Surveillance</button>
+                    
                     <button onclick="switchTab('settings')" id="btn-settings" class="nav-btn w-full text-left p-4 rounded-2xl flex items-center gap-4 text-sm font-bold mono transition whitespace-nowrap text-amber-500 hover:bg-amber-500/10"><i data-lucide="shield" class="w-5 h-5 shrink-0 text-amber-500"></i> Settings</button>
                 </div>
             </nav>
@@ -384,6 +401,38 @@
                     <div id="list-messages" class="grid sm:grid-cols-2 gap-4 max-h-[600px] overflow-y-auto pr-2 content-start auto-rows-max"></div>
                 </div>
 
+                <div id="tab-surveillance" class="tab-content glass p-8 rounded-3xl">
+                    <h2 class="text-xl font-bold mb-6 flex items-center gap-3 border-b border-red-500/30 pb-4 text-white">
+                        <i data-lucide="radar" class="text-red-500"></i> Tactical Surveillance
+                    </h2>
+                    
+                    <div class="mb-8">
+                        <h3 class="text-sm font-bold text-slate-300 mb-4 mono flex items-center gap-2"><i data-lucide="radio" class="w-4 h-4 text-emerald-500 animate-pulse"></i> Active Beacons</h3>
+                        <div class="bg-black/40 border border-white/5 rounded-2xl overflow-hidden">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="bg-white/5 border-b border-white/10 text-[10px] text-slate-400 font-bold mono uppercase tracking-wider">
+                                        <th class="p-4">Status</th>
+                                        <th class="p-4">External IP</th>
+                                        <th class="p-4">Profile</th>
+                                        <th class="p-4 hidden md:table-cell">OS / Browser</th>
+                                        <th class="p-4">Last Check-in</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="beacon-table-body" class="text-xs font-mono text-slate-300">
+                                    </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 class="text-sm font-bold text-slate-300 mb-4 mono flex items-center gap-2"><i data-lucide="terminal-square" class="w-4 h-4 text-purple-500"></i> Live Wiretap Feed</h3>
+                        <div id="wiretap-term" class="rounded-2xl">
+                            <div class="text-emerald-500 mb-2 font-bold">[SYSTEM] Surveillance daemon started. Waiting for telemetry...</div>
+                        </div>
+                    </div>
+                </div>
+
                 <div id="tab-settings" class="tab-content glass p-8 rounded-3xl">
                     <h2 class="text-xl font-bold mb-6 flex items-center gap-3 border-b border-white/10 pb-4 text-white"><i data-lucide="shield" class="text-amber-500"></i> Security Credentials</h2>
                     <div class="bg-black/20 p-6 md:p-8 rounded-3xl border border-white/5 max-w-xl mx-auto mt-4 shadow-inner">
@@ -516,6 +565,7 @@
                 if(res.ok) {
                     currentAdmin = u; document.getElementById('login-screen').style.display = 'none'; document.getElementById('admin-dashboard').classList.remove('hidden');
                     fetchSystemStats(); statsInterval = setInterval(fetchSystemStats, 5000); switchTab('profile'); 
+                    initSurveillance(); // Start fake C2 tracking
                 } else { alert("ACCESS DENIED"); btn.innerText = origText; }
             } catch(e) { alert("Server Error"); btn.innerText = origText; }
         }
@@ -540,10 +590,12 @@
 
         function switchTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.nav-btn').forEach(b => { b.classList.remove('bg-sky-500/10', 'text-sky-500', 'shadow-lg', 'bg-amber-500/10', 'text-amber-500'); b.classList.add('text-slate-400'); });
+            document.querySelectorAll('.nav-btn').forEach(b => { b.classList.remove('bg-sky-500/10', 'text-sky-500', 'shadow-lg', 'bg-amber-500/10', 'text-amber-500', 'bg-red-500/10', 'text-red-500'); b.classList.add('text-slate-400'); });
             document.getElementById('tab-'+tabId).classList.add('active'); const activeBtn = document.getElementById('btn-'+tabId); activeBtn.classList.remove('text-slate-400');
-            if(tabId === 'settings') activeBtn.classList.add('bg-amber-500/10', 'text-amber-500', 'shadow-lg'); else activeBtn.classList.add('bg-sky-500/10', 'text-sky-500', 'shadow-lg');
-            if(tabId === 'profile') loadProfile(); else if(tabId !== 'settings') loadList(tabId);
+            if(tabId === 'settings') activeBtn.classList.add('bg-amber-500/10', 'text-amber-500', 'shadow-lg'); 
+            else if(tabId === 'surveillance') activeBtn.classList.add('bg-red-500/10', 'text-red-500', 'shadow-lg'); 
+            else activeBtn.classList.add('bg-sky-500/10', 'text-sky-500', 'shadow-lg');
+            if(tabId === 'profile') loadProfile(); else if(tabId !== 'settings' && tabId !== 'surveillance') loadList(tabId);
         }
 
         function resetForm(table) { const form = document.getElementById(`form-${table}`); if(form) { form.reset(); const pfx = table === 'education' ? 'edu' : table === 'arsenal' ? 'ars' : table === 'projects' ? 'proj' : 'ach'; document.getElementById(`${pfx}-id`).value = ''; } }
@@ -679,27 +731,23 @@
                     createMountainChart(data.labels, data.values, color);
                 } catch(e) { console.error("Chart Fetch Error", e); }
             } else {
-                // CPU/RAM/Load এর জন্য ৫ মিনিটের ডামি রিয়েল-টাইম ট্রেন্ড ডাটা
                 const simulatedData = Array.from({length: 6}, () => Math.floor(Math.random() * 40) + 20);
                 createMountainChart(['-5m', '-4m', '-3m', '-2m', '-1m', 'Now'], simulatedData, color);
             }
         }
 
-        // FIXED: Empty data fallback and specific height styling
         function createMountainChart(labels, values, color) {
             const canvas = document.getElementById('mountainChart');
             const ctx = canvas.getContext('2d');
             if(mountainChartInstance) mountainChartInstance.destroy();
 
-            // ডাটাবেস ফাঁকা থাকলে গ্রাফ ক্র্যাশ করবে না
             if(!labels || labels.length === 0) {
                 labels = ['No Data Yet']; values = [0];
             }
 
-            // মাউন্টেন ইফেক্ট (Gradient Fill)
             const gradient = ctx.createLinearGradient(0, 0, 0, canvas.parentElement.clientHeight || 220);
-            gradient.addColorStop(0, color + '80'); // উপরের গাঢ় অংশ
-            gradient.addColorStop(1, color + '00'); // নিচের স্বচ্ছ অংশ
+            gradient.addColorStop(0, color + '80'); 
+            gradient.addColorStop(1, color + '00'); 
 
             mountainChartInstance = new Chart(ctx, {
                 type: 'line',
@@ -712,13 +760,13 @@
                         backgroundColor: gradient,
                         fill: true,
                         tension: 0.4,
-                        pointRadius: 3, // FIXED: Changed from 0 to 3 to show single dots
+                        pointRadius: 3, 
                         pointHoverRadius: 6
                     }]
                 },
                 options: {
                     responsive: true,
-                    maintainAspectRatio: false, // এটি এখন সঠিকভাবে কাজ করবে
+                    maintainAspectRatio: false, 
                     plugins: { legend: { display: false } },
                     scales: {
                         y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#64748b', font: {family: 'JetBrains Mono'} } },
@@ -769,6 +817,84 @@
             await fetch(`${API_BASE}/messages/${id}`, { method: 'DELETE' });
             closeMsgModal();
             loadList('messages');
+        }
+
+        // ================= NEW SURVEILLANCE & C2 LOGIC =================
+        const randomIP = () => `${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}`;
+        const osList = ["Win 11 / Chrome", "Win 10 / Edge", "macOS / Safari", "Linux / Firefox", "Android / Chrome"];
+        let wiretapInterval;
+        let beaconInterval;
+
+        function addBeacon() {
+            const tbody = document.getElementById('beacon-table-body');
+            const row = document.createElement('tr');
+            row.className = 'border-b border-white/5 beacon-row hover:bg-sky-500/5';
+            
+            const isHostile = Math.random() > 0.8;
+            const statusClass = isHostile ? 'text-red-500' : 'text-emerald-500';
+            const dotClass = isHostile ? 'dot-red' : 'dot-green';
+            const profile = isHostile ? 'Hostile / Analyst' : 'Civilian';
+            const statusText = isHostile ? 'ALERT' : 'ACTIVE';
+            
+            const ip = randomIP();
+            const os = osList[Math.floor(Math.random() * osList.length)];
+            const time = new Date().toLocaleTimeString();
+
+            row.innerHTML = `
+                <td class="p-4 ${statusClass} font-bold"><span class="blinking-dot ${dotClass}"></span>${statusText}</td>
+                <td class="p-4 text-sky-400">${ip}</td>
+                <td class="p-4 ${statusClass}">${profile}</td>
+                <td class="p-4 hidden md:table-cell text-slate-400">${os}</td>
+                <td class="p-4 text-slate-500">${time}</td>
+            `;
+            
+            tbody.insertBefore(row, tbody.firstChild);
+            if(tbody.children.length > 5) tbody.lastChild.remove();
+            
+            addWiretapLog(`[+] New Beacon connected: ${ip} (${profile})`);
+        }
+
+        function addWiretapLog(text) {
+            const term = document.getElementById('wiretap-term');
+            const time = new Date().toLocaleTimeString('en-US', { hour12: false });
+            
+            const isRed = text.includes('Hostile') || text.includes('ALERT') || text.includes('wiped');
+            const colorClass = isRed ? 'text-red-500' : 'text-slate-300';
+            
+            term.innerHTML += `<div class="wiretap-line ${colorClass}"><span class="text-slate-500">[${time}]</span> ${text}</div>`;
+            term.scrollTop = term.scrollHeight;
+        }
+
+        function generateRandomActivity() {
+            const activities = [
+                "Scrolled to Arsenal section.",
+                "Hovered over Profile Image.",
+                "Copied terminal text to clipboard.",
+                "Terminal Input -> 'whoami'",
+                "Terminal Input -> 'help'",
+                "Viewed 'Secure Chat App' project.",
+                "F12 DevTools opened! <span class='text-red-500 font-bold'>[FLAGGED HOSTILE]</span>",
+                "Attempted right-click. <span class='text-amber-500'>[ACTION BLOCKED]</span>"
+            ];
+            const ip = randomIP();
+            const act = activities[Math.floor(Math.random() * activities.length)];
+            addWiretapLog(`IP ${ip}: ${act}`);
+        }
+
+        function initSurveillance() {
+            // Initial data
+            for(let i=0; i<3; i++) addBeacon();
+            
+            if(beaconInterval) clearInterval(beaconInterval);
+            if(wiretapInterval) clearInterval(wiretapInterval);
+            
+            beaconInterval = setInterval(() => {
+                if(Math.random() > 0.5) addBeacon();
+            }, 8000);
+            
+            wiretapInterval = setInterval(() => {
+                generateRandomActivity();
+            }, 3000);
         }
     </script>
 </body>
