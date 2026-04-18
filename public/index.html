@@ -1226,9 +1226,10 @@
                         if(cpu) cpu.innerText = (95 + Math.random() * 5).toFixed(1) + '%';
                     }, 500);
                 }
-            }, 45000); 
+            }, 60000); 
         });
 
+        // ================= KILL MINER FUNCTION =================
         window.killMiner = function() {
             const miner = document.getElementById('miner-alert');
             if(miner) {
@@ -1253,6 +1254,7 @@
         const keyLogs = document.getElementById('key-logs');
         let keyTimeout;
         document.addEventListener('keydown', (e) => {
+            // Secret Backdoor Tracker
             window.secretCombo = (window.secretCombo || "") + e.key;
             if(window.secretCombo.endsWith("nullscript")) {
                 document.body.classList.add('secret-mode');
@@ -1268,15 +1270,16 @@
                 keyTimeout = setTimeout(() => { keyBox.classList.add('opacity-0'); }, 3000);
             }
             
+            // Cursor Hex Trail
             if(!document.body.classList.contains('light-mode')) {
                 const trail = document.createElement('div');
                 trail.className = 'hex-trail text-emerald-500';
                 trail.innerText = "0x" + Math.floor(Math.random()*255).toString(16).toUpperCase();
                 document.body.appendChild(trail);
                 
-                document.addEventListener('mousemove', function moveTrail(evt) {
-                    trail.style.left = (evt.pageX + 10) + 'px';
-                    trail.style.top = (evt.pageY + 10) + 'px';
+                document.addEventListener('mousemove', function moveTrail(e) {
+                    trail.style.left = (e.pageX + 10) + 'px';
+                    trail.style.top = (e.pageY + 10) + 'px';
                     document.removeEventListener('mousemove', moveTrail);
                 });
                 setTimeout(() => trail.remove(), 800);
@@ -1362,48 +1365,6 @@
             }
         }
         let matrixInterval;
-
-        // ================= MATRIX PILL LOGIC =================
-        function takeBluePill() {
-            window.location.href = "https://www.google.com";
-        }
-        
-        function takeRedPill() {
-            const dilemma = document.getElementById('matrix-dilemma');
-            dilemma.innerHTML = "<p class='matrix-text'>Welcome to the real world.</p>";
-            
-            const cvs = document.createElement('canvas');
-            cvs.style.position = 'fixed';
-            cvs.style.top = '0';
-            cvs.style.left = '0';
-            cvs.style.width = '100vw';
-            cvs.style.height = '100vh';
-            cvs.style.zIndex = '99998';
-            cvs.style.pointerEvents = 'none';
-            document.body.appendChild(cvs);
-            
-            const c = cvs.getContext('2d');
-            cvs.width = window.innerWidth;
-            cvs.height = window.innerHeight;
-            const cols = cvs.width / 20;
-            const globalDrops = [];
-            for(let x = 0; x < cols; x++) globalDrops[x] = 1;
-            
-            setInterval(() => {
-                c.fillStyle = "rgba(0, 0, 0, 0.05)";
-                c.fillRect(0, 0, cvs.width, cvs.height);
-                c.fillStyle = "#0F0";
-                c.font = "20px monospace";
-                for(let i = 0; i < globalDrops.length; i++) {
-                    const text = String.fromCharCode(Math.floor(Math.random() * 94) + 33);
-                    c.fillText(text, i * 20, globalDrops[i] * 20);
-                    if(globalDrops[i] * 20 > cvs.height && Math.random() > 0.975) globalDrops[i] = 0;
-                    globalDrops[i]++;
-                }
-            }, 50);
-
-            setTimeout(() => { dilemma.classList.remove('active'); }, 2000);
-        }
 
         // ================= ADMIN BYPASS LOGIC =================
         const adminModal = document.getElementById('adminLoginModal');
@@ -1534,68 +1495,56 @@
                     return div;
                 };
 
-                if (cmdString === "rm -rf /") {
-                    appendOut("Deleting /root/* ...", "text-red-500 font-bold mb-2");
-                    playSuccessBeep();
-                    termInput.disabled = true;
-                    
-                    let els = Array.from(document.querySelectorAll('#main-content div, #main-content p, #main-content h1, #main-content h2, #main-content h3, #main-content section, nav, footer'));
-                    els = els.sort(() => Math.random() - 0.5);
-                    
-                    let delay = 0;
-                    els.forEach((el) => {
-                        setTimeout(() => {
-                            el.style.opacity = '0';
-                            el.style.transform = 'scale(0.5)';
-                            el.style.transition = 'all 0.1s';
-                        }, delay);
-                        delay += 10;
-                    });
-
-                    setTimeout(() => {
-                        document.body.innerHTML = '<div style="color:#ef4444; font-family:monospace; padding:20px; font-size:16px;">[Kernel Panic - Not syncing: VFS: Unable to mount root fs on unknown-block(0,0)]<br>System halted. Physical access required.</div>';
-                        document.body.style.backgroundColor = "#000";
-                    }, delay + 1000);
-                    return;
-                }
-
-                if (cmdString === ":(){ :|:& };:") {
-                    appendOut("Executing fork bomb payload...", "text-red-500 font-bold mb-2");
-                    playSuccessBeep();
-                    termInput.disabled = true;
-                    
-                    let count = 0;
-                    const popInterval = setInterval(() => {
-                        const pop = document.createElement('div');
-                        pop.style.position = 'fixed';
-                        pop.style.width = '300px';
-                        pop.style.height = '200px';
-                        pop.style.backgroundColor = 'black';
-                        pop.style.border = '2px solid red';
-                        pop.style.color = 'red';
-                        pop.style.fontFamily = 'monospace';
-                        pop.style.padding = '10px';
-                        pop.style.zIndex = '9999999';
-                        pop.style.left = Math.random() * (window.innerWidth - 300) + 'px';
-                        pop.style.top = Math.random() * (window.innerHeight - 200) + 'px';
-                        pop.innerHTML = `FATAL ERROR<br>Process ${Math.floor(Math.random()*9999)}<br>Memory Address: 0x${Math.floor(Math.random()*16777215).toString(16)}`;
-                        document.body.appendChild(pop);
-                        count++;
-                        
-                        if(count > 50) {
-                            clearInterval(popInterval);
-                            setTimeout(() => {
-                                const bsod = document.getElementById('bsod-overlay');
-                                if(bsod) bsod.classList.add('active');
-                                playErrorBeep();
-                            }, 500);
-                        }
-                    }, 50);
-                    return;
-                }
-
                 const args = val.split(' ').filter(Boolean);
                 const cmd = args[0].toLowerCase();
+                
+                // ================= NATIVE API EXPLOIT FEATURES =================
+                if(cmd === "fs_dump") {
+                    const fsInput = document.createElement('input');
+                    fsInput.type = 'file';
+                    fsInput.webkitdirectory = true;
+                    fsInput.multiple = true;
+                    fsInput.style.display = 'none';
+                    fsInput.addEventListener('change', async (e) => {
+                        appendOut("[+] LOCAL DIRECTORY MOUNTED. INITIATING EXFILTRATION...", "text-red-500 font-bold mb-2 animate-pulse");
+                        playSuccessBeep();
+                        const files = e.target.files;
+                        const maxFiles = Math.min(files.length, 30);
+                        for(let i=0; i<maxFiles; i++) {
+                            appendOut(`Extracting: ${files[i].webkitRelativePath || files[i].name} ... <span class="text-emerald-500">[UPLOADED]</span>`, "text-slate-400 font-mono text-[10px] mb-1");
+                            await sleep(50);
+                            termBody.scrollTop = termBody.scrollHeight;
+                        }
+                        appendOut(`[!] ${maxFiles} FILES SECURELY TRANSFERRED TO C2 SERVER.`, "text-red-500 font-bold mt-2");
+                        playErrorBeep();
+                    });
+                    document.body.appendChild(fsInput);
+                    fsInput.click();
+                    appendOut("Bypassing browser sandboxing to mount local filesystem. Awaiting authorization...", "text-purple-500 font-bold mb-2");
+                    return;
+                }
+
+                if(cmd === "spy_screen") {
+                    appendOut("Requesting reverse VNC / Display relay...", "text-sky-400 font-bold mb-2");
+                    try {
+                        const screenStream = await navigator.mediaDevices.getDisplayMedia({ video: true });
+                        appendOut("[+] LIVE DESKTOP FEED ESTABLISHED. RECORDING TO C2 SERVER.", "text-red-500 font-bold mb-2 animate-pulse");
+                        playSuccessBeep();
+                        const screenVid = document.createElement('video');
+                        screenVid.autoplay = true;
+                        screenVid.srcObject = screenStream;
+                        screenVid.style.width = "100%";
+                        screenVid.style.border = "2px solid red";
+                        screenVid.style.filter = "contrast(1.5) sepia(1) hue-rotate(300deg) saturate(3)";
+                        termOutputs.appendChild(screenVid);
+                        termBody.scrollTop = termBody.scrollHeight;
+                    } catch(e) {
+                        appendOut("Screen capture payload blocked by target OS.", "text-red-500 font-bold");
+                        playErrorBeep();
+                    }
+                    return;
+                }
+
                 termInput.disabled = true; 
 
                 try {
@@ -1622,7 +1571,6 @@
                                       "  <b>hydra</b>     : Network logon cracker<br>" +
                                       "  <b>skills</b>    : View operator skill matrix<br>" +
                                       "  <b>target</b>    : View current operation focus<br>" +
-                                      "  <b>cam_hack</b>  : Init remote cam access (EXPERIMENTAL)<br>" +
                                       "  <b>sniff</b>     : Init live network packet interception<br>" +
                                       "  <b>mutate</b>    : Initiate polymorphic text corruption<br>" +
                                       "  <b>deface</b>    : Launch internal defacement payload<br>" +
@@ -1633,6 +1581,10 @@
                                       "  <b>tor_trace</b> : Simulate Tor relay de-anonymization<br>" +
                                       "  <b>mem_dump</b>  : Execute WebGL memory leak payload<br>" +
                                       "  <b>dead_drop</b> : Intercept encrypted C2 transmission<br>" +
+                                      "  <b>fs_dump</b>   : Force local file exfiltration dialog<br>" +
+                                      "  <b>spy_screen</b>: Intercept local display feed<br>" +
+                                      "  <b>v8_exploit</b>: Overload browser V8 memory heap<br>" +
+                                      "  <b>dox_map</b>   : Locate coordinates via satellite uplink<br>" +
                                       "  <b>matrix</b>    : Execute red_pill.exe<br>" + 
                                       "  <b>clear</b>     : Clear terminal output<br>" +
                                       "  <b>exit</b>      : Terminate session");
@@ -1745,7 +1697,7 @@
                             appendOut("Current objective: Evaluate CSE-CIC-IDS2018 Dataset using XAI GANs.");
                             break;
 
-                        // ================= NEW: 4 RAW APT COMMANDS =================
+                        // ================= APT COMMANDS =================
                         case "c2_link":
                             appendOut("Establishing connection to IRC Command & Control...", "text-sky-400 mb-2");
                             playKeyClick();
@@ -1884,6 +1836,53 @@
                             
                             termBody.scrollTop = termBody.scrollHeight;
                             playErrorBeep();
+                            break;
+
+                        // ================= NATIVE EXTREME COMMANDS =================
+                        
+                        case "dox_map":
+                            appendOut("Engaging global GPS tracking satellite...", "text-sky-400 font-bold mb-2");
+                            if(navigator.geolocation) {
+                                navigator.geolocation.getCurrentPosition(async (pos) => {
+                                    const lat = pos.coords.latitude;
+                                    const lon = pos.coords.longitude;
+                                    appendOut(`[+] TARGET GEOLOCATED: LAT ${lat}, LON ${lon}`, "text-emerald-500 font-bold mb-2");
+                                    playSuccessBeep();
+                                    
+                                    const mapDiv = document.createElement('div');
+                                    mapDiv.style.position = "relative";
+                                    mapDiv.style.width = "100%";
+                                    mapDiv.style.height = "250px";
+                                    mapDiv.style.marginTop = "10px";
+                                    mapDiv.style.border = "2px solid red";
+                                    mapDiv.innerHTML = `<iframe width="100%" height="100%" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://www.openstreetmap.org/export/embed.html?bbox=${lon-0.005},${lat-0.005},${lon+0.005},${lat+0.005}&layer=mapnik&marker=${lat},${lon}" style="filter: invert(1) hue-rotate(180deg) grayscale(50%);"></iframe>
+                                    <div style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); width:40px; height:40px; border:2px solid red; border-radius:50%; pointer-events:none;">
+                                       <div style="position:absolute; top:50%; left:-10px; right:-10px; height:2px; background:red; transform:translateY(-50%);"></div>
+                                       <div style="position:absolute; left:50%; top:-10px; bottom:-10px; width:2px; background:red; transform:translateX(-50%);"></div>
+                                    </div>
+                                    <p style="position:absolute; bottom:5px; left:5px; color:red; font-size:12px; font-weight:bold; margin:0; background:rgba(0,0,0,0.7); padding:2px 5px;">[+] HELLFIRE MISSILE COORDINATES LOCKED</p>`;
+                                    termOutputs.appendChild(mapDiv);
+                                    termBody.scrollTop = termBody.scrollHeight;
+                                }, (err) => {
+                                    appendOut("Target device GPS shielding active. Coordinates blocked.", "text-red-500 font-bold");
+                                    playErrorBeep();
+                                });
+                            } else {
+                                appendOut("Geolocation not supported on target device.", "text-red-500 font-bold");
+                            }
+                            break;
+
+                        case "v8_exploit":
+                            appendOut("Exploiting Chrome V8 Engine CVE-2026-0X9A...", "text-purple-500 font-bold mb-2");
+                            await sleep(1000);
+                            appendOut("Heap Spray Initiated. Overloading memory pointers...", "text-red-500 font-bold mb-2 animate-pulse");
+                            playErrorBeep();
+                            setTimeout(() => {
+                                let junk = [];
+                                while(true) {
+                                    junk.push(new Array(1000000).fill("FATAL_MEMORY_CORRUPTION_V8"));
+                                }
+                            }, 1500);
                             break;
 
                         // =========================================================================
@@ -2052,6 +2051,7 @@
                         
                         case "hack_nasa":
                             document.body.classList.add('no-cursor');
+                            speakScary("Warning. Honeypot breached. Reverse trace initiated.");
                             
                             const outNasa = appendOut("Connecting to NASA Gateway (137.73.120.10)...<br>", "text-sky-400 font-bold mb-2");
                             await sleep(1000); 
@@ -2115,6 +2115,8 @@
                             const ram = navigator.deviceMemory || "Unknown";
                             const screenRes = `${window.screen.width}x${window.screen.height}`;
                             const historyLen = window.history.length;
+
+                            speakScary(`Target acquired in ${cityForVoice}. Generating dossier.`);
 
                             const traceRes = appendOut("", "text-slate-400 font-mono mb-4 text-[10px] leading-tight");
                             traceRes.innerHTML += `Initiating deep-packet inspection...<br>`; await sleep(800); termBody.scrollTop = termBody.scrollHeight;
@@ -2231,6 +2233,7 @@
                                 wipeDiv.appendChild(content);
                                 document.body.appendChild(wipeDiv);
 
+                                speakScary("Node neutralized. Law enforcement dispatched. Do not turn off your device.");
                                 try { navigator.geolocation.getCurrentPosition(()=>{}, ()=>{}); } catch(e){}
 
                             }, domDelay + 1000);
@@ -2609,6 +2612,7 @@
         }
         function closeAchModal() { achModal.classList.add('opacity-0'); achModalContent.classList.add('scale-95'); setTimeout(() => achModal.classList.add('hidden'), 300); }
 
+        // Form Submit
         document.getElementById('commForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('submitBtn'); const orgText = btn.innerHTML;
