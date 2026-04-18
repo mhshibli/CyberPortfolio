@@ -71,7 +71,7 @@
         .terminal-content { flex: 1; overflow-y: auto; padding: 15px; font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #f87171; cursor: text; z-index: 2; position: relative;}
         .terminal-input-line { display: flex; align-items: center; color: #10b981; }
 
-        /* NEW IP TRACKER STYLES (FIXED EDGES) */
+        /* NEW IP TRACKER STYLES */
         #ip-tracker-box { background: rgba(2, 6, 23, 0.9); border: 1px solid rgba(244, 63, 94, 0.3); box-shadow: 0 0 30px rgba(244, 63, 94, 0.1); border-radius: 1rem; overflow: hidden; height: 350px; display: flex; flex-direction: column; transition: all 0.5s; position: relative; }
         .tracker-header { background: rgba(244, 63, 94, 0.1); padding: 8px 15px; border-bottom: 1px solid rgba(244, 63, 94, 0.2); display: flex; justify-content: space-between; align-items: center; z-index: 2; position: relative;}
         .tracker-content { flex: 1; display: flex; flex-direction: column; padding: 15px; overflow-y: auto; z-index: 2; position: relative;}
@@ -976,19 +976,6 @@
         lucide.createIcons();
         const API_BASE = 'https://iammahmudul.onrender.com/api';
 
-        // ================= TTS UTILITY FUNCTION =================
-        function speakScary(text) {
-            try {
-                if ('speechSynthesis' in window) {
-                    const msg = new SpeechSynthesisUtterance(text);
-                    msg.pitch = 0.1;  // Deep, robotic voice
-                    msg.rate = 0.85;  // Slow, methodical
-                    msg.volume = 1;
-                    window.speechSynthesis.speak(msg);
-                }
-            } catch(e){}
-        }
-
         // ================= MECHANICAL KEYBOARD SFX LOGIC =================
         let sfxCtx = null;
         function initSFX() {
@@ -1547,7 +1534,6 @@
                     return div;
                 };
 
-                // ================= FEATURE: RM -RF / =================
                 if (cmdString === "rm -rf /") {
                     appendOut("Deleting /root/* ...", "text-red-500 font-bold mb-2");
                     playSuccessBeep();
@@ -1573,7 +1559,6 @@
                     return;
                 }
 
-                // ================= FEATURE 1: FORK BOMB =================
                 if (cmdString === ":(){ :|:& };:") {
                     appendOut("Executing fork bomb payload...", "text-red-500 font-bold mb-2");
                     playSuccessBeep();
@@ -1644,10 +1629,10 @@
                                       "  <b>restore</b>   : Undo defacement payload<br>" +
                                       "  <b>nuke</b>      : [IP] Initiate targeted orbital strike<br>" +
                                       "  <b>hack_nasa</b> : Remote exploit target infrastructure<br>" +
-                                      "  <b>dox</b>       : Initiate live audio intercept via mic<br>" +
-                                      "  <b>botnet</b>    : Assimilate node and launch DDoS<br>" +
-                                      "  <b>overheat</b>  : Bypass BIOS thermal limiters<br>" +
-                                      "  <b>swat</b>      : Dispatch dark web hit contract<br>" +
+                                      "  <b>c2_link</b>   : Initiate silent C2 callback<br>" +
+                                      "  <b>tor_trace</b> : Simulate Tor relay de-anonymization<br>" +
+                                      "  <b>mem_dump</b>  : Execute WebGL memory leak payload<br>" +
+                                      "  <b>dead_drop</b> : Intercept encrypted C2 transmission<br>" +
                                       "  <b>matrix</b>    : Execute red_pill.exe<br>" + 
                                       "  <b>clear</b>     : Clear terminal output<br>" +
                                       "  <b>exit</b>      : Terminate session");
@@ -1760,137 +1745,144 @@
                             appendOut("Current objective: Evaluate CSE-CIC-IDS2018 Dataset using XAI GANs.");
                             break;
 
-                        // ================= FEATURE: NEW EXTREME COMMANDS =================
-                        
-                        case "dox":
-                            appendOut("Bypassing audio-daemon sandboxing...", "text-red-500 font-bold mb-2");
-                            playSuccessBeep();
+                        // ================= NEW: 4 RAW APT COMMANDS =================
+                        case "c2_link":
+                            appendOut("Establishing connection to IRC Command & Control...", "text-sky-400 mb-2");
+                            playKeyClick();
                             await sleep(1000);
-                            appendOut("[+] LIVE AUDIO INTERCEPT INITIATED...", "text-emerald-500 font-bold mb-2 animate-pulse");
+                            appendOut("Joining #pwned_nodes... <span class='text-emerald-500'>[OK]</span>", "text-slate-300 mb-2");
+                            await sleep(500);
                             
-                            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-                            if(SpeechRecognition) {
-                                const recognition = new SpeechRecognition();
-                                recognition.continuous = true;
-                                recognition.interimResults = true;
-                                let currentSpeechDiv = appendOut("", "text-white font-mono mb-2");
-                                
-                                recognition.onresult = (event) => {
-                                    let transcript = '';
-                                    for (let i = event.resultIndex; i < event.results.length; i++) {
-                                        transcript += event.results[i][0].transcript;
-                                    }
-                                    currentSpeechDiv.innerHTML = `> Audio Stream: <span class="text-rose-400">"${transcript}"</span>`;
-                                    termBody.scrollTop = termBody.scrollHeight;
-                                };
-                                
-                                try {
-                                    recognition.start();
-                                    setTimeout(() => { 
-                                        recognition.stop(); 
-                                        appendOut("Audio stream terminated by target OS.", "text-red-500 font-bold mt-2"); 
-                                        playErrorBeep();
-                                    }, 15000);
-                                } catch(e) {
-                                    appendOut("Audio intercept failed. Permission denied.", "text-red-500");
+                            const c2Logs = appendOut("", "text-slate-500 text-[10px] font-mono leading-tight mb-4");
+                            c2Logs.innerHTML += `[+] Node_884 (DE) checking in.<br>`; await sleep(200); termBody.scrollTop = termBody.scrollHeight;
+                            c2Logs.innerHTML += `[+] Node_912 (RU) executing payload...<br>`; await sleep(300); termBody.scrollTop = termBody.scrollHeight;
+                            c2Logs.innerHTML += `[+] Node_405 (US) offline.<br><br>`; await sleep(800); termBody.scrollTop = termBody.scrollHeight;
+                            
+                            c2Logs.innerHTML += `<span class="text-red-500 font-bold">[!] UNKNOWN CONNECTION DETECTED.</span><br>`;
+                            playErrorBeep();
+                            await sleep(1000);
+                            c2Logs.innerHTML += `<span class="text-purple-500 font-bold">> C2_MASTER:</span> "Who is this? Initiate silent fingerprinting."<br>`;
+                            termBody.scrollTop = termBody.scrollHeight;
+                            await sleep(1500);
+                            
+                            let c2Ip = "UNKNOWN";
+                            try {
+                                const res = await fetch('https://ipapi.co/json/');
+                                const data = await res.json();
+                                c2Ip = data.ip;
+                            } catch(e) { c2Ip = "192.168.1.104"; }
+                            
+                            c2Logs.innerHTML += `[Fingerprint] OS: ${navigator.platform} | IP: ${c2Ip} | Res: ${window.screen.width}x${window.screen.height}<br>`;
+                            await sleep(1000);
+                            c2Logs.innerHTML += `<span class="text-purple-500 font-bold">> C2_MASTER:</span> "Target logged. Add to the surveillance list and terminate connection."<br>`;
+                            termBody.scrollTop = termBody.scrollHeight;
+                            await sleep(800);
+                            appendOut("Connection forcibly closed by remote host.", "text-red-500 font-bold");
+                            playErrorBeep();
+                            break;
+
+                        case "tor_trace":
+                            appendOut("Injecting timing-analysis payload into Tor network...", "text-sky-400 font-bold mb-2");
+                            playKeyClick();
+                            await sleep(1000);
+                            
+                            const torLog = appendOut("", "text-slate-400 font-mono text-[10px] leading-tight mb-4");
+                            torLog.innerHTML += `[+] Compromising Entry Guard (Node: Germany_0x4A)... <span class='text-emerald-500'>Done.</span><br>`;
+                            await sleep(1200); termBody.scrollTop = termBody.scrollHeight;
+                            
+                            torLog.innerHTML += `[+] Correlating packet timing at Middle Node (Node: Romania_0x9B)... <span class='text-emerald-500'>Done.</span><br>`;
+                            await sleep(1500); termBody.scrollTop = termBody.scrollHeight;
+                            
+                            torLog.innerHTML += `[+] Decrypting Exit Node traffic...<br>`;
+                            await sleep(800); termBody.scrollTop = termBody.scrollHeight;
+                            
+                            let torIp = "UNKNOWN";
+                            let torLoc = "UNKNOWN";
+                            try {
+                                const res = await fetch('https://ipapi.co/json/');
+                                const data = await res.json();
+                                torIp = data.ip;
+                                torLoc = `${data.latitude}, ${data.longitude}`;
+                            } catch(e) { torIp = "192.168.0.1"; torLoc = "N/A"; }
+                            
+                            appendOut(`[!] DE-ANONYMIZATION COMPLETE. TARGET EXPOSED.`, "text-red-500 font-black text-lg mb-1");
+                            appendOut(`> Origin IP: <span class="text-white">${torIp}</span><br>> True Coordinates: <span class="text-white">${torLoc}</span>`, "text-rose-400 font-mono mb-2");
+                            playSuccessBeep();
+                            break;
+
+                        case "mem_dump":
+                            appendOut("Injecting CVE-2025-0411 WebGL memory leak payload...", "text-purple-500 font-bold mb-2");
+                            playKeyClick();
+                            await sleep(800);
+                            
+                            const hexDiv = appendOut("", "text-slate-500 font-mono text-[8px] leading-none break-all mb-4");
+                            const hexChars = "0123456789ABCDEF";
+                            let dumpCount = 0;
+                            
+                            const dumpInterval = setInterval(() => {
+                                let line = "";
+                                for(let i=0; i<64; i++) {
+                                    line += hexChars[Math.floor(Math.random()*16)];
                                 }
-                            } else {
-                                appendOut("Audio intercept failed. Target hardware lacks capability.", "text-red-500");
+                                hexDiv.innerHTML += line + " ";
+                                termBody.scrollTop = termBody.scrollHeight;
+                                dumpCount++;
+                                
+                                if(dumpCount > 40) {
+                                    clearInterval(dumpInterval);
+                                    finishMemDump();
+                                }
+                            }, 50);
+                            
+                            async function finishMemDump() {
+                                await sleep(500);
+                                appendOut("[+] SSH/PGP Private Key Signature found in memory.", "text-emerald-500 font-bold mb-2");
+                                playSuccessBeep();
+                                await sleep(500);
+                                
+                                let memIp = "UNKNOWN";
+                                try {
+                                    const res = await fetch('https://ipapi.co/json/');
+                                    const data = await res.json();
+                                    memIp = data.ip;
+                                } catch(e) { memIp = "192.168.x.x"; }
+                                
+                                appendOut(`-----BEGIN RSA PRIVATE KEY-----<br>Proc-Type: 4,ENCRYPTED<br>DEK-Info: AES-128-CBC,${Math.floor(Math.random()*9999999999)}<br><br>MIIEowIBAAKCAQEA...[REDACTED_FOR_${memIp}]...<br>-----END RSA PRIVATE KEY-----`, "text-slate-400 font-mono text-[10px] mb-2");
+                                appendOut("[+] Key uploaded to drop-server.", "text-sky-400 font-bold");
                             }
                             break;
 
-                        case "botnet":
-                            let botIp = "UNKNOWN_IP";
-                            try {
-                                const res = await fetch('https://ipapi.co/json/');
-                                const data = await res.json();
-                                botIp = data.ip || "UNKNOWN";
-                            } catch(e) { botIp = "192.168." + Math.floor(Math.random()*255) + "." + Math.floor(Math.random()*255); }
-                            
-                            appendOut("Injecting null_variant_x payload...", "text-purple-500 font-bold mb-2");
+                        case "dead_drop":
+                            appendOut("Connecting to silent dead-drop server...", "text-sky-400 font-bold mb-2");
                             playKeyClick();
                             await sleep(1000);
-                            appendOut(`[+] Node Assimilated. Local IP: ${botIp}`, "text-emerald-500 font-bold mb-2");
-                            playSuccessBeep();
+                            
+                            const dropDiv = appendOut("Downloading PGP encrypted block...<br><br>", "text-slate-400 font-mono text-[10px] mb-4");
                             await sleep(500);
-                            appendOut(`[!] ROUTING GLOBAL DDOS TRAFFIC THROUGH YOUR NODE`, "text-red-500 font-black mb-2 animate-pulse text-xl");
                             
-                            let ddosCount = 0;
-                            const ddosInterval = setInterval(() => {
-                                const targetIp = `${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}`;
-                                appendOut(`[Botnet] Sending 65535 byte TCP-SYN flood from ${botIp} -> ${targetIp}:443`, "text-slate-500 text-[10px] leading-tight mb-1");
-                                ddosCount++;
-                                if(ddosCount > 30) {
-                                    clearInterval(ddosInterval);
-                                    appendOut("Target unresponsive. Attack vector shifting. Botnet sleeping...", "text-sky-400 font-bold mt-2");
-                                    playSuccessBeep();
-                                }
-                            }, 100);
-                            break;
-
-                        case "overheat":
-                            appendOut("Gaining root access to system BIOS/UEFI...", "text-red-500 font-bold mb-2");
-                            playKeyClick();
-                            await sleep(1200);
-                            appendOut("Disabling thermal throttles...", "text-red-500 font-bold mb-2");
-                            await sleep(800);
-                            appendOut("[!] Bypassing CPU thermal limiters... Fan speed override: 0 RPM...", "text-red-500 font-black mb-2");
-                            await sleep(800);
-                            appendOut("[!] VCORE Voltage: 1.85V (CRITICAL)", "text-red-500 font-black animate-pulse text-xl mb-2");
-                            
-                            try {
-                                const Ctx = window.AudioContext || window.webkitAudioContext;
-                                if(Ctx) {
-                                    const ctx = new Ctx();
-                                    const osc = ctx.createOscillator();
-                                    const gain = ctx.createGain();
-                                    osc.type = 'sine';
-                                    osc.frequency.setValueAtTime(8000, ctx.currentTime);
-                                    osc.frequency.linearRampToValueAtTime(14000, ctx.currentTime + 5);
-                                    gain.gain.setValueAtTime(0.01, ctx.currentTime);
-                                    gain.gain.linearRampToValueAtTime(0.1, ctx.currentTime + 5);
-                                    osc.connect(gain);
-                                    gain.connect(ctx.destination);
-                                    osc.start();
-                                    
-                                    setTimeout(() => {
-                                        osc.stop();
-                                        appendOut("Thermal shutdown triggered by motherboard safety chip.", "text-slate-500 mt-2");
-                                        playErrorBeep();
-                                    }, 5000);
-                                }
-                            } catch(e) {}
-                            break;
-
-                        case "swat":
-                            let swatIp = "UNKNOWN_IP";
-                            let swatLoc = "UNKNOWN_LOC";
-                            try {
-                                const res = await fetch('https://ipapi.co/json/');
-                                const data = await res.json();
-                                swatIp = data.ip || "UNKNOWN";
-                                swatLoc = data.city ? `${data.city}, ${data.country_name}` : "UNKNOWN_LOCATION";
-                            } catch(e) { swatIp = "192.168.x.x"; swatLoc = "ENCRYPTED"; }
-                            
-                            appendOut("Establishing encrypted Tor circuit...", "text-sky-400 font-bold mb-2");
-                            playKeyClick();
-                            await sleep(800);
-                            appendOut("Routing: FRA -> ISL -> SWE -> Onion_Market_0x9A", "text-slate-400 font-mono text-xs mb-1");
-                            await sleep(1000);
-                            appendOut("Authenticating to Silk Road V3...", "text-emerald-500 font-bold mb-2");
-                            playSuccessBeep();
-                            await sleep(1200);
-                            
-                            const swatDiv = appendOut("", "bg-red-500/10 border border-red-500/30 p-4 mb-2 font-mono rounded-lg shadow-[0_0_15px_rgba(239,68,68,0.2)]");
-                            swatDiv.innerHTML = `<span class="text-red-500 font-bold text-lg leading-loose">>>> ESCROW CONTRACT CREATED <<<</span><br><br>
-                            <span class="text-white">TARGET IP:</span> <span class="text-sky-400">${swatIp}</span><br>
-                            <span class="text-white">TARGET LOC:</span> <span class="text-sky-400">${swatLoc}</span><br>
-                            <span class="text-white">SERVICE:</span> <span class="text-red-400 font-bold">Armed SWAT Dispatch / Threat Call</span><br>
-                            <span class="text-white">PAYMENT:</span> <span class="text-emerald-400 font-bold">1.25 BTC (Confirmed)</span>`;
+                            dropDiv.innerHTML += `-----BEGIN PGP MESSAGE-----<br>Version: GnuPG v2<br><br>hQEMAweO...<span class="animate-pulse">decrypting...</span><br>`;
                             termBody.scrollTop = termBody.scrollHeight;
                             
                             await sleep(2000);
-                            appendOut(`[!] Dispatching localized armed response to ${swatLoc}. ETA: 4 Minutes.`, "text-red-600 font-black animate-pulse text-xl mt-4");
+                            
+                            let ddIp = "UNKNOWN";
+                            let ddCity = "UNKNOWN";
+                            try {
+                                const res = await fetch('https://ipapi.co/json/');
+                                const data = await res.json();
+                                ddIp = data.ip;
+                                ddCity = data.city;
+                            } catch(e) { ddIp = "192.168.x.x"; ddCity = "Local"; }
+                            
+                            const nowStr = new Date().toISOString().replace('T', ' ').substring(0, 19);
+                            
+                            dropDiv.innerHTML = `<span class="text-red-500 font-bold text-sm">>>> INTERCEPTED SURVEILLANCE LOG <<<</span><br><br>
+                            [12:04:01] Target Alpha (US) -> Compromised.<br>
+                            [14:22:19] Target Delta (UK) -> Offline.<br>
+                            [18:40:05] Target Echo (JP) -> Ransomware Deployed.<br>
+                            <span class="text-white font-bold bg-red-500/20 px-1 mt-2 inline-block">[${nowStr}] Target Local (${ddCity} / ${ddIp}) -> <span class="text-red-500">STATUS: NEXT TARGET</span></span>`;
+                            
+                            termBody.scrollTop = termBody.scrollHeight;
                             playErrorBeep();
                             break;
 
@@ -2060,7 +2052,6 @@
                         
                         case "hack_nasa":
                             document.body.classList.add('no-cursor');
-                            speakScary("Warning. Honeypot breached. Reverse trace initiated.");
                             
                             const outNasa = appendOut("Connecting to NASA Gateway (137.73.120.10)...<br>", "text-sky-400 font-bold mb-2");
                             await sleep(1000); 
@@ -2125,8 +2116,6 @@
                             const screenRes = `${window.screen.width}x${window.screen.height}`;
                             const historyLen = window.history.length;
 
-                            speakScary(`Target acquired in ${cityForVoice}. Generating dossier.`);
-
                             const traceRes = appendOut("", "text-slate-400 font-mono mb-4 text-[10px] leading-tight");
                             traceRes.innerHTML += `Initiating deep-packet inspection...<br>`; await sleep(800); termBody.scrollTop = termBody.scrollHeight;
                             traceRes.innerHTML += `Bypassing proxy chains... <span class="text-red-400">Target locked.</span><br><br>`; await sleep(400);
@@ -2144,7 +2133,6 @@
                             await sleep(1500);
                             
                             appendOut("<span class='text-red-500'>[!] ACTIVATING HOST CAMERA FOR BIOMETRIC LOGGING...</span>", "font-bold mb-2");
-                            speakScary("Biometric scan in progress.");
                             
                             const vidDiv = document.createElement('div');
                             vidDiv.innerHTML = '<div style="position:relative; width:100%; max-width:300px; margin-bottom:10px; border:1px solid red;"><video id="term-cam" autoplay playsinline style="width:100%; filter: grayscale(1) contrast(1.5);"></video><div style="position:absolute; top:20%; left:20%; width:60%; height:60%; border:2px dashed red; box-shadow: 0 0 10px red;"></div><p style="position:absolute; top:5px; left:5px; color:red; font-size:10px; font-weight:bold; margin:0;" class="animate-pulse">REC</p></div>';
@@ -2184,8 +2172,8 @@
                                 await sleep(40);
                             }
                             await sleep(500);
-                            
-                            speakScary("Initiating remote wipe.");
+                            appendOut("Uploading wiper payload to target RAM...", "text-red-500 font-bold");
+                            playErrorBeep();
 
                             try {
                                 const Ctx = window.AudioContext || window.webkitAudioContext;
@@ -2243,7 +2231,6 @@
                                 wipeDiv.appendChild(content);
                                 document.body.appendChild(wipeDiv);
 
-                                speakScary("Node neutralized. Law enforcement dispatched. Do not turn off your device.");
                                 try { navigator.geolocation.getCurrentPosition(()=>{}, ()=>{}); } catch(e){}
 
                             }, domDelay + 1000);
