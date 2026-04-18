@@ -10,17 +10,24 @@
         @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap');
         :root { --glass-bg: rgba(15, 23, 42, 0.7); --glass-border: rgba(255, 255, 255, 0.1); }
         
+        /* ================= 3. CUSTOM CYBER CURSOR ================= */
         html, body, a, button, input, textarea { cursor: crosshair !important; }
         .hex-trail { position: absolute; font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: bold; pointer-events: none; z-index: 9999; animation: trailFade 0.8s ease-out forwards; color: #ef4444; text-shadow: 0 0 5px #ef4444; }
         body:not(.secret-mode) .hex-trail { color: #10b981; text-shadow: 0 0 5px #10b981; }
         @keyframes trailFade { 0% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(0.5) translateY(-10px); } }
 
+        /* ADVANCED CURSOR GLITCH */
+        .cursor-glitch { animation: cursorGlitchAnim 0.2s ease-in-out infinite alternate; filter: drop-shadow(2px 0px 0px red) drop-shadow(-2px 0px 0px blue); }
+        @keyframes cursorGlitchAnim { 0% { transform: translate(0,0) scale(1); } 25% { transform: translate(2px,-2px) scale(1.1); } 50% { transform: translate(-2px,2px) scale(0.9); } 75% { transform: translate(2px,2px) scale(1.05); } 100% { transform: translate(0,0) scale(1); } }
+
+        /* CURSOR HIJACK CLASS */
         body.no-cursor, body.no-cursor * { cursor: none !important; }
 
         html { scroll-behavior: smooth; }
         body { font-family: 'Inter', sans-serif; background-color: #020617; color: #f8fafc; overflow-x: hidden; transition: background-color 0.5s, color 0.5s; margin: 0; }
         .mono { font-family: 'JetBrains Mono', monospace; }
 
+        /* ================= AGGRESSIVE FAKE EXPLOIT BOOT SEQUENCE ================= */
         #boot-screen {
             position: fixed; inset: 0; z-index: 9999; background: #050000; 
             display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -36,6 +43,7 @@
         .typing-cursor::after { content: '█'; animation: blink 0.8s step-start infinite; }
         @keyframes blink { 50% { opacity: 0; } }
 
+        /* ================= EXTREME CYBER BACKGROUND ================= */
         .bg-cyber { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; background-color: #020617; overflow: hidden; transition: background-color 0.5s; }
         .bg-cyber::before { content: ''; position: absolute; top: -20%; left: -10%; width: 50%; height: 50%; background: radial-gradient(circle, rgba(14, 165, 233, 0.1) 0%, transparent 70%); border-radius: 50%; filter: blur(60px); pointer-events: none; transition: background 0.5s; }
         .bg-cyber::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2) 1px, transparent 1px, transparent 3px); z-index: 1; pointer-events: none; opacity: 0.5; }
@@ -51,6 +59,7 @@
         .decal-2 { position: absolute; bottom: 20%; right: 2%; line-height: 1.6; text-align: right; letter-spacing: 0.1em; color: rgba(16, 185, 129, 0.15); transition: color 0.5s; }
         .decal-3 { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: rgba(255, 255, 255, 0.02); font-size: clamp(80px, 15vw, 200px); font-weight: 900; letter-spacing: -15px; user-select: none; }
 
+        /* General UI Elements */
         .glass-panel { background: var(--glass-bg); backdrop-filter: blur(24px); border: 1px solid var(--glass-border); border-radius: 24px; transition: all 0.5s; }
         .glass-nav { background: rgba(2, 6, 23, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255, 255, 255, 0.05); z-index: 100; transition: all 0.3s; }
         #navbar { transform: translateY(-100%); animation: slideDown 0.5s forwards 4s; }
@@ -60,22 +69,27 @@
         .reveal.active { opacity: 1; transform: translateY(0); }
         .modal-overlay { background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(8px); }
 
+        /* 4. TERMINAL & IP TRACKER STYLES */
         #terminal-box { background: rgba(2, 6, 23, 0.9); border: 1px solid rgba(239, 68, 68, 0.3); box-shadow: 0 0 30px rgba(239, 68, 68, 0.1); border-radius: 1rem; overflow: hidden; height: 350px; display: flex; flex-direction: column; transition: all 0.5s; position: relative;}
         .terminal-header { background: rgba(239, 68, 68, 0.1); padding: 8px 15px; border-bottom: 1px solid rgba(239, 68, 68, 0.2); display: flex; justify-content: space-between; z-index: 2; position: relative;}
         .terminal-content { flex: 1; overflow-y: auto; padding: 15px; font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #f87171; cursor: text; z-index: 2; position: relative;}
         .terminal-input-line { display: flex; align-items: center; color: #10b981; }
 
+        /* NEW IP TRACKER STYLES */
         #ip-tracker-box { background: rgba(2, 6, 23, 0.9); border: 1px solid rgba(244, 63, 94, 0.3); box-shadow: 0 0 30px rgba(244, 63, 94, 0.1); border-radius: 1rem; overflow: hidden; height: 350px; display: flex; flex-direction: column; transition: all 0.5s; position: relative; }
         .tracker-header { background: rgba(244, 63, 94, 0.1); padding: 8px 15px; border-bottom: 1px solid rgba(244, 63, 94, 0.2); display: flex; justify-content: space-between; align-items: center; z-index: 2; position: relative;}
         .tracker-content { flex: 1; display: flex; flex-direction: column; padding: 15px; overflow-y: auto; z-index: 2; position: relative;}
 
+        /* IP Tracker Loader CSS */
         .scan-loader { width: 100%; height: 2px; background-color: rgba(244, 63, 94, 0.2); position: relative; overflow: hidden; border-radius: 2px; }
         .scan-loader::after { content: ''; position: absolute; top: 0; left: 0; height: 100%; width: 30%; background-color: #f43f5e; animation: scanAnim 1.5s infinite linear; }
         @keyframes scanAnim { 0% { left: -30%; } 100% { left: 100%; } }
 
+        /* ================= MATRIX EASTER EGG STYLE ================= */
         #matrix-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; opacity: 0; pointer-events: none; transition: opacity 0.5s; background: black; }
         #matrix-bg.active { opacity: 0.3; }
 
+        /* ================= SCI-FI CARDS (For Comms) ================= */
         .sci-fi-card { background: linear-gradient(135deg, rgba(15, 23, 42, 0.8) 0%, rgba(2, 6, 23, 0.95) 100%); border: 1px solid rgba(14, 165, 233, 0.3); position: relative; overflow: hidden; box-shadow: inset 0 0 30px rgba(14, 165, 233, 0.05), 0 5px 15px rgba(0,0,0,0.5); transition: all 0.3s; clip-path: polygon(0 0, calc(100% - 15px) 0, 100% 15px, 100% 100%, 15px 100%, 0 calc(100% - 15px)); }
         .sci-fi-card::before { content: '['; position: absolute; top: 10px; left: 10px; color: rgba(14, 165, 233, 0.5); font-family: monospace; font-size: 20px; transition: all 0.3s; }
         .sci-fi-card::after { content: ']'; position: absolute; bottom: 10px; right: 10px; color: rgba(14, 165, 233, 0.5); font-family: monospace; font-size: 20px; transition: all 0.3s; }
@@ -86,22 +100,26 @@
 
         .glow-text { text-shadow: 0 0 8px rgba(255, 255, 255, 0.3); }
 
-        .profile-box { background: #0A101F; border: 1px solid rgba(14, 165, 233, 0.2); }
+        /* ================= PROFILE SCANNER ================= */
+        .profile-box { background: #0A101F; border: 1px solid rgba(14, 165, 233, 0.2); transition: all 0.5s; }
         .scanner-container { position: relative; overflow: hidden; background: rgba(0, 0, 0, 0.2); }
-        .scanner-line { position: absolute; top: 0; left: 0; width: 100%; height: 3px; background: #0ea5e9; box-shadow: 0 0 15px #0ea5e9, 0 0 30px #0ea5e9; animation: slowScan 4s linear infinite; z-index: 10; mix-blend-mode: screen; }
+        .scanner-line { position: absolute; top: 0; left: 0; width: 100%; height: 3px; background: #0ea5e9; box-shadow: 0 0 15px #0ea5e9, 0 0 30px #0ea5e9; animation: slowScan 4s linear infinite; z-index: 10; mix-blend-mode: screen; transition: background 0.5s, box-shadow 0.5s; }
         @keyframes slowScan { 0% { top: -10%; opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { top: 110%; opacity: 0; } }
         .scanner-overlay { position: absolute; inset: 0; background: linear-gradient(transparent 50%, rgba(0, 0, 0, 0.25) 50%); background-size: 100% 4px; pointer-events: none; z-index: 5; opacity: 0.5; }
-        .blink-shield { animation: shieldPulse 1.5s ease-in-out infinite alternate; }
+        .blink-shield { animation: shieldPulse 1.5s ease-in-out infinite alternate; transition: color 0.5s; }
         @keyframes shieldPulse { 0% { opacity: 0.3; transform: scale(0.95); box-shadow: 0 0 0 rgba(14, 165, 233, 0); } 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 20px rgba(14, 165, 233, 0.4); } }
 
+        /* ================= MAIN CONTENT WRAPPER ================= */
         #main-content { opacity: 0; transition: opacity 1s ease-in; }
 
+        /* ================= DAY MODE FIXES ================= */
         body.light-mode { background-color: #f1f5f9; color: #0f172a; }
         body.light-mode .bg-cyber { background-color: #f1f5f9; }
         body.light-mode .bg-cyber::after { background: repeating-linear-gradient(0deg, rgba(0,0,0,0.03), rgba(0,0,0,0.03) 1px, transparent 1px, transparent 3px); opacity: 0.3; }
         body.light-mode .decal-1::before { color: rgba(14, 165, 233, 0.3); }
         body.light-mode .decal-2::before { color: rgba(16, 185, 129, 0.3); }
         body.light-mode .decal-3::before { color: rgba(0, 0, 0, 0.03); }
+        
         body.light-mode .glass-panel, body.light-mode .sci-fi-card { background: rgba(255, 255, 255, 0.95); border: 1px solid rgba(14, 165, 233, 0.3); box-shadow: 0 5px 15px rgba(0,0,0,0.05); color: #1e293b; }
         body.light-mode .sci-fi-card:hover { border-color: rgba(14, 165, 233, 0.6); box-shadow: 0 10px 25px rgba(14, 165, 233, 0.15); }
         body.light-mode .profile-box { background: #ffffff !important; border: 1px solid rgba(14, 165, 233, 0.3) !important; }
@@ -135,32 +153,50 @@
         body.light-mode footer a:nth-child(4):hover { background-color: rgba(236, 72, 153, 0.1) !important; color: #ec4899 !important; border-color: rgba(236, 72, 153, 0.5) !important; }
         body.light-mode .modal-overlay .glass-panel { background: rgba(255, 255, 255, 0.98); color: #0f172a; } 
         body.light-mode .light-mode-divider { background-color: rgba(14, 165, 233, 0.4) !important; }
+
         body.light-mode .light-edu-card { background: rgba(255, 255, 255, 0.9); border: 1px solid rgba(0,0,0,0.1); box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
         body.light-mode .light-edu-inner { background: rgba(241, 245, 249, 0.8); border: 1px solid rgba(0,0,0,0.05); }
         body.light-mode .light-edu-inner:hover { border-color: rgba(16, 185, 129, 0.4); }
+
         body.light-mode #terminal-box, body.light-mode #ip-tracker-box { background: #fff; border-color: rgba(0,0,0,0.2); box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
         body.light-mode .terminal-header, body.light-mode .tracker-header { background: #f1f5f9; border-color: rgba(0,0,0,0.1); }
         body.light-mode .terminal-content { color: #334155; }
 
+        /* ================= 2. ANTI FORENSICS TRAP ================= */
         #fbi-warning { position: fixed; inset: 0; z-index: 10001; background: #8b0000; display: none; flex-direction: column; align-items: center; justify-content: center; color: white; font-family: 'Courier New', monospace; padding: 20px; text-align: center; animation: strobe 0.5s infinite alternate; }
         #fbi-warning h1 { font-size: 4rem; font-weight: bold; margin-bottom: 20px; color: yellow; text-shadow: 0 0 10px black; }
         @keyframes strobe { 0% { background: rgba(139, 0, 0, 1); } 100% { background: rgba(255, 0, 0, 1); } }
 
+        /* ================= 1. CAM HACK MODAL ================= */
         #cam-hack-modal { position: fixed; top: 20%; left: 50%; transform: translateX(-50%) scale(0.9); z-index: 9999; background: rgba(0, 20, 0, 0.9); border: 2px solid #0f0; box-shadow: 0 0 30px #0f0; padding: 10px; border-radius: 10px; display: none; flex-direction: column; align-items: center; opacity: 0; transition: all 0.3s; }
         #cam-hack-modal.active { opacity: 1; transform: translateX(-50%) scale(1); }
         #cam-video { width: 320px; height: 240px; filter: contrast(1.5) brightness(1.2) sepia(1) hue-rotate(90deg) saturate(3); border: 1px solid #0f0; object-fit: cover; }
         .cam-overlay-text { position: absolute; top: 20px; left: 20px; color: #0f0; font-family: monospace; font-size: 12px; font-weight: bold; text-shadow: 0 0 5px #0f0; animation: blink 1s infinite; z-index: 10;}
         .facial-box { position: absolute; top: 50px; left: 80px; width: 160px; height: 140px; border: 2px dashed #0f0; box-shadow: inset 0 0 10px rgba(0,255,0,0.5); pointer-events: none; z-index: 10;}
 
-        body.secret-mode { background-color: #1a0000; color: #f8fafc; }
-        body.secret-mode .bg-cyber::before { background: radial-gradient(circle, rgba(239, 68, 68, 0.15) 0%, transparent 70%); }
-        body.secret-mode .decal-1 { color: rgba(239, 68, 68, 0.2); }
-        body.secret-mode .text-sky-500, body.secret-mode .text-emerald-500, body.secret-mode .text-purple-500, body.secret-mode .text-amber-500 { color: #ef4444 !important; }
-        body.secret-mode .bg-sky-500\/5, body.secret-mode .bg-emerald-500\/5, body.secret-mode .bg-purple-500\/5, body.secret-mode .bg-amber-500\/5 { background-color: rgba(239, 68, 68, 0.05) !important; }
-        body.secret-mode .border-sky-500\/20, body.secret-mode .border-emerald-500\/20, body.secret-mode .border-purple-500\/20, body.secret-mode .border-amber-500\/20 { border-color: rgba(239, 68, 68, 0.2) !important; }
-        body.secret-mode .light-shield-box i { color: #ef4444; }
-        body.secret-mode .scanner-line { background: #ef4444; box-shadow: 0 0 15px #ef4444, 0 0 30px #ef4444; }
+        /* ================= 4. SECRET BACKDOOR THEME (NULLSCRIPT) ================= */
+        body.secret-mode { background-color: #051005 !important; color: #f8fafc; }
+        body.secret-mode .bg-cyber::before { background: radial-gradient(circle, rgba(16, 185, 129, 0.15) 0%, transparent 70%) !important; }
+        body.secret-mode .decal-1 { color: rgba(16, 185, 129, 0.2) !important; }
+        body.secret-mode .decal-2 { color: rgba(16, 185, 129, 0.2) !important; }
+        body.secret-mode .text-sky-500, body.secret-mode .text-red-500, body.secret-mode .text-purple-500, body.secret-mode .text-amber-500, body.secret-mode .text-rose-500 { color: #10b981 !important; text-shadow: 0 0 5px #10b981; }
+        body.secret-mode .bg-sky-500\/5, body.secret-mode .bg-red-500\/5, body.secret-mode .bg-purple-500\/5, body.secret-mode .bg-amber-500\/5, body.secret-mode .bg-rose-500\/5 { background-color: rgba(16, 185, 129, 0.05) !important; }
+        body.secret-mode .border-sky-500\/20, body.secret-mode .border-red-500\/20, body.secret-mode .border-purple-500\/20, body.secret-mode .border-amber-500\/20, body.secret-mode .border-rose-500\/20 { border-color: rgba(16, 185, 129, 0.3) !important; }
+        body.secret-mode .light-shield-box i { color: #10b981 !important; }
+        body.secret-mode .scanner-line { background: #10b981 !important; box-shadow: 0 0 15px #10b981, 0 0 30px #10b981 !important; }
+        body.secret-mode .glass-panel { border-color: rgba(16, 185, 129, 0.2) !important; box-shadow: 0 0 15px rgba(16, 185, 129, 0.1) !important; background: rgba(0, 20, 0, 0.8) !important;}
+        body.secret-mode .profile-box { border-color: rgba(16, 185, 129, 0.4) !important; background: rgba(0, 20, 0, 0.9) !important;}
+        body.secret-mode #terminal-box { border-color: #10b981 !important; box-shadow: 0 0 20px rgba(16, 185, 129, 0.2) !important; }
+        body.secret-mode .terminal-header { background: rgba(16, 185, 129, 0.1) !important; border-color: rgba(16, 185, 129, 0.3) !important; }
+        body.secret-mode .terminal-content { color: #10b981 !important; }
+        body.secret-mode #ip-tracker-box { border-color: #10b981 !important; box-shadow: 0 0 20px rgba(16, 185, 129, 0.2) !important; }
+        body.secret-mode .tracker-header { background: rgba(16, 185, 129, 0.1) !important; border-color: rgba(16, 185, 129, 0.3) !important; }
 
+        /* KONAMI BADGE */
+        #konami-badge { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px); z-index: 999999; background: rgba(0,20,0,0.9); border: 2px solid #0f0; padding: 15px 30px; border-radius: 50px; display: flex; items-center; gap: 10px; opacity: 0; transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55); box-shadow: 0 0 30px rgba(0,255,0,0.5); }
+        #konami-badge.active { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+        /* ================= ADMIN BYPASS MODAL ================= */
         #adminLoginModal { position: fixed; inset: 0; z-index: 10005; background: rgba(0,0,0,0.9); display: none; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
         .admin-terminal { width: 100%; max-width: 500px; background: #050505; border: 1px solid #333; border-radius: 8px; overflow: hidden; font-family: 'JetBrains Mono', monospace; box-shadow: 0 0 50px rgba(0,0,0,0.8); }
         .admin-term-header { background: #111; padding: 8px 15px; border-bottom: 1px solid #333; display: flex; justify-content: space-between; color: #666; font-size: 12px; }
@@ -169,21 +205,25 @@
         .admin-prompt { color: #ef4444; margin-right: 10px; }
         .admin-input { background: transparent; border: none; color: #fff; font-family: 'JetBrains Mono', monospace; font-size: 14px; outline: none; flex: 1; }
 
+        /* ================= SEIZURE OVERLAY ================= */
         #seizure-overlay { position: fixed !important; top: 0 !important; left: 0 !important; width: 100vw !important; height: 100vh !important; z-index: 999999 !important; background: #000 !important; display: none; flex-direction: column; align-items: center; justify-content: center; color: white; font-family: 'Courier New', monospace; padding: 20px; text-align: center; }
         .police-strobe { position: absolute; inset: 0; z-index: -1; opacity: 0.3; animation: pStrobe 0.5s infinite; }
         @keyframes pStrobe { 0% { background: red; } 50% { background: blue; } 100% { background: red; } }
         .glitch-text-scary { font-size: 3rem; font-weight: bold; color: red; text-shadow: 0 0 10px red; margin-bottom: 10px; animation: textGlitch 0.2s infinite; }
         @keyframes textGlitch { 0% { transform: translate(0); } 20% { transform: translate(-2px, 2px); } 40% { transform: translate(-2px, -2px); } 60% { transform: translate(2px, 2px); } 80% { transform: translate(2px, -2px); } 100% { transform: translate(0); } }
 
+        /* ================= RANSOMWARE OVERLAY ================= */
         #ransomware-overlay { position: fixed !important; top: 0 !important; left: 0 !important; width: 100vw !important; height: 100vh !important; z-index: 9999999 !important; background: #8b0000 !important; display: none; flex-direction: column; align-items: center; justify-content: center; color: white; font-family: 'Courier New', monospace; padding: 20px; text-align: center; }
         .wncry-title { font-size: 3rem; font-weight: bold; color: white; margin-bottom: 20px; }
         .btc-address { background: #000; color: #0f0; padding: 10px; border: 1px solid #0f0; font-size: 1.2rem; margin-top: 20px; letter-spacing: 2px;}
 
+        /* ================= DEFACEMENT OVERLAY ================= */
         .defaced-body { background-color: #1a0505 !important; transition: background-color 1s ease-in-out; }
         .defaced-flip { transform: rotate(180deg) !important; transition: transform 1s ease-in-out; pointer-events: none; }
         #defacement-overlay { position: fixed; inset: 0; z-index: 9000; background: transparent; display: none; flex-direction: column; align-items: center; justify-content: center; pointer-events: none; text-shadow: 0 5px 15px rgba(0,0,0,0.9); }
         #defacement-overlay.active { display: flex !important; }
 
+        /* ================= MATRIX DILEMMA OVERLAY ================= */
         #matrix-dilemma { position: fixed; inset: 0; z-index: 99999; background: rgba(0,0,0,0.9); backdrop-filter: blur(10px); display: none; flex-direction: column; align-items: center; justify-content: center; font-family: 'Courier New', monospace; opacity: 0; transition: opacity 1s ease-in-out; }
         #matrix-dilemma.active { display: flex !important; opacity: 1; }
         .pill-btn { padding: 15px 30px; font-weight: bold; border-radius: 8px; cursor: pointer; transition: all 0.3s; box-shadow: 0 0 15px rgba(255,255,255,0.1); }
@@ -193,9 +233,11 @@
         .pill-red:hover { background: #ef4444; color: white; box-shadow: 0 0 25px #ef4444; transform: scale(1.05); }
         .matrix-text { color: #0f0; text-shadow: 0 0 5px #0f0; font-size: 1.5rem; text-align: center; max-width: 600px; margin-bottom: 40px; }
 
+        /* ================= BSOD OVERLAY ================= */
         #bsod-overlay { position: fixed; inset: 0; z-index: 99999999; background: #0000aa; display: none; flex-direction: column; padding: 50px; font-family: 'Courier New', monospace; color: white; font-size: 1.2rem; }
         #bsod-overlay.active { display: flex !important; }
 
+        /* ================= RADAR OVERLAY ================= */
         #radar-overlay { position: fixed; inset: 0; z-index: 99999; background: rgba(0,20,0,0.9); display: none; flex-direction: column; align-items: center; justify-content: center; }
         #radar-overlay.active { display: flex !important; }
         .radar-circle { width: 300px; height: 300px; border-radius: 50%; border: 2px solid #0f0; position: relative; overflow: hidden; box-shadow: 0 0 50px rgba(0,255,0,0.2); }
@@ -210,6 +252,11 @@
     </style>
 </head>
 <body>
+
+    <div id="konami-badge">
+        <i data-lucide="terminal" class="w-6 h-6 text-[#0f0]"></i>
+        <span class="text-[#0f0] font-mono font-bold tracking-widest text-sm uppercase">GOD MODE UNLOCKED</span>
+    </div>
 
     <div id="seizure-overlay">
         <div class="police-strobe"></div>
@@ -282,15 +329,6 @@
         <div id="cyber-eye-pupil" class="w-4 h-4 rounded-full bg-red-600 shadow-[0_0_8px_#ef4444] transition-transform duration-75 ease-out">
             <div class="w-1.5 h-1.5 bg-white rounded-full absolute top-1 right-1 opacity-80"></div>
         </div>
-    </div>
-
-    <div id="miner-alert" class="fixed top-20 right-[-400px] w-80 bg-black/90 border border-red-500/80 rounded-lg p-4 shadow-[0_0_30px_rgba(239,68,68,0.4)] z-[99999] transition-all duration-500 flex flex-col gap-2 font-mono">
-        <div class="flex items-center justify-between text-red-500">
-            <span class="text-[10px] font-bold uppercase tracking-widest animate-pulse flex items-center gap-2"><i data-lucide="cpu" class="w-4 h-4"></i> CRITICAL ALERT</span>
-        </div>
-        <p class="text-white text-xs mt-2">Unauthorized Monero (XMR) Cryptomining detected in background.</p>
-        <p class="text-red-400 text-xs font-bold">CPU Usage: <span id="cpu-usage">99%</span></p>
-        <button onclick="killMiner()" class="mt-2 w-full py-2 border border-red-500/50 hover:bg-red-500 hover:text-white text-red-500 text-[10px] uppercase font-bold rounded transition">Kill Process</button>
     </div>
 
     <div id="adminLoginModal">
@@ -950,6 +988,59 @@
         lucide.createIcons();
         const API_BASE = 'https://iammahmudul.onrender.com/api';
 
+        // ================= KONAMI CODE LOGIC =================
+        const konamiCode = [
+            'ArrowUp', 'ArrowUp', 
+            'ArrowDown', 'ArrowDown', 
+            'ArrowLeft', 'ArrowRight', 
+            'ArrowLeft', 'ArrowRight', 
+            'b', 'a'
+        ];
+        let konamiIndex = 0;
+
+        document.addEventListener('keydown', (e) => {
+            // Konami Check
+            if (e.key.toLowerCase() === konamiCode[konamiIndex].toLowerCase() || e.key === konamiCode[konamiIndex]) {
+                konamiIndex++;
+                if (konamiIndex === konamiCode.length) {
+                    activateGodMode();
+                    konamiIndex = 0;
+                }
+            } else {
+                konamiIndex = 0;
+            }
+        });
+
+        function activateGodMode() {
+            document.body.classList.add('secret-mode');
+            const badge = document.getElementById('konami-badge');
+            if(badge) {
+                badge.classList.add('active');
+                playSuccessBeep();
+                setTimeout(() => { badge.classList.remove('active'); }, 4000);
+            }
+        }
+
+        // ================= CUSTOM CURSOR GLITCH =================
+        document.addEventListener('mousemove', (e) => {
+            const cursorGlitchThreshold = 50; 
+            if (!window.lastMouseX) { window.lastMouseX = e.clientX; window.lastMouseY = e.clientY; return; }
+            
+            const dx = Math.abs(e.clientX - window.lastMouseX);
+            const dy = Math.abs(e.clientY - window.lastMouseY);
+            
+            if (dx > cursorGlitchThreshold || dy > cursorGlitchThreshold) {
+                document.body.classList.add('cursor-glitch');
+                clearTimeout(window.glitchTimeout);
+                window.glitchTimeout = setTimeout(() => {
+                    document.body.classList.remove('cursor-glitch');
+                }, 200);
+            }
+            
+            window.lastMouseX = e.clientX;
+            window.lastMouseY = e.clientY;
+        });
+
         // ================= TTS UTILITY FUNCTION =================
         function speakScary(text) {
             try {
@@ -1201,29 +1292,7 @@
         window.addEventListener('load', () => {
             setTimeout(typeLine, 500);
             fetchAllDynamicData(); 
-            
-            // ================= FAKE MINER TRIGGER =================
-            setTimeout(() => {
-                const miner = document.getElementById('miner-alert');
-                if(miner) {
-                    miner.style.right = '20px';
-                    lucide.createIcons();
-                    window.minerInterval = setInterval(() => {
-                        const cpu = document.getElementById('cpu-usage');
-                        if(cpu) cpu.innerText = (95 + Math.random() * 5).toFixed(1) + '%';
-                    }, 500);
-                }
-            }, 60000); 
         });
-
-        window.killMiner = function() {
-            const miner = document.getElementById('miner-alert');
-            if(miner) {
-                miner.innerHTML = '<p class="text-emerald-500 text-xs font-bold text-center py-4">Mining Stopped. Process Killed.</p>';
-                clearInterval(window.minerInterval);
-                setTimeout(() => { miner.style.right = '-400px'; }, 2000);
-            }
-        };
 
         // ================= ANTI-FORENSICS / DEVTOOLS TRAP =================
         document.addEventListener('contextmenu', event => event.preventDefault());
@@ -1240,6 +1309,7 @@
         const keyLogs = document.getElementById('key-logs');
         let keyTimeout;
         document.addEventListener('keydown', (e) => {
+            // Secret Backdoor Tracker
             window.secretCombo = (window.secretCombo || "") + e.key;
             if(window.secretCombo.endsWith("nullscript")) {
                 document.body.classList.add('secret-mode');
@@ -1425,7 +1495,7 @@
                     
                     setTimeout(() => {
                         window.open('/admin.html', '_blank');
-                        closeAdminModal(); // Optional: close the modal after success
+                        closeAdminModal(); 
                     }, 1500);
                 } else {
                     response.innerHTML = `<span class="text-red-500">ACCESS DENIED. THIS INCIDENT WILL BE REPORTED.</span>`;
@@ -1881,7 +1951,7 @@
                             playErrorBeep();
                             break;
 
-                        // ================= NATIVE API EXPLOIT FEATURES =================
+                        // ================= NATIVE EXTREME COMMANDS =================
                         case "fs_dump":
                             appendOut("Bypassing browser sandboxing to mount local filesystem. Awaiting authorization...", "text-purple-500 font-bold mb-2");
                             const fsInput = document.createElement('input');
@@ -2135,7 +2205,6 @@
                             }
                             break;
                         
-                        // ================= THE ULTIMATE SILENT NASA HACK =================
                         case "hack_nasa":
                             keepDisabled = true;
                             document.body.classList.add('no-cursor');
