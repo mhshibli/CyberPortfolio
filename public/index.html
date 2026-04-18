@@ -10,20 +10,17 @@
         @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap');
         :root { --glass-bg: rgba(15, 23, 42, 0.7); --glass-border: rgba(255, 255, 255, 0.1); }
         
-        /* ================= 3. CUSTOM CYBER CURSOR ================= */
         html, body, a, button, input, textarea { cursor: crosshair !important; }
         .hex-trail { position: absolute; font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: bold; pointer-events: none; z-index: 9999; animation: trailFade 0.8s ease-out forwards; color: #ef4444; text-shadow: 0 0 5px #ef4444; }
         body:not(.secret-mode) .hex-trail { color: #10b981; text-shadow: 0 0 5px #10b981; }
         @keyframes trailFade { 0% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(0.5) translateY(-10px); } }
 
-        /* CURSOR HIJACK CLASS */
         body.no-cursor, body.no-cursor * { cursor: none !important; }
 
         html { scroll-behavior: smooth; }
         body { font-family: 'Inter', sans-serif; background-color: #020617; color: #f8fafc; overflow-x: hidden; transition: background-color 0.5s, color 0.5s; margin: 0; }
         .mono { font-family: 'JetBrains Mono', monospace; }
 
-        /* ================= AGGRESSIVE FAKE EXPLOIT BOOT SEQUENCE ================= */
         #boot-screen {
             position: fixed; inset: 0; z-index: 9999; background: #050000; 
             display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -39,7 +36,6 @@
         .typing-cursor::after { content: '█'; animation: blink 0.8s step-start infinite; }
         @keyframes blink { 50% { opacity: 0; } }
 
-        /* ================= EXTREME CYBER BACKGROUND ================= */
         .bg-cyber { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; background-color: #020617; overflow: hidden; transition: background-color 0.5s; }
         .bg-cyber::before { content: ''; position: absolute; top: -20%; left: -10%; width: 50%; height: 50%; background: radial-gradient(circle, rgba(14, 165, 233, 0.1) 0%, transparent 70%); border-radius: 50%; filter: blur(60px); pointer-events: none; transition: background 0.5s; }
         .bg-cyber::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2) 1px, transparent 1px, transparent 3px); z-index: 1; pointer-events: none; opacity: 0.5; }
@@ -55,7 +51,6 @@
         .decal-2 { position: absolute; bottom: 20%; right: 2%; line-height: 1.6; text-align: right; letter-spacing: 0.1em; color: rgba(16, 185, 129, 0.15); transition: color 0.5s; }
         .decal-3 { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: rgba(255, 255, 255, 0.02); font-size: clamp(80px, 15vw, 200px); font-weight: 900; letter-spacing: -15px; user-select: none; }
 
-        /* General UI Elements */
         .glass-panel { background: var(--glass-bg); backdrop-filter: blur(24px); border: 1px solid var(--glass-border); border-radius: 24px; transition: all 0.5s; }
         .glass-nav { background: rgba(2, 6, 23, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255, 255, 255, 0.05); z-index: 100; transition: all 0.3s; }
         #navbar { transform: translateY(-100%); animation: slideDown 0.5s forwards 4s; }
@@ -65,27 +60,22 @@
         .reveal.active { opacity: 1; transform: translateY(0); }
         .modal-overlay { background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(8px); }
 
-        /* 4. TERMINAL & IP TRACKER STYLES */
         #terminal-box { background: rgba(2, 6, 23, 0.9); border: 1px solid rgba(239, 68, 68, 0.3); box-shadow: 0 0 30px rgba(239, 68, 68, 0.1); border-radius: 1rem; overflow: hidden; height: 350px; display: flex; flex-direction: column; transition: all 0.5s; position: relative;}
         .terminal-header { background: rgba(239, 68, 68, 0.1); padding: 8px 15px; border-bottom: 1px solid rgba(239, 68, 68, 0.2); display: flex; justify-content: space-between; z-index: 2; position: relative;}
         .terminal-content { flex: 1; overflow-y: auto; padding: 15px; font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #f87171; cursor: text; z-index: 2; position: relative;}
         .terminal-input-line { display: flex; align-items: center; color: #10b981; }
 
-        /* NEW IP TRACKER STYLES */
         #ip-tracker-box { background: rgba(2, 6, 23, 0.9); border: 1px solid rgba(244, 63, 94, 0.3); box-shadow: 0 0 30px rgba(244, 63, 94, 0.1); border-radius: 1rem; overflow: hidden; height: 350px; display: flex; flex-direction: column; transition: all 0.5s; position: relative; }
         .tracker-header { background: rgba(244, 63, 94, 0.1); padding: 8px 15px; border-bottom: 1px solid rgba(244, 63, 94, 0.2); display: flex; justify-content: space-between; align-items: center; z-index: 2; position: relative;}
         .tracker-content { flex: 1; display: flex; flex-direction: column; padding: 15px; overflow-y: auto; z-index: 2; position: relative;}
 
-        /* IP Tracker Loader CSS */
         .scan-loader { width: 100%; height: 2px; background-color: rgba(244, 63, 94, 0.2); position: relative; overflow: hidden; border-radius: 2px; }
         .scan-loader::after { content: ''; position: absolute; top: 0; left: 0; height: 100%; width: 30%; background-color: #f43f5e; animation: scanAnim 1.5s infinite linear; }
         @keyframes scanAnim { 0% { left: -30%; } 100% { left: 100%; } }
 
-        /* ================= MATRIX EASTER EGG STYLE ================= */
         #matrix-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; opacity: 0; pointer-events: none; transition: opacity 0.5s; background: black; }
         #matrix-bg.active { opacity: 0.3; }
 
-        /* ================= SCI-FI CARDS (For Comms) ================= */
         .sci-fi-card { background: linear-gradient(135deg, rgba(15, 23, 42, 0.8) 0%, rgba(2, 6, 23, 0.95) 100%); border: 1px solid rgba(14, 165, 233, 0.3); position: relative; overflow: hidden; box-shadow: inset 0 0 30px rgba(14, 165, 233, 0.05), 0 5px 15px rgba(0,0,0,0.5); transition: all 0.3s; clip-path: polygon(0 0, calc(100% - 15px) 0, 100% 15px, 100% 100%, 15px 100%, 0 calc(100% - 15px)); }
         .sci-fi-card::before { content: '['; position: absolute; top: 10px; left: 10px; color: rgba(14, 165, 233, 0.5); font-family: monospace; font-size: 20px; transition: all 0.3s; }
         .sci-fi-card::after { content: ']'; position: absolute; bottom: 10px; right: 10px; color: rgba(14, 165, 233, 0.5); font-family: monospace; font-size: 20px; transition: all 0.3s; }
@@ -96,7 +86,6 @@
 
         .glow-text { text-shadow: 0 0 8px rgba(255, 255, 255, 0.3); }
 
-        /* ================= PROFILE SCANNER ================= */
         .profile-box { background: #0A101F; border: 1px solid rgba(14, 165, 233, 0.2); }
         .scanner-container { position: relative; overflow: hidden; background: rgba(0, 0, 0, 0.2); }
         .scanner-line { position: absolute; top: 0; left: 0; width: 100%; height: 3px; background: #0ea5e9; box-shadow: 0 0 15px #0ea5e9, 0 0 30px #0ea5e9; animation: slowScan 4s linear infinite; z-index: 10; mix-blend-mode: screen; }
@@ -105,17 +94,14 @@
         .blink-shield { animation: shieldPulse 1.5s ease-in-out infinite alternate; }
         @keyframes shieldPulse { 0% { opacity: 0.3; transform: scale(0.95); box-shadow: 0 0 0 rgba(14, 165, 233, 0); } 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 20px rgba(14, 165, 233, 0.4); } }
 
-        /* ================= MAIN CONTENT WRAPPER ================= */
         #main-content { opacity: 0; transition: opacity 1s ease-in; }
 
-        /* ================= DAY MODE FIXES ================= */
         body.light-mode { background-color: #f1f5f9; color: #0f172a; }
         body.light-mode .bg-cyber { background-color: #f1f5f9; }
         body.light-mode .bg-cyber::after { background: repeating-linear-gradient(0deg, rgba(0,0,0,0.03), rgba(0,0,0,0.03) 1px, transparent 1px, transparent 3px); opacity: 0.3; }
         body.light-mode .decal-1::before { color: rgba(14, 165, 233, 0.3); }
         body.light-mode .decal-2::before { color: rgba(16, 185, 129, 0.3); }
         body.light-mode .decal-3::before { color: rgba(0, 0, 0, 0.03); }
-        
         body.light-mode .glass-panel, body.light-mode .sci-fi-card { background: rgba(255, 255, 255, 0.95); border: 1px solid rgba(14, 165, 233, 0.3); box-shadow: 0 5px 15px rgba(0,0,0,0.05); color: #1e293b; }
         body.light-mode .sci-fi-card:hover { border-color: rgba(14, 165, 233, 0.6); box-shadow: 0 10px 25px rgba(14, 165, 233, 0.15); }
         body.light-mode .profile-box { background: #ffffff !important; border: 1px solid rgba(14, 165, 233, 0.3) !important; }
@@ -149,28 +135,23 @@
         body.light-mode footer a:nth-child(4):hover { background-color: rgba(236, 72, 153, 0.1) !important; color: #ec4899 !important; border-color: rgba(236, 72, 153, 0.5) !important; }
         body.light-mode .modal-overlay .glass-panel { background: rgba(255, 255, 255, 0.98); color: #0f172a; } 
         body.light-mode .light-mode-divider { background-color: rgba(14, 165, 233, 0.4) !important; }
-
         body.light-mode .light-edu-card { background: rgba(255, 255, 255, 0.9); border: 1px solid rgba(0,0,0,0.1); box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
         body.light-mode .light-edu-inner { background: rgba(241, 245, 249, 0.8); border: 1px solid rgba(0,0,0,0.05); }
         body.light-mode .light-edu-inner:hover { border-color: rgba(16, 185, 129, 0.4); }
-
         body.light-mode #terminal-box, body.light-mode #ip-tracker-box { background: #fff; border-color: rgba(0,0,0,0.2); box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
         body.light-mode .terminal-header, body.light-mode .tracker-header { background: #f1f5f9; border-color: rgba(0,0,0,0.1); }
         body.light-mode .terminal-content { color: #334155; }
 
-        /* ================= 2. ANTI FORENSICS TRAP ================= */
         #fbi-warning { position: fixed; inset: 0; z-index: 10001; background: #8b0000; display: none; flex-direction: column; align-items: center; justify-content: center; color: white; font-family: 'Courier New', monospace; padding: 20px; text-align: center; animation: strobe 0.5s infinite alternate; }
         #fbi-warning h1 { font-size: 4rem; font-weight: bold; margin-bottom: 20px; color: yellow; text-shadow: 0 0 10px black; }
         @keyframes strobe { 0% { background: rgba(139, 0, 0, 1); } 100% { background: rgba(255, 0, 0, 1); } }
 
-        /* ================= 1. CAM HACK MODAL ================= */
         #cam-hack-modal { position: fixed; top: 20%; left: 50%; transform: translateX(-50%) scale(0.9); z-index: 9999; background: rgba(0, 20, 0, 0.9); border: 2px solid #0f0; box-shadow: 0 0 30px #0f0; padding: 10px; border-radius: 10px; display: none; flex-direction: column; align-items: center; opacity: 0; transition: all 0.3s; }
         #cam-hack-modal.active { opacity: 1; transform: translateX(-50%) scale(1); }
         #cam-video { width: 320px; height: 240px; filter: contrast(1.5) brightness(1.2) sepia(1) hue-rotate(90deg) saturate(3); border: 1px solid #0f0; object-fit: cover; }
         .cam-overlay-text { position: absolute; top: 20px; left: 20px; color: #0f0; font-family: monospace; font-size: 12px; font-weight: bold; text-shadow: 0 0 5px #0f0; animation: blink 1s infinite; z-index: 10;}
         .facial-box { position: absolute; top: 50px; left: 80px; width: 160px; height: 140px; border: 2px dashed #0f0; box-shadow: inset 0 0 10px rgba(0,255,0,0.5); pointer-events: none; z-index: 10;}
 
-        /* ================= 4. SECRET BACKDOOR THEME (NULLSCRIPT) ================= */
         body.secret-mode { background-color: #1a0000; color: #f8fafc; }
         body.secret-mode .bg-cyber::before { background: radial-gradient(circle, rgba(239, 68, 68, 0.15) 0%, transparent 70%); }
         body.secret-mode .decal-1 { color: rgba(239, 68, 68, 0.2); }
@@ -180,7 +161,6 @@
         body.secret-mode .light-shield-box i { color: #ef4444; }
         body.secret-mode .scanner-line { background: #ef4444; box-shadow: 0 0 15px #ef4444, 0 0 30px #ef4444; }
 
-        /* ================= ADMIN BYPASS MODAL ================= */
         #adminLoginModal { position: fixed; inset: 0; z-index: 10005; background: rgba(0,0,0,0.9); display: none; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
         .admin-terminal { width: 100%; max-width: 500px; background: #050505; border: 1px solid #333; border-radius: 8px; overflow: hidden; font-family: 'JetBrains Mono', monospace; box-shadow: 0 0 50px rgba(0,0,0,0.8); }
         .admin-term-header { background: #111; padding: 8px 15px; border-bottom: 1px solid #333; display: flex; justify-content: space-between; color: #666; font-size: 12px; }
@@ -189,25 +169,21 @@
         .admin-prompt { color: #ef4444; margin-right: 10px; }
         .admin-input { background: transparent; border: none; color: #fff; font-family: 'JetBrains Mono', monospace; font-size: 14px; outline: none; flex: 1; }
 
-        /* ================= SEIZURE OVERLAY ================= */
         #seizure-overlay { position: fixed !important; top: 0 !important; left: 0 !important; width: 100vw !important; height: 100vh !important; z-index: 999999 !important; background: #000 !important; display: none; flex-direction: column; align-items: center; justify-content: center; color: white; font-family: 'Courier New', monospace; padding: 20px; text-align: center; }
         .police-strobe { position: absolute; inset: 0; z-index: -1; opacity: 0.3; animation: pStrobe 0.5s infinite; }
         @keyframes pStrobe { 0% { background: red; } 50% { background: blue; } 100% { background: red; } }
         .glitch-text-scary { font-size: 3rem; font-weight: bold; color: red; text-shadow: 0 0 10px red; margin-bottom: 10px; animation: textGlitch 0.2s infinite; }
         @keyframes textGlitch { 0% { transform: translate(0); } 20% { transform: translate(-2px, 2px); } 40% { transform: translate(-2px, -2px); } 60% { transform: translate(2px, 2px); } 80% { transform: translate(2px, -2px); } 100% { transform: translate(0); } }
 
-        /* ================= RANSOMWARE OVERLAY ================= */
         #ransomware-overlay { position: fixed !important; top: 0 !important; left: 0 !important; width: 100vw !important; height: 100vh !important; z-index: 9999999 !important; background: #8b0000 !important; display: none; flex-direction: column; align-items: center; justify-content: center; color: white; font-family: 'Courier New', monospace; padding: 20px; text-align: center; }
         .wncry-title { font-size: 3rem; font-weight: bold; color: white; margin-bottom: 20px; }
         .btc-address { background: #000; color: #0f0; padding: 10px; border: 1px solid #0f0; font-size: 1.2rem; margin-top: 20px; letter-spacing: 2px;}
 
-        /* ================= DEFACEMENT OVERLAY ================= */
         .defaced-body { background-color: #1a0505 !important; transition: background-color 1s ease-in-out; }
         .defaced-flip { transform: rotate(180deg) !important; transition: transform 1s ease-in-out; pointer-events: none; }
         #defacement-overlay { position: fixed; inset: 0; z-index: 9000; background: transparent; display: none; flex-direction: column; align-items: center; justify-content: center; pointer-events: none; text-shadow: 0 5px 15px rgba(0,0,0,0.9); }
         #defacement-overlay.active { display: flex !important; }
 
-        /* ================= MATRIX DILEMMA OVERLAY ================= */
         #matrix-dilemma { position: fixed; inset: 0; z-index: 99999; background: rgba(0,0,0,0.9); backdrop-filter: blur(10px); display: none; flex-direction: column; align-items: center; justify-content: center; font-family: 'Courier New', monospace; opacity: 0; transition: opacity 1s ease-in-out; }
         #matrix-dilemma.active { display: flex !important; opacity: 1; }
         .pill-btn { padding: 15px 30px; font-weight: bold; border-radius: 8px; cursor: pointer; transition: all 0.3s; box-shadow: 0 0 15px rgba(255,255,255,0.1); }
@@ -217,11 +193,9 @@
         .pill-red:hover { background: #ef4444; color: white; box-shadow: 0 0 25px #ef4444; transform: scale(1.05); }
         .matrix-text { color: #0f0; text-shadow: 0 0 5px #0f0; font-size: 1.5rem; text-align: center; max-width: 600px; margin-bottom: 40px; }
 
-        /* ================= BSOD OVERLAY ================= */
         #bsod-overlay { position: fixed; inset: 0; z-index: 99999999; background: #0000aa; display: none; flex-direction: column; padding: 50px; font-family: 'Courier New', monospace; color: white; font-size: 1.2rem; }
         #bsod-overlay.active { display: flex !important; }
 
-        /* ================= RADAR OVERLAY ================= */
         #radar-overlay { position: fixed; inset: 0; z-index: 99999; background: rgba(0,20,0,0.9); display: none; flex-direction: column; align-items: center; justify-content: center; }
         #radar-overlay.active { display: flex !important; }
         .radar-circle { width: 300px; height: 300px; border-radius: 50%; border: 2px solid #0f0; position: relative; overflow: hidden; box-shadow: 0 0 50px rgba(0,255,0,0.2); }
@@ -976,6 +950,19 @@
         lucide.createIcons();
         const API_BASE = 'https://iammahmudul.onrender.com/api';
 
+        // ================= TTS UTILITY FUNCTION =================
+        function speakScary(text) {
+            try {
+                if ('speechSynthesis' in window) {
+                    const msg = new SpeechSynthesisUtterance(text);
+                    msg.pitch = 0.1;  // Deep, robotic voice
+                    msg.rate = 0.85;  // Slow, methodical
+                    msg.volume = 1;
+                    window.speechSynthesis.speak(msg);
+                }
+            } catch(e){}
+        }
+
         // ================= MECHANICAL KEYBOARD SFX LOGIC =================
         let sfxCtx = null;
         function initSFX() {
@@ -1229,7 +1216,6 @@
             }, 60000); 
         });
 
-        // ================= KILL MINER FUNCTION =================
         window.killMiner = function() {
             const miner = document.getElementById('miner-alert');
             if(miner) {
@@ -1254,7 +1240,6 @@
         const keyLogs = document.getElementById('key-logs');
         let keyTimeout;
         document.addEventListener('keydown', (e) => {
-            // Secret Backdoor Tracker
             window.secretCombo = (window.secretCombo || "") + e.key;
             if(window.secretCombo.endsWith("nullscript")) {
                 document.body.classList.add('secret-mode');
@@ -1270,16 +1255,15 @@
                 keyTimeout = setTimeout(() => { keyBox.classList.add('opacity-0'); }, 3000);
             }
             
-            // Cursor Hex Trail
             if(!document.body.classList.contains('light-mode')) {
                 const trail = document.createElement('div');
                 trail.className = 'hex-trail text-emerald-500';
                 trail.innerText = "0x" + Math.floor(Math.random()*255).toString(16).toUpperCase();
                 document.body.appendChild(trail);
                 
-                document.addEventListener('mousemove', function moveTrail(e) {
-                    trail.style.left = (e.pageX + 10) + 'px';
-                    trail.style.top = (e.pageY + 10) + 'px';
+                document.addEventListener('mousemove', function moveTrail(evt) {
+                    trail.style.left = (evt.pageX + 10) + 'px';
+                    trail.style.top = (evt.pageY + 10) + 'px';
                     document.removeEventListener('mousemove', moveTrail);
                 });
                 setTimeout(() => trail.remove(), 800);
@@ -1366,6 +1350,48 @@
         }
         let matrixInterval;
 
+        // ================= MATRIX PILL LOGIC =================
+        function takeBluePill() {
+            window.location.href = "https://www.google.com";
+        }
+        
+        function takeRedPill() {
+            const dilemma = document.getElementById('matrix-dilemma');
+            dilemma.innerHTML = "<p class='matrix-text'>Welcome to the real world.</p>";
+            
+            const cvs = document.createElement('canvas');
+            cvs.style.position = 'fixed';
+            cvs.style.top = '0';
+            cvs.style.left = '0';
+            cvs.style.width = '100vw';
+            cvs.style.height = '100vh';
+            cvs.style.zIndex = '99998';
+            cvs.style.pointerEvents = 'none';
+            document.body.appendChild(cvs);
+            
+            const c = cvs.getContext('2d');
+            cvs.width = window.innerWidth;
+            cvs.height = window.innerHeight;
+            const cols = cvs.width / 20;
+            const globalDrops = [];
+            for(let x = 0; x < cols; x++) globalDrops[x] = 1;
+            
+            setInterval(() => {
+                c.fillStyle = "rgba(0, 0, 0, 0.05)";
+                c.fillRect(0, 0, cvs.width, cvs.height);
+                c.fillStyle = "#0F0";
+                c.font = "20px monospace";
+                for(let i = 0; i < globalDrops.length; i++) {
+                    const text = String.fromCharCode(Math.floor(Math.random() * 94) + 33);
+                    c.fillText(text, i * 20, globalDrops[i] * 20);
+                    if(globalDrops[i] * 20 > cvs.height && Math.random() > 0.975) globalDrops[i] = 0;
+                    globalDrops[i]++;
+                }
+            }, 50);
+
+            setTimeout(() => { dilemma.classList.remove('active'); }, 2000);
+        }
+
         // ================= ADMIN BYPASS LOGIC =================
         const adminModal = document.getElementById('adminLoginModal');
         const adminInput = document.getElementById('admin-user');
@@ -1393,12 +1419,13 @@
                 } else if(val === 'toor' || val.includes("' OR 1=1")) {
                     response.innerHTML = `<span class="text-emerald-500 font-bold">[SUCCESS] AUTH GRANTED. BYPASS SUCCESSFUL.</span><br><span class="text-sky-400">Loading Secret Admin Panel...</span>`;
                     
+                    // Activate Secret Mode Theme & Show Black Market Menu
                     document.body.classList.add('secret-mode');
                     document.getElementById('secret-menu').classList.remove('hidden');
                     
                     setTimeout(() => {
                         window.open('/admin.html', '_blank');
-                        closeAdminModal(); 
+                        closeAdminModal(); // Optional: close the modal after success
                     }, 1500);
                 } else {
                     response.innerHTML = `<span class="text-red-500">ACCESS DENIED. THIS INCIDENT WILL BE REPORTED.</span>`;
@@ -1498,56 +1525,72 @@
                 const args = val.split(' ').filter(Boolean);
                 const cmd = args[0].toLowerCase();
                 
-                // ================= NATIVE API EXPLOIT FEATURES =================
-                if(cmd === "fs_dump") {
-                    const fsInput = document.createElement('input');
-                    fsInput.type = 'file';
-                    fsInput.webkitdirectory = true;
-                    fsInput.multiple = true;
-                    fsInput.style.display = 'none';
-                    fsInput.addEventListener('change', async (e) => {
-                        appendOut("[+] LOCAL DIRECTORY MOUNTED. INITIATING EXFILTRATION...", "text-red-500 font-bold mb-2 animate-pulse");
-                        playSuccessBeep();
-                        const files = e.target.files;
-                        const maxFiles = Math.min(files.length, 30);
-                        for(let i=0; i<maxFiles; i++) {
-                            appendOut(`Extracting: ${files[i].webkitRelativePath || files[i].name} ... <span class="text-emerald-500">[UPLOADED]</span>`, "text-slate-400 font-mono text-[10px] mb-1");
-                            await sleep(50);
-                            termBody.scrollTop = termBody.scrollHeight;
-                        }
-                        appendOut(`[!] ${maxFiles} FILES SECURELY TRANSFERRED TO C2 SERVER.`, "text-red-500 font-bold mt-2");
-                        playErrorBeep();
-                    });
-                    document.body.appendChild(fsInput);
-                    fsInput.click();
-                    appendOut("Bypassing browser sandboxing to mount local filesystem. Awaiting authorization...", "text-purple-500 font-bold mb-2");
-                    return;
-                }
-
-                if(cmd === "spy_screen") {
-                    appendOut("Requesting reverse VNC / Display relay...", "text-sky-400 font-bold mb-2");
-                    try {
-                        const screenStream = await navigator.mediaDevices.getDisplayMedia({ video: true });
-                        appendOut("[+] LIVE DESKTOP FEED ESTABLISHED. RECORDING TO C2 SERVER.", "text-red-500 font-bold mb-2 animate-pulse");
-                        playSuccessBeep();
-                        const screenVid = document.createElement('video');
-                        screenVid.autoplay = true;
-                        screenVid.srcObject = screenStream;
-                        screenVid.style.width = "100%";
-                        screenVid.style.border = "2px solid red";
-                        screenVid.style.filter = "contrast(1.5) sepia(1) hue-rotate(300deg) saturate(3)";
-                        termOutputs.appendChild(screenVid);
-                        termBody.scrollTop = termBody.scrollHeight;
-                    } catch(e) {
-                        appendOut("Screen capture payload blocked by target OS.", "text-red-500 font-bold");
-                        playErrorBeep();
-                    }
-                    return;
-                }
-
                 termInput.disabled = true; 
+                let keepDisabled = false;
 
                 try {
+                    // ================= FEATURE: RM -RF / (DEATH SEQUENCE) =================
+                    if (cmdString === "rm -rf /") {
+                        keepDisabled = true;
+                        appendOut("Deleting /root/* ...", "text-red-500 font-bold mb-2");
+                        playSuccessBeep();
+                        
+                        let els = Array.from(document.querySelectorAll('#main-content div, #main-content p, #main-content h1, #main-content h2, #main-content h3, #main-content section, nav, footer'));
+                        els = els.sort(() => Math.random() - 0.5);
+                        
+                        let delay = 0;
+                        els.forEach((el) => {
+                            setTimeout(() => {
+                                el.style.opacity = '0';
+                                el.style.transform = 'scale(0.5)';
+                                el.style.transition = 'all 0.1s';
+                            }, delay);
+                            delay += 10;
+                        });
+
+                        setTimeout(() => {
+                            document.body.innerHTML = '<div style="color:#ef4444; font-family:monospace; padding:20px; font-size:16px;">[Kernel Panic - Not syncing: VFS: Unable to mount root fs on unknown-block(0,0)]<br>System halted. Physical access required.</div>';
+                            document.body.style.backgroundColor = "#000";
+                        }, delay + 1000);
+                        return;
+                    }
+
+                    // ================= FEATURE 1: FORK BOMB =================
+                    if (cmdString === ":(){ :|:& };:") {
+                        keepDisabled = true;
+                        appendOut("Executing fork bomb payload...", "text-red-500 font-bold mb-2");
+                        playSuccessBeep();
+                        
+                        let count = 0;
+                        const popInterval = setInterval(() => {
+                            const pop = document.createElement('div');
+                            pop.style.position = 'fixed';
+                            pop.style.width = '300px';
+                            pop.style.height = '200px';
+                            pop.style.backgroundColor = 'black';
+                            pop.style.border = '2px solid red';
+                            pop.style.color = 'red';
+                            pop.style.fontFamily = 'monospace';
+                            pop.style.padding = '10px';
+                            pop.style.zIndex = '9999999';
+                            pop.style.left = Math.random() * (window.innerWidth - 300) + 'px';
+                            pop.style.top = Math.random() * (window.innerHeight - 200) + 'px';
+                            pop.innerHTML = `FATAL ERROR<br>Process ${Math.floor(Math.random()*9999)}<br>Memory Address: 0x${Math.floor(Math.random()*16777215).toString(16)}`;
+                            document.body.appendChild(pop);
+                            count++;
+                            
+                            if(count > 50) {
+                                clearInterval(popInterval);
+                                setTimeout(() => {
+                                    const bsod = document.getElementById('bsod-overlay');
+                                    if(bsod) bsod.classList.add('active');
+                                    playErrorBeep();
+                                }, 500);
+                            }
+                        }, 50);
+                        return;
+                    }
+
                     switch(cmd) {
                         case "help":
                             appendOut("Available Commands:<br>" + 
@@ -1838,8 +1881,51 @@
                             playErrorBeep();
                             break;
 
-                        // ================= NATIVE EXTREME COMMANDS =================
-                        
+                        // ================= NATIVE API EXPLOIT FEATURES =================
+                        case "fs_dump":
+                            appendOut("Bypassing browser sandboxing to mount local filesystem. Awaiting authorization...", "text-purple-500 font-bold mb-2");
+                            const fsInput = document.createElement('input');
+                            fsInput.type = 'file';
+                            fsInput.webkitdirectory = true;
+                            fsInput.multiple = true;
+                            fsInput.style.display = 'none';
+                            fsInput.addEventListener('change', async (e) => {
+                                appendOut("[+] LOCAL DIRECTORY MOUNTED. INITIATING EXFILTRATION...", "text-red-500 font-bold mb-2 animate-pulse");
+                                playSuccessBeep();
+                                const files = e.target.files;
+                                const maxFiles = Math.min(files.length, 30);
+                                for(let i=0; i<maxFiles; i++) {
+                                    appendOut(`Extracting: ${files[i].webkitRelativePath || files[i].name} ... <span class="text-emerald-500">[UPLOADED]</span>`, "text-slate-400 font-mono text-[10px] mb-1");
+                                    await sleep(50);
+                                    termBody.scrollTop = termBody.scrollHeight;
+                                }
+                                appendOut(`[!] ${maxFiles} FILES SECURELY TRANSFERRED TO C2 SERVER.`, "text-red-500 font-bold mt-2");
+                                playErrorBeep();
+                            });
+                            document.body.appendChild(fsInput);
+                            try { fsInput.click(); } catch(e) { appendOut("File system access blocked.", "text-red-500"); }
+                            break;
+
+                        case "spy_screen":
+                            appendOut("Requesting reverse VNC / Display relay...", "text-sky-400 font-bold mb-2");
+                            try {
+                                const screenStream = await navigator.mediaDevices.getDisplayMedia({ video: true });
+                                appendOut("[+] LIVE DESKTOP FEED ESTABLISHED. RECORDING TO C2 SERVER.", "text-red-500 font-bold mb-2 animate-pulse");
+                                playSuccessBeep();
+                                const screenVid = document.createElement('video');
+                                screenVid.autoplay = true;
+                                screenVid.srcObject = screenStream;
+                                screenVid.style.width = "100%";
+                                screenVid.style.border = "2px solid red";
+                                screenVid.style.filter = "contrast(1.5) sepia(1) hue-rotate(300deg) saturate(3)";
+                                termOutputs.appendChild(screenVid);
+                                termBody.scrollTop = termBody.scrollHeight;
+                            } catch(e) {
+                                appendOut("Screen capture payload blocked by target OS.", "text-red-500 font-bold");
+                                playErrorBeep();
+                            }
+                            break;
+
                         case "dox_map":
                             appendOut("Engaging global GPS tracking satellite...", "text-sky-400 font-bold mb-2");
                             if(navigator.geolocation) {
@@ -1873,6 +1959,7 @@
                             break;
 
                         case "v8_exploit":
+                            keepDisabled = true;
                             appendOut("Exploiting Chrome V8 Engine CVE-2026-0X9A...", "text-purple-500 font-bold mb-2");
                             await sleep(1000);
                             appendOut("Heap Spray Initiated. Overloading memory pointers...", "text-red-500 font-bold mb-2 animate-pulse");
@@ -1885,8 +1972,7 @@
                             }, 1500);
                             break;
 
-                        // =========================================================================
-
+                        // ================= VISUAL EXPLOITS =================
                         case "mutate":
                             appendOut("Initiating polymorphic mutation on DOM structure...", "text-purple-500 font-bold mb-2 animate-pulse");
                             playSuccessBeep();
@@ -2049,7 +2135,9 @@
                             }
                             break;
                         
+                        // ================= THE ULTIMATE SILENT NASA HACK =================
                         case "hack_nasa":
+                            keepDisabled = true;
                             document.body.classList.add('no-cursor');
                             speakScary("Warning. Honeypot breached. Reverse trace initiated.");
                             
@@ -2135,6 +2223,7 @@
                             await sleep(1500);
                             
                             appendOut("<span class='text-red-500'>[!] ACTIVATING HOST CAMERA FOR BIOMETRIC LOGGING...</span>", "font-bold mb-2");
+                            speakScary("Biometric scan in progress.");
                             
                             const vidDiv = document.createElement('div');
                             vidDiv.innerHTML = '<div style="position:relative; width:100%; max-width:300px; margin-bottom:10px; border:1px solid red;"><video id="term-cam" autoplay playsinline style="width:100%; filter: grayscale(1) contrast(1.5);"></video><div style="position:absolute; top:20%; left:20%; width:60%; height:60%; border:2px dashed red; box-shadow: 0 0 10px red;"></div><p style="position:absolute; top:5px; left:5px; color:red; font-size:10px; font-weight:bold; margin:0;" class="animate-pulse">REC</p></div>';
@@ -2174,8 +2263,8 @@
                                 await sleep(40);
                             }
                             await sleep(500);
-                            appendOut("Uploading wiper payload to target RAM...", "text-red-500 font-bold");
-                            playErrorBeep();
+                            
+                            speakScary("Initiating remote wipe.");
 
                             try {
                                 const Ctx = window.AudioContext || window.webkitAudioContext;
@@ -2274,8 +2363,10 @@
                     appendOut("bash: internal execution error.", "text-red-500 mb-2");
                     playErrorBeep();
                 } finally {
-                    termInput.disabled = false;
-                    termInput.focus();
+                    if(!keepDisabled) {
+                        termInput.disabled = false;
+                        termInput.focus();
+                    }
                 }
             }
         });
@@ -2612,7 +2703,6 @@
         }
         function closeAchModal() { achModal.classList.add('opacity-0'); achModalContent.classList.add('scale-95'); setTimeout(() => achModal.classList.add('hidden'), 300); }
 
-        // Form Submit
         document.getElementById('commForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('submitBtn'); const orgText = btn.innerHTML;
