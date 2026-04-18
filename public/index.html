@@ -16,10 +16,6 @@
         body:not(.secret-mode) .hex-trail { color: #10b981; text-shadow: 0 0 5px #10b981; }
         @keyframes trailFade { 0% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(0.5) translateY(-10px); } }
 
-        /* ADVANCED CURSOR GLITCH */
-        .cursor-glitch { animation: cursorGlitchAnim 0.2s ease-in-out infinite alternate; filter: drop-shadow(2px 0px 0px red) drop-shadow(-2px 0px 0px blue); }
-        @keyframes cursorGlitchAnim { 0% { transform: translate(0,0) scale(1); } 25% { transform: translate(2px,-2px) scale(1.1); } 50% { transform: translate(-2px,2px) scale(0.9); } 75% { transform: translate(2px,2px) scale(1.05); } 100% { transform: translate(0,0) scale(1); } }
-
         /* CURSOR HIJACK CLASS */
         body.no-cursor, body.no-cursor * { cursor: none !important; }
 
@@ -192,10 +188,6 @@
         body.secret-mode #ip-tracker-box { border-color: #10b981 !important; box-shadow: 0 0 20px rgba(16, 185, 129, 0.2) !important; }
         body.secret-mode .tracker-header { background: rgba(16, 185, 129, 0.1) !important; border-color: rgba(16, 185, 129, 0.3) !important; }
 
-        /* KONAMI BADGE */
-        #konami-badge { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px); z-index: 999999; background: rgba(0,20,0,0.9); border: 2px solid #0f0; padding: 15px 30px; border-radius: 50px; display: flex; items-center; gap: 10px; opacity: 0; transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55); box-shadow: 0 0 30px rgba(0,255,0,0.5); }
-        #konami-badge.active { transform: translateX(-50%) translateY(0); opacity: 1; }
-
         /* ================= ADMIN BYPASS MODAL ================= */
         #adminLoginModal { position: fixed; inset: 0; z-index: 10005; background: rgba(0,0,0,0.9); display: none; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
         .admin-terminal { width: 100%; max-width: 500px; background: #050505; border: 1px solid #333; border-radius: 8px; overflow: hidden; font-family: 'JetBrains Mono', monospace; box-shadow: 0 0 50px rgba(0,0,0,0.8); }
@@ -252,11 +244,6 @@
     </style>
 </head>
 <body>
-
-    <div id="konami-badge">
-        <i data-lucide="terminal" class="w-6 h-6 text-[#0f0]"></i>
-        <span class="text-[#0f0] font-mono font-bold tracking-widest text-sm uppercase">GOD MODE UNLOCKED</span>
-    </div>
 
     <div id="seizure-overlay">
         <div class="police-strobe"></div>
@@ -988,72 +975,6 @@
         lucide.createIcons();
         const API_BASE = 'https://iammahmudul.onrender.com/api';
 
-        // ================= KONAMI CODE LOGIC =================
-        const konamiCode = [
-            'ArrowUp', 'ArrowUp', 
-            'ArrowDown', 'ArrowDown', 
-            'ArrowLeft', 'ArrowRight', 
-            'ArrowLeft', 'ArrowRight', 
-            'b', 'a'
-        ];
-        let konamiIndex = 0;
-
-        document.addEventListener('keydown', (e) => {
-            // Konami Check
-            if (e.key.toLowerCase() === konamiCode[konamiIndex].toLowerCase() || e.key === konamiCode[konamiIndex]) {
-                konamiIndex++;
-                if (konamiIndex === konamiCode.length) {
-                    activateGodMode();
-                    konamiIndex = 0;
-                }
-            } else {
-                konamiIndex = 0;
-            }
-        });
-
-        function activateGodMode() {
-            document.body.classList.add('secret-mode');
-            const badge = document.getElementById('konami-badge');
-            if(badge) {
-                badge.classList.add('active');
-                playSuccessBeep();
-                setTimeout(() => { badge.classList.remove('active'); }, 4000);
-            }
-        }
-
-        // ================= CUSTOM CURSOR GLITCH =================
-        document.addEventListener('mousemove', (e) => {
-            const cursorGlitchThreshold = 50; 
-            if (!window.lastMouseX) { window.lastMouseX = e.clientX; window.lastMouseY = e.clientY; return; }
-            
-            const dx = Math.abs(e.clientX - window.lastMouseX);
-            const dy = Math.abs(e.clientY - window.lastMouseY);
-            
-            if (dx > cursorGlitchThreshold || dy > cursorGlitchThreshold) {
-                document.body.classList.add('cursor-glitch');
-                clearTimeout(window.glitchTimeout);
-                window.glitchTimeout = setTimeout(() => {
-                    document.body.classList.remove('cursor-glitch');
-                }, 200);
-            }
-            
-            window.lastMouseX = e.clientX;
-            window.lastMouseY = e.clientY;
-        });
-
-        // ================= TTS UTILITY FUNCTION =================
-        function speakScary(text) {
-            try {
-                if ('speechSynthesis' in window) {
-                    const msg = new SpeechSynthesisUtterance(text);
-                    msg.pitch = 0.1;  // Deep, robotic voice
-                    msg.rate = 0.85;  // Slow, methodical
-                    msg.volume = 1;
-                    window.speechSynthesis.speak(msg);
-                }
-            } catch(e){}
-        }
-
         // ================= MECHANICAL KEYBOARD SFX LOGIC =================
         let sfxCtx = null;
         function initSFX() {
@@ -1325,6 +1246,7 @@
                 keyTimeout = setTimeout(() => { keyBox.classList.add('opacity-0'); }, 3000);
             }
             
+            // Cursor Hex Trail
             if(!document.body.classList.contains('light-mode')) {
                 const trail = document.createElement('div');
                 trail.className = 'hex-trail text-emerald-500';
@@ -2042,7 +1964,8 @@
                             }, 1500);
                             break;
 
-                        // ================= VISUAL EXPLOITS =================
+                        // =========================================================================
+
                         case "mutate":
                             appendOut("Initiating polymorphic mutation on DOM structure...", "text-purple-500 font-bold mb-2 animate-pulse");
                             playSuccessBeep();
