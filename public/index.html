@@ -6,6 +6,7 @@
     <title>Mahmudul Hasan | Cybersecurity Researcher</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap');
         :root { --glass-bg: rgba(15, 23, 42, 0.7); --glass-border: rgba(255, 255, 255, 0.1); }
@@ -1400,7 +1401,7 @@
         let currentDir = "~";
         let cmdHistory = [];
         let historyIndex = -1;
-        let isExecuting = false; // Prevents overlapping commands
+        let isExecuting = false; 
 
         const fileSystem = {
             "target_ips.txt": "192.168.1.44\n10.0.0.5\n172.16.254.1",
@@ -1619,7 +1620,42 @@
                               "  <b>clear</b>     : Clear terminal output<br>" +
                               "  <b>exit</b>      : Terminate session");
                     break;
-                case "whoami": appendOut(isRoot ? "root" : "mh_guest"); break;
+                case "whoami":
+                    appendOut("Querying identity parameters...", "text-slate-400 font-mono text-[10px] mb-2");
+                    await sleep(500);
+                    let wIp = "UNKNOWN", wLoc = "UNKNOWN", wIsp = "UNKNOWN";
+                    try {
+                        const res = await fetch('https://ipapi.co/json/');
+                        const data = await res.json();
+                        wIp = data.ip || "UNKNOWN";
+                        wLoc = `${data.city || 'Unknown'}, ${data.country_name || 'Unknown'}`;
+                        wIsp = data.org || "UNKNOWN";
+                    } catch(e) {
+                        wIp = "127.0.0.1 (PROXY)";
+                        wLoc = "ENCRYPTED NODE";
+                        wIsp = "UNKNOWN_ISP";
+                    }
+                    
+                    const wOs = navigator.platform || "Unknown OS";
+                    let wBrowser = "Unknown Browser";
+                    const wUa = navigator.userAgent;
+                    if(wUa.includes("Firefox/")) wBrowser = "Mozilla Firefox";
+                    else if(wUa.includes("Edg/")) wBrowser = "Microsoft Edge";
+                    else if(wUa.includes("Chrome/")) wBrowser = "Google Chrome";
+                    else if(wUa.includes("Safari/")) wBrowser = "Apple Safari";
+                    
+                    const userName = isRoot ? "root" : "mh_guest";
+                    appendOut(
+                        `&gt; <span class="text-sky-400 font-bold">USER</span>     : <span class="text-emerald-500 font-bold">${userName}</span><br>` +
+                        `&gt; <span class="text-sky-400 font-bold">IP ADDRESS</span>: <span class="text-white">${wIp}</span><br>` +
+                        `&gt; <span class="text-sky-400 font-bold">LOCATION</span>  : <span class="text-white">${wLoc}</span><br>` +
+                        `&gt; <span class="text-sky-400 font-bold">ISP</span>       : <span class="text-white">${wIsp}</span><br>` +
+                        `&gt; <span class="text-sky-400 font-bold">DEVICE/OS</span> : <span class="text-white">${wOs}</span><br>` +
+                        `&gt; <span class="text-sky-400 font-bold">BROWSER</span>   : <span class="text-white">${wBrowser}</span>`, 
+                        "text-slate-300 font-mono text-[11px] leading-relaxed mb-2 bg-black/40 p-3 rounded border border-white/10"
+                    );
+                    playSuccessBeep();
+                    break;
                 case "pwd": appendOut(isRoot ? (currentDir === "~" ? "/root" : `/root/${currentDir.replace('~/','')}`) : (currentDir === "~" ? "/home/mh_guest" : `/home/mh_guest/${currentDir.replace('~/','')}`)); break;
                 case "cd":
                     if(!args[1] || args[1] === "~") currentDir = "~";
@@ -1884,6 +1920,7 @@
                     remoteDiv2.innerHTML = `<span class="text-purple-500 font-bold">root@USCYBERCOM:~$</span> `;
                     for(let i=0; i<remoteCmd2.length; i++) { remoteDiv2.innerHTML += remoteCmd2[i]; playKeyClick(); await sleep(40); }
                     await sleep(500);
+                    
                     speakScary("Initiating remote wipe.");
 
                     try {
