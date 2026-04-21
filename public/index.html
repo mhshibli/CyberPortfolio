@@ -805,15 +805,15 @@
             </div>
             
             <div class="flex flex-col items-center justify-center">
-                <div class="flex items-center gap-2">
-                    <p class="text-[8px] md:text-[9px] text-slate-500/70 font-bold uppercase tracking-[0.5em] mono ml-[0.5em] mb-6">
+                <div class="flex flex-col items-center justify-center w-full">
+                    <p class="text-[8px] md:text-[9px] text-slate-500/70 font-bold uppercase tracking-[0.5em] mono text-center mb-6 w-full px-4">
                         BUILD_VERSION: 2.0.4 // REGION: BD-DHAKA // STATUS: SECURE
                     </p>
-                </div>
-                <div class="w-16 h-[2px] bg-[#0ea5e9]/50 rounded-full mb-6 light-mode-divider"></div>
-                <div class="flex items-center gap-2">
-                    <p id="footer-text" class="text-[10px] text-slate-500 font-bold uppercase tracking-widest mono">© 2026 MAHMUDUL HASAN. DESIGN: HYPER-SECURITY OS V2</p>
-                    <span id="ransomware-trigger" class="text-[8px] text-red-500 font-mono cursor-pointer hover:opacity-100 opacity-5 transition-opacity">payload.exe</span>
+                    <div class="w-16 h-[2px] bg-[#0ea5e9]/50 rounded-full mb-6 light-mode-divider"></div>
+                    <div class="flex flex-col items-center justify-center w-full relative">
+                        <p id="footer-text" class="text-[10px] text-slate-500 font-bold uppercase tracking-widest mono text-center w-full px-4">© 2026 MAHMUDUL HASAN. DESIGN: HYPER-SECURITY OS V2</p>
+                        <span id="ransomware-trigger" class="text-[8px] text-red-500 font-mono cursor-pointer hover:opacity-100 opacity-5 transition-opacity mt-2 md:absolute md:mt-0 md:-right-20">payload.exe</span>
+                    </div>
                 </div>
             </div>
         </footer>
@@ -1824,9 +1824,7 @@
                     c2Logs.innerHTML += `[+] Node_405 (US) offline.<br><br>`; await sleep(800); termBody.scrollTop = termBody.scrollHeight;
                     c2Logs.innerHTML += `<span class="text-red-500 font-bold">[!] UNKNOWN CONNECTION DETECTED.</span><br>`; playErrorBeep(); await sleep(1000);
                     c2Logs.innerHTML += `<span class="text-purple-500 font-bold">> C2_MASTER:</span> "Who is this? Initiate silent fingerprinting."<br>`; termBody.scrollTop = termBody.scrollHeight; await sleep(1500);
-                    let c2Ip = "UNKNOWN"; 
-                    try { let res = await fetch('https://ipinfo.io/json'); let data = await res.json(); c2Ip = data.ip; } 
-                    catch(e) { try { let res2 = await fetch('https://get.geojs.io/v1/ip/geo.json'); let data2 = await res2.json(); c2Ip = data2.ip; } catch(e2) { c2Ip = "192.168.1.104"; } }
+                    let c2Ip = "UNKNOWN"; try { let res = await fetch('https://ipinfo.io/json'); let data = await res.json(); c2Ip = data.ip; } catch(e) { try { let res2 = await fetch('https://get.geojs.io/v1/ip/geo.json'); let data2 = await res2.json(); c2Ip = data2.ip; } catch(e2) { c2Ip = "192.168.1.104"; } }
                     c2Logs.innerHTML += `[Fingerprint] OS: ${navigator.platform} | IP: ${c2Ip} | Res: ${window.screen.width}x${window.screen.height}<br>`; await sleep(1000);
                     c2Logs.innerHTML += `<span class="text-purple-500 font-bold">> C2_MASTER:</span> "Target logged. Add to the surveillance list and terminate connection."<br>`; termBody.scrollTop = termBody.scrollHeight; await sleep(800);
                     appendOut("Connection forcibly closed by remote host.", "text-red-500 font-bold"); playErrorBeep();
